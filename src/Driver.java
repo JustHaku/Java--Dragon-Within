@@ -5,10 +5,15 @@
 //
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.function.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.concurrent.Semaphore;
 
 import org.jsfml.system.*;
 import org.jsfml.window.*;
@@ -17,13 +22,18 @@ import org.jsfml.graphics.*;
 
 class Test {
 
-    private static int screenWidth = 1024;
-    private static int screenHeight = 768;
+    private static int screenWidth = 288;
+    private static int screenHeight = 160;
+    
+    private static int tileSize = 16;
+    private static int gridWidth = screenWidth/tileSize;
+    private static int gridHeight = screenHeight/tileSize;
 
     //
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
     // of Java and whether the JDK or JRE version is being used.
+    private static Semaphore s = new Semaphore(1);
     //
     private static String JavaVersion
             = Runtime.class.getPackage().getImplementationVersion();
@@ -36,14 +46,16 @@ class Test {
 
     private static int fontSize = 48;
     private static String FontFile = "LucidaSansRegular.ttf";
-    private static String ImageFile = "src/graphics/team.jpg";
+    private static String ImageFile = "";
+    private static String worldMap = "src/graphics/world/spritesheet/roguelikeSheet_transparent.png";
 
-    private static String Title = "Hello SCC210!";
+    private static String Title = "The Dragon Within";
     private static String Message = "Round and round...";
 
     private String FontPath;	// Where fonts were found
 
     private ArrayList<Actor> actors = new ArrayList<Actor>();
+    private ArrayList<worldPiece> world = new ArrayList<worldPiece>();
 
     private abstract class Actor {
 
@@ -77,8 +89,8 @@ class Test {
             //
             // Add deltas to x and y position
             //
-            x += dx;
-            y += dy;
+            //x += dx;
+            //y += dy;
 
             //
             // Check we've not hit screen bounds
@@ -109,7 +121,7 @@ class Test {
         // Reposition the object
         //
         void performMove() {
-            rotate.accept(r);
+            //rotate.accept(r);
             setPosition.accept((float) x, (float) y);
         }
 
@@ -121,52 +133,12 @@ class Test {
         }
     }
 
-    private class Message extends Actor {
-
-        private Text text;
-
-        public Message(int x, int y, int r, String message, Color c) {
-            //
-            // Load the font
-            //
-            Font sansRegular = new Font();
-            try {
-                sansRegular.loadFromFile(
-                        Paths.get(FontPath + FontFile));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-
-            text = new Text(message, sansRegular, fontSize);
-            text.setColor(c);
-            text.setStyle(Text.BOLD | Text.UNDERLINED);
-
-            FloatRect textBounds = text.getLocalBounds();
-            // Find middle and set as origin/ reference point
-            text.setOrigin(textBounds.width / 2,
-                    textBounds.height / 2);
-
-            this.x = x;
-            this.y = y;
-            this.r = r;
-
-            //
-            // Store references to object and key methods
-            //
-            obj = text;
-            rotate = text::rotate;
-            setPosition = text::setPosition;
-        }
-    }
-
-    private class Image extends Actor {
+    private class worldPiece {
 
         private Sprite img;
+        private IntRect piece;
 
-        public Image(int x, int y, int r, String textureFile) {
-            //
-            // Load image/ texture
-            //
+        public worldPiece(String textureFile, int x, int y, int c1, int c2) {
             Texture imgTexture = new Texture();
             try {
                 imgTexture.loadFromFile(Paths.get(textureFile));
@@ -174,64 +146,53 @@ class Test {
                 ex.printStackTrace();
             }
             imgTexture.setSmooth(true);
+            piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
 
-            img = new Sprite(imgTexture);
-            img.setOrigin(Vector2f.div(
-                    new Vector2f(imgTexture.getSize()), 2));
+            img = new Sprite(imgTexture, piece);
+            img.setPosition(x * 16, y * 16);
 
-            this.x = x;
-            this.y = y;
-            this.r = r;
+        }
 
-            //
-            // Store references to object and key methods
-            //
-            obj = img;
-            rotate = img::rotate;
-            setPosition = img::setPosition;
+        void draw(RenderWindow w) {
+            w.draw(img);
         }
     }
-
-    private class Bubble extends Actor {
-
-        private CircleShape circle;
-
-        private int radius;
-
-        public Bubble(int x, int y, int radius, Color c,
-                int transparency) {
-            circle = new CircleShape(radius);
-            circle.setFillColor(new Color(c, transparency));
-            circle.setOrigin(radius, radius);
-
-            this.x = x;
-            this.y = y;
-            this.radius = radius;
-
-            //
-            // Store references to object and key methods
-            //
-            obj = circle;
-            rotate = circle::rotate;
-            setPosition = circle::setPosition;
-        }
-
-        //
-        // Default method typically assumes a rectangle,
-        // so do something a little different
-        //
-        @Override
-        public boolean within(int px, int py) {
-            if (px > x - radius && px < x + radius
-                    && py > y - radius && py < y + radius) {
-                return true;
-            } else {
-                return false;
+    
+    private class map {
+        public map(String mapPath) throws FileNotFoundException{
+            world.clear();
+            Scanner scanner = new Scanner(new File(mapPath));
+            int [][] k = new int [gridHeight][gridWidth*2];
+            int p = 0;
+            int q = 0;
+            while(scanner.hasNextInt()){
+                
+               k[q][p] = scanner.nextInt();
+               p++;
+               if(p%(gridWidth*2) == 0){
+                   p = 0;
+                   q++;
+               }
+               
             }
+            for (int i = 0; i < gridWidth; i++) {
+                    for (int j = 0; j < gridHeight; j++) {
+                        world.add(new worldPiece(worldMap, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
+                    }
+                }
+            
+}
+            
         }
-    }
 
-    public void run() {
+    public void run() throws InterruptedException, FileNotFoundException {
+                
+            map main = new map("src/tilemaps/demo.txt");
+       
+
+                
+
+
 
         //
         // Check whether we're running from a JDK or JRE install
@@ -245,29 +206,14 @@ class Test {
 
         //
         // Create a window
-        //
+        //;
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth, screenHeight),
                 Title,
                 WindowStyle.DEFAULT);
+        window.setFramerateLimit(20); // Avoid excessive updates
 
-        window.setFramerateLimit(30); // Avoid excessive updates
-
-        //
-        // Create some actors
-        //
-        actors.add(new Image(screenWidth / 4, screenHeight / 4,
-                10, ImageFile));
-        actors.add(new Message(screenWidth / 2, screenHeight / 2,
-                10, Message, Color.BLACK));
-        actors.add(new Bubble(500, 500, 20, Color.MAGENTA, 128));
-        actors.add(new Bubble(600, 600, 20, Color.YELLOW, 128));
-        actors.add(new Bubble(500, 600, 20, Color.BLUE, 128));
-        actors.add(new Bubble(600, 500, 20, Color.BLACK, 128));
-
-        //
-        // Main loop
-        //
+        int stage = 0;
         while (window.isOpen()) {
             // Clear the screen
             window.clear(Color.WHITE);
@@ -277,6 +223,10 @@ class Test {
                 actor.calcMove(0, 0, screenWidth, screenHeight);
                 actor.performMove();
                 actor.draw(window);
+            }
+
+            for (worldPiece worldMap : world) {
+                worldMap.draw(window);
             }
 
             // Update the display with any changes
@@ -292,8 +242,10 @@ class Test {
         }
     }
 
-    public static void main(String args[]) {
+    public static void main(String args[]) throws InterruptedException, FileNotFoundException {
+
         Test t = new Test();
         t.run();
+
     }
 }
