@@ -14,6 +14,8 @@ import java.util.function.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.concurrent.Semaphore;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 import org.jsfml.system.*;
 import org.jsfml.window.*;
@@ -22,12 +24,14 @@ import org.jsfml.graphics.*;
 
 class Test {
 
-    private static int screenWidth = 288;
-    private static int screenHeight = 160;
-    
-    private static int tileSize = 16;
-    private static int gridWidth = screenWidth/tileSize;
-    private static int gridHeight = screenHeight/tileSize;
+    private static int spd = 2;
+    private static int SCALE = 3;
+    private static int screenWidth = 288 * SCALE; //Must be a multiple of 288 
+    private static int screenHeight = 160 * SCALE; //Must be a multiple of 160
+
+    private static int tileSize = 16 * SCALE; //Must be a multiple of 16
+    private static int gridWidth = screenWidth / tileSize;
+    private static int gridHeight = screenHeight / tileSize;
 
     //
     // The Java install comes with a set of fonts but these will
@@ -52,10 +56,16 @@ class Test {
     private static String Title = "The Dragon Within";
     private static String Message = "Round and round...";
 
+    private static Texture imgTexture = new Texture();
+    private static Texture playerTexture = new Texture();
+
+    private Image icon;
+
     private String FontPath;	// Where fonts were found
 
     private ArrayList<Actor> actors = new ArrayList<Actor>();
     private ArrayList<worldPiece> world = new ArrayList<worldPiece>();
+//    private ArrayList<barrier> barriers = new ArrayList<barrier>();
 
     private abstract class Actor {
 
@@ -67,8 +77,8 @@ class Test {
         int y = 0;	// Current Y-coordinate
 
         int r = 0;	// Change in rotation per cycle
-        int dx = 5;	// Change in X-coordinate per cycle
-        int dy = 5;	// Change in Y-coordinate per cycle
+        int dx = 0;	// Change in X-coordinate per cycle
+        int dy = 0;	// Change in Y-coordinate per cycle
 
         //
         // Is point x, y within area occupied by this object?
@@ -94,27 +104,33 @@ class Test {
 
             //
             // Check we've not hit screen bounds
-            //
-            if (x <= minx || x >= maxx) {
-                dx *= -1;
-                x += dx;
-            }
-            if (y <= miny || y >= maxy) {
-                dy *= -1;
-                y += dy;
-            }
-
-            //
+//            if (x <= minx || x >= maxx) {
+//                dx *= -1;
+//                x += dx;
+//            }
+//            if (y <= miny || y >= maxy) {
+//                dy *= -1;
+//                y += dy;
+//            }
+            // Check we've not hit screen bounds
             // Check we've not collided with any other actor
             //
-            for (Actor a : actors) {
-                if (a.obj != obj && a.within(x, y)) {
-                    dx *= -1;
-                    x += dx;
-                    dy *= -1;
-                    y += dy;
-                }
-            }
+//            for (Actor a : actors) {
+//                if (a.obj != obj && a.within(x, y)) {
+//                    dx *= -1;
+//                    x += dx;
+//                    dy *= -1;
+//                    y += dy;
+//                }
+//            }
+//            for (Actor a : actors) {
+//                if (a.obj != obj && a.within(x, y)) {
+//                    dx *= -1;
+//                    x += dx;
+//                    dy *= -1;
+//                    y += dy;
+//                }
+//            }
         }
 
         //
@@ -138,18 +154,12 @@ class Test {
         private Sprite img;
         private IntRect piece;
 
-        public worldPiece(String textureFile, int x, int y, int c1, int c2) {
-            Texture imgTexture = new Texture();
-            try {
-                imgTexture.loadFromFile(Paths.get(textureFile));
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-            imgTexture.setSmooth(true);
+        public worldPiece(Texture imgTexture, int x, int y, int c1, int c2) {
             piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
 
             img = new Sprite(imgTexture, piece);
-            img.setPosition(x * 16, y * 16);
+            img.setPosition(x * tileSize, y * tileSize);
+            img.setScale(SCALE, SCALE);
 
         }
 
@@ -157,42 +167,128 @@ class Test {
             w.draw(img);
         }
     }
-    
-    private class map {
-        public map(String mapPath) throws FileNotFoundException{
-            world.clear();
-            Scanner scanner = new Scanner(new File(mapPath));
-            int [][] k = new int [gridHeight][gridWidth*2];
-            int p = 0;
-            int q = 0;
-            while(scanner.hasNextInt()){
-                
-               k[q][p] = scanner.nextInt();
-               p++;
-               if(p%(gridWidth*2) == 0){
-                   p = 0;
-                   q++;
-               }
-               
-            }
-            for (int i = 0; i < gridWidth; i++) {
-                    for (int j = 0; j < gridHeight; j++) {
-                        world.add(new worldPiece(worldMap, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
-                    }
-                }
-            
-}
-            
+
+    private class player extends Actor {
+
+        private Sprite img;
+        private Sprite weapon;
+        private Sprite shield;
+        private IntRect[] states = new IntRect[2];
+        private int c1;
+        private int c2;
+        private int w1;
+        private int w2;
+
+        public player(Texture imgTexture) {
+            c1 = 1;
+            c2 = 6;
+            states[0] = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
+
+            w1 = 46;
+            w2 = 4;
+            states[1] = new IntRect(((w1 * 16) + w1), ((w2 * 16) + w2), 16, 16);
+
+            img = new Sprite(imgTexture, states[0]);
+            weapon = new Sprite(imgTexture, states[1]);
+            img.setScale(SCALE / (float) 1.333, SCALE / (float) 1.333);
+            //weapon.setScale(SCALE-1,SCALE-1);
+
+            x = 1;
+            y = 1;
+
+            setPosition = img::setPosition;
+
         }
 
-    public void run() throws InterruptedException, FileNotFoundException {
-                
-            map main = new map("src/tilemaps/demo.txt");
-       
+        @Override
+        void calcMove(int minx, int miny, int maxx, int maxy) {
+            if (x <= minx || x >= maxx) {
+                if (x <= minx) {
+                    x += spd;
+                } else {
+                    x -= spd;
+                }
+            }
+            if (y <= miny || y >= maxy) {
+                if (y <= minx) {
+                    y += spd;
+                } else {
+                    y -= spd;
+                }
 
-                
+            }
 
+            for (Actor a : actors) {
+                if (a.obj != obj && a.within(x, y)) {
+                }
+            }
 
+        }
+
+        @Override
+        void draw(RenderWindow w) {
+            w.draw(img);
+            //w.draw(weapon);
+        }
+    }
+
+//    private class barrier extends Actor {
+//
+//        private Sprite img;
+//        private Texture derp; 
+//                
+//        
+//        public barrier(int x, int y) throws IOException{
+//            derp.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png")); 
+//            img = new Sprite(derp);
+//            
+//            this.x = x * tileSize;
+//            this.y = y * tileSize;
+//            
+//            setPosition = img::setPosition;
+//        }
+//
+//    }
+
+    private class map {
+
+        public map(String mapPath, Texture imgTexture) throws FileNotFoundException, IOException {
+            world.clear();
+            Scanner scanner = new Scanner(new File(mapPath));
+            int[][] k = new int[gridHeight][gridWidth * 2];
+            int p = 0;
+            int q = 0;
+            while (scanner.hasNextInt()) {
+
+                k[q][p] = scanner.nextInt();
+                p++;
+                if (p % (gridWidth * 2) == 0) {
+                    p = 0;
+                    q++;
+                }
+
+            }
+            for (int i = 0; i < gridWidth; i++) {
+                for (int j = 0; j < gridHeight; j++) {
+                    world.add(new worldPiece(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
+                    if(k[j][i*2]==0 && k[j][(i*2)+1] ==0){
+//                        barriers.add(new barrier(1,1));
+                        
+                        
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    public void run() throws InterruptedException, FileNotFoundException, IOException {
+        imgTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeSheet_transparent.png"));
+        playerTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeChar_transparent.png"));
+        map main = new map("src/tilemaps/demo.txt", imgTexture);
+        player p1 = new player(playerTexture);
+        actors.add(p1);
 
         //
         // Check whether we're running from a JDK or JRE install
@@ -210,23 +306,38 @@ class Test {
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth, screenHeight),
                 Title,
-                WindowStyle.DEFAULT);
-        window.setFramerateLimit(20); // Avoid excessive updates
-
-        int stage = 0;
+                WindowStyle.CLOSE);
+        window.setFramerateLimit(60); // Avoid excessive updates
+        //window.setIcon(icon);
         while (window.isOpen()) {
-            // Clear the screen
-            window.clear(Color.WHITE);
+            if (window.isOpen()) // Clear the screen
+            {
+                window.clear(Color.WHITE);
+            }
 
             // Move all the actors around
-            for (Actor actor : actors) {
-                actor.calcMove(0, 0, screenWidth, screenHeight);
-                actor.performMove();
-                actor.draw(window);
+            if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
+
+                p1.y -= spd;
+            }
+            if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+                p1.y += spd;
+            }
+            if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+                p1.x -= spd;
+            }
+            if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+                p1.x += spd;
             }
 
             for (worldPiece worldMap : world) {
                 worldMap.draw(window);
+            }
+
+            for (Actor actor : actors) {
+                actor.calcMove(0, 0, screenWidth-(16*SCALE)+8, screenHeight-(16*SCALE)+8);
+                actor.performMove();
+                actor.draw(window);
             }
 
             // Update the display with any changes
@@ -242,7 +353,7 @@ class Test {
         }
     }
 
-    public static void main(String args[]) throws InterruptedException, FileNotFoundException {
+    public static void main(String args[]) throws InterruptedException, FileNotFoundException, IOException {
 
         Test t = new Test();
         t.run();
