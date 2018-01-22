@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 import java.util.concurrent.Semaphore;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
+import org.jsfml.audio.Music;
 
 import org.jsfml.system.*;
 import org.jsfml.window.*;
@@ -25,7 +26,7 @@ import org.jsfml.graphics.*;
 class Test {
 
     private static int spd = 2;
-    private static int SCALE = 3;
+    private static int SCALE = 4;
     private static int screenWidth = 288 * SCALE; //Must be a multiple of 288 
     private static int screenHeight = 160 * SCALE; //Must be a multiple of 160
 
@@ -51,13 +52,14 @@ class Test {
     private static int fontSize = 48;
     private static String FontFile = "LucidaSansRegular.ttf";
     private static String ImageFile = "";
-    private static String worldMap = "src/graphics/world/spritesheet/roguelikeSheet_transparent.png";
+    private static String worldMap = "src/graphics/world/spritesheet/barrier";
 
     private static String Title = "The Dragon Within";
     private static String Message = "Round and round...";
 
     private static Texture imgTexture = new Texture();
     private static Texture playerTexture = new Texture();
+    private static Texture barrierTexture = new Texture();
 
     private Image icon;
 
@@ -77,8 +79,8 @@ class Test {
         int y = 0;	// Current Y-coordinate
 
         int r = 0;	// Change in rotation per cycle
-        int dx = 0;	// Change in X-coordinate per cycle
-        int dy = 0;	// Change in Y-coordinate per cycle
+        int dx = 2;	// Change in X-coordinate per cycle
+        int dy = 2;	// Change in Y-coordinate per cycle
 
         //
         // Is point x, y within area occupied by this object?
@@ -99,8 +101,8 @@ class Test {
             //
             // Add deltas to x and y position
             //
-            //x += dx;
-            //y += dy;
+//            x += dx;
+//            y += dy;
 
             //
             // Check we've not hit screen bounds
@@ -217,10 +219,21 @@ class Test {
                 }
 
             }
-
             for (Actor a : actors) {
                 if (a.obj != obj && a.within(x, y)) {
+                    System.out.println("Collision");
                 }
+            }
+
+        }
+
+        @Override
+        boolean within(int px, int py) {
+            if (px > x - (states[0].width * (SCALE / (float) 1.333)) && px < x + (states[0].width * (SCALE / (float) 1.333))
+                    && py > y - (states[0].width * (SCALE / (float) 1.333)) && py < y + (states[0].width * (SCALE / (float) 1.333))) {
+                return true;
+            } else {
+                return false;
             }
 
         }
@@ -232,26 +245,42 @@ class Test {
         }
     }
 
-//    private class barrier extends Actor {
-//
-//        private Sprite img;
-//        private Texture derp; 
-//                
-//        
-//        public barrier(int x, int y) throws IOException{
-//            derp.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png")); 
-//            img = new Sprite(derp);
-//            
-//            this.x = x * tileSize;
-//            this.y = y * tileSize;
-//            
-//            setPosition = img::setPosition;
-//        }
-//
-//    }
+    private class barrier extends Actor {
+        private Sprite img;
+        private Texture barrierTexture;
+
+        public barrier(int x, int y, Texture barrierTexture) throws IOException {
+            this.barrierTexture = barrierTexture;
+            img = new Sprite(barrierTexture);
+
+            this.x = x * tileSize;
+            this.y = y * tileSize;
+
+            obj = img;
+
+            setPosition = img::setPosition;
+        }
+
+        @Override
+        void calcMove(int minx, int miny, int maxx, int maxy) {
+            for (Actor a : actors) {
+                if (a.obj != obj && a.within(x, y)) {
+                    if (a.x <= x) {
+                        a.x -= spd;
+                    } else if (a.x >= x) {
+                        a.x += spd;
+                    }
+                    if (a.y <= y) {
+                        a.y -= spd;
+                    } else if (a.y >= y) {
+                        a.y += spd;
+                    }
+                }
+            }
+        }
+    }
 
     private class map {
-
         public map(String mapPath, Texture imgTexture) throws FileNotFoundException, IOException {
             world.clear();
             Scanner scanner = new Scanner(new File(mapPath));
@@ -271,10 +300,9 @@ class Test {
             for (int i = 0; i < gridWidth; i++) {
                 for (int j = 0; j < gridHeight; j++) {
                     world.add(new worldPiece(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
-                    if(k[j][i*2]==0 && k[j][(i*2)+1] ==0){
-//                        barriers.add(new barrier(1,1));
-                        
-                        
+                    if (k[j][i * 2] == 0 && k[j][(i * 2) + 1] == 0) {
+                        actors.add(new barrier(i, j, barrierTexture));
+
                     }
                 }
             }
@@ -289,6 +317,18 @@ class Test {
         map main = new map("src/tilemaps/demo.txt", imgTexture);
         player p1 = new player(playerTexture);
         actors.add(p1);
+        barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
+        barrier test = new barrier(0, 0, barrierTexture);
+
+        //Gets footsteps sound
+        Music m = new Music();
+        m.openFromFile(Paths.get("src/audio/rpg/footstep06.ogg"));
+
+        //Opens music from file, sets it to loop, and starts it.
+        Music main_theme = new Music();
+        main_theme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
+        main_theme.setLoop(true);
+        main_theme.play();
 
         //
         // Check whether we're running from a JDK or JRE install
@@ -307,9 +347,12 @@ class Test {
         window.create(new VideoMode(screenWidth, screenHeight),
                 Title,
                 WindowStyle.CLOSE);
-        window.setFramerateLimit(60); // Avoid excessive updates
+        window.setFramerateLimit(30); // Avoid excessive updates
         //window.setIcon(icon);
         while (window.isOpen()) {
+
+            main_theme.getStatus();
+
             if (window.isOpen()) // Clear the screen
             {
                 window.clear(Color.WHITE);
@@ -317,25 +360,31 @@ class Test {
 
             // Move all the actors around
             if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
-
                 p1.y -= spd;
+                m.play();
             }
             if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
                 p1.y += spd;
+                m.play();
             }
             if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
                 p1.x -= spd;
+                m.play();
             }
             if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
                 p1.x += spd;
-            }
+                m.play();
 
+            }
+            
+            //Draws the backsground and main tiles 
             for (worldPiece worldMap : world) {
                 worldMap.draw(window);
             }
-
+            
+            //Draws the "Foreground" objects to interact with including: player, barriers and npc
             for (Actor actor : actors) {
-                actor.calcMove(0, 0, screenWidth-(16*SCALE)+8, screenHeight-(16*SCALE)+8);
+                actor.calcMove(0, 0, screenWidth, screenHeight);
                 actor.performMove();
                 actor.draw(window);
             }
@@ -349,12 +398,16 @@ class Test {
                     // the user pressed the close button
                     window.close();
                 }
+                if (event.type == Event.Type.LOST_FOCUS) {
+                    window.setFramerateLimit(8);
+                } else if (event.type == Event.Type.GAINED_FOCUS) {
+                    window.setFramerateLimit(30);
+                }
             }
         }
     }
 
     public static void main(String args[]) throws InterruptedException, FileNotFoundException, IOException {
-
         Test t = new Test();
         t.run();
 
