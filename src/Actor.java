@@ -19,13 +19,12 @@ public abstract class Actor {
     int y = 0;	// Current Y-coordinate.
     int r = 0;	// Change in rotation per cycle.
 
+    // Work out where object should be for next frame.
+    abstract void calcMove(int minX, int minY, int maxX, int maxY);
+
     // Method for detecting if it is inside another actor.
     boolean within(int x, int y) {
         return false;
-    }
-
-    // Work out where object should be for next frame.
-    void calcMove(int minx, int miny, int maxx, int maxy) {
     }
 
     // Reposition the object.
