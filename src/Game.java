@@ -226,7 +226,6 @@ public class Game {
             }
         }
     }
-
     /**
      * Starts the game.
      *
