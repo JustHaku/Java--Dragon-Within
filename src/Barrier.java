@@ -20,7 +20,7 @@ public class Barrier extends Actor {
      * @param y Y tile coordinate of desired barrier.
      * @throws IOException
      */
-    public Barrier(Texture barrierTexture, int x, int y) throws IOException {
+    public Barrier(Texture barrierTexture,int x, int y) throws IOException {
         img = new Sprite(barrierTexture); // New barrier object.
 
         // Changes coordinates so that they are tile-bound and not pixel bound.
