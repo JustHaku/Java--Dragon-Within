@@ -18,13 +18,24 @@ public abstract class Actor {
     int x = 0;	// Current X-coordinate.
     int y = 0;	// Current Y-coordinate.
     int r = 0;	// Change in rotation per cycle.
+    int dx = 0;
+    int dy = 0;
+    int xv = 0;
+    int yv = 0;
 
-    // Work out where object should be for next frame.
-    abstract void calcMove(int minX, int minY, int maxX, int maxY);
 
     // Method for detecting if it is inside another actor.
     boolean within(int x, int y) {
         return false;
+    }
+
+    void setValid(int x,int y){
+        xv = x;
+        yv = y;
+    }
+
+    // Work out where object should be for next frame.
+    void calcMove(int minx, int miny, int maxx, int maxy) {
     }
 
     // Reposition the object.
@@ -32,7 +43,7 @@ public abstract class Actor {
         //rotate.accept(r);
         setPosition.accept((float) x, (float) y);
     }
-    
+
     boolean isPlayer(){
         return false;
     }

@@ -19,55 +19,25 @@ import org.jsfml.system.Clock;
  */
 public class Game {
 
-    /**
-     * The speed in which the player moves at.
-     */
-    public final static int spd = 4;
-
-    /**
-     * The scale of the game. This is changed when you want the game screen to
-     * change.
-     */
-    public final static int SCALE = 4;
-
-    /**
-     * Width of the game screen. Must be a multiple of 288.
-     */
-    public final static int screenWidth = 288 * SCALE;
-
-    /**
-     * Height of the game screen. Must be a multiple of 160.
-     */
-    public final static int screenHeight = 160 * SCALE;
-
-    /**
-     * Size of the tile. Must be a multiple of 16 Allows for easy scaling
-     */
-    public final static int tileSize = 16 * SCALE;
-
-    /**
-     * How many tiles wide the game screen is.
-     */
-    public final static int gridWidth = screenWidth / tileSize;
-
-    /**
-     * How may tiles high the game screen is.
-     */
-    public final static int gridHeight = screenHeight / tileSize;
+    public static final int spd = 4; //The speed in which the player moves at.
+    public static final int SCALE = 4; //The scale of the game. This is changed when you want the game screen to change.
+    public static final int screenWidth = 288 * SCALE; //Width of the game screen. Must be a multiple of 288.
+    public static final int screenHeight = 160 * SCALE; //Height of the game screen. Must be a multiple of 160.
+    public static final int tileSize = 16 * SCALE; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
+    public static final int gridWidth = screenWidth / tileSize; //How many tiles wide the game screen is.
+    public static final int gridHeight = screenHeight / tileSize; //How may tiles high the game screen is.
 
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
     // of Java and whether the JDK or JRE version is being used.
-    private static final String JavaVersion
-            = Runtime.class.getPackage().getImplementationVersion();
-    private static final String JdkFontPath
-            = "C:\\Program Files\\Java\\jdk" + JavaVersion
-            + "\\jre\\lib\\fonts\\";
-    private static final String JreFontPath
-            = "C:\\Program Files\\Java\\jre" + JavaVersion
-            + "\\lib\\fonts\\";
+    private static final String JavaVersion = Runtime.class.getPackage().getImplementationVersion();
+    private static final String JdkFontPath = "C:\\Program Files\\Java\\jdk" + JavaVersion + "\\jre\\lib\\fonts\\";
+    private static final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
 
-    private static final String Title = "The Dragon Within";
+    //The game title
+    private static final String Title = "The Dragon Within Pt.1";
+
+    //private Event event;
 
     // Textures for the game.
     public static final Texture worldSpriteSheet = new Texture();
@@ -85,6 +55,11 @@ public class Game {
     // State of footsteps for swapping audio.
     private static int footstepsState = 0;
 
+    /**********
+    TEMPORARY, TESTS WETHER IS MINIMISED OR NOT
+    ***********/
+    static boolean isMinimized = false;
+
     private String FontPath; // Where fonts were found.
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
@@ -98,7 +73,7 @@ public class Game {
 
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
-    private static int worldNum = 0;
+    public static int worldNum = 0;
 
     /**
      * Array list of actors. Typically used for adding/removing from the list.
@@ -113,7 +88,7 @@ public class Game {
     public static void changeWorld(int w) {
         worldNum = w;
     }
-    
+
 
     /**
      * Array list of tiles. Typically used for creating a game map. Add
@@ -131,16 +106,22 @@ public class Game {
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
     private void playFootsteps() {
-        if (footstepsTimer.getElapsedTime().asMilliseconds() > 500) {
-            if (footstepsState == 0) {
+      if(!isMinimized)
+      {
+        if (footstepsTimer.getElapsedTime().asMilliseconds() > 500)
+        {
+            if (footstepsState == 0)
+            {
                 footsteps1.play();
                 footstepsState = 1;
-            } else if (footstepsState == 1) {
+            }
+            else if (footstepsState == 1) {
                 footsteps2.play();
                 footstepsState = 0;
             }
             footstepsTimer.restart();
         }
+      }
     }
 
     /**
@@ -151,18 +132,15 @@ public class Game {
      * @throws IOException
      */
     public void run() throws InterruptedException, FileNotFoundException, IOException {
-
         worldSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeSheet_transparent.png"));
-
         playerSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeChar_transparent.png"));
-
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
 
         maps.add(new WorldMap(worldSpriteSheet,0));
         maps.add(new WorldMap(worldSpriteSheet,1));
-        
+
         Player player1 = new Player(playerSpriteSheet);
-        
+
         Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
         Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
         maps.get(0).getActor().add(portal1);
@@ -175,7 +153,7 @@ public class Game {
 
         maps.get(0).getActor().add(player1);
         maps.get(1).getActor().add(player1);
-        
+
         footsteps1.openFromFile(Paths.get("src/audio/rpg/footstep00.ogg"));
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
@@ -185,42 +163,40 @@ public class Game {
         mainTheme.setLoop(true);
         mainTheme.play();
 
-        // Check whether we're running from a JDK or JRE install
-        // ...and set FontPath appropriately.
+        // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
             FontPath = JreFontPath;
-        } else {
+        }
+        else {
             FontPath = JdkFontPath;
         }
 
         // Create a window.
         RenderWindow window = new RenderWindow();
-        window.create(new VideoMode(
-                screenWidth, screenHeight),
-                Title,
-                WindowStyle.CLOSE);
+        window.create(new VideoMode(screenWidth, screenHeight), Title, WindowStyle.CLOSE);
         window.setFramerateLimit(30); // Avoid excessive updates.
 
-        while (window.isOpen()) {
-
-            mainTheme.getStatus();
-
-            if (window.isOpen()) { // Clear the screen.
-                //window.clear(Color.WHITE);
+        //main game loop
+        while (window.isOpen())
+        {
+          mainTheme.getStatus();
+            if (window.isOpen()) {
+              // Clear the screen
+              window.clear(Color.WHITE);
             }
 
             // Check for input (UP,DOWN,LEFT,RIGHT)
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-                player1.y -= spd;
+                player1.moveUp();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-                player1.y += spd;
+                player1.moveDown();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-                player1.x -= spd;
+                player1.moveLeft();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-                player1.x += spd;
+                player1.moveRight();
                 playFootsteps();
             }
 
@@ -246,14 +222,15 @@ public class Game {
             // Handle any events.
             for (Event event : window.pollEvents()) {
                 if (event.type == Event.Type.CLOSED) {
-                    // the user pressed the close button.
-                    window.close();
+                    window.close(); // the user pressed the close button.
                 }
                 if (event.type == Event.Type.LOST_FOCUS) {
-                    // Will set FPS to low if game is in background.
-                    window.setFramerateLimit(8);
+                    isMinimized = true;
+                    window.setFramerateLimit(2); // Will set FPS to low if game is in background.
                     mainTheme.pause();
-                } else if (event.type == Event.Type.GAINED_FOCUS) {
+                }
+                else if (event.type == Event.Type.GAINED_FOCUS) {
+                    isMinimized = false;
                     window.setFramerateLimit(30);
                     mainTheme.play();
                 }

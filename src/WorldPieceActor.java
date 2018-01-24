@@ -10,15 +10,16 @@ import org.jsfml.graphics.Texture;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author LBals
  */
 public class WorldPieceActor extends Actor {
+
     private final Sprite img;
     private final IntRect piece;
     private final ArrayList<Actor> actors;
+
     /**
      * Selects a world piece from a Spritesheet.
      *
@@ -35,35 +36,33 @@ public class WorldPieceActor extends Actor {
 
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
-        
-        this.x = x*Game.tileSize;
-        this.y = y*Game.tileSize;
-        
+
+        this.x = x * Game.tileSize;
+        this.y = y * Game.tileSize;
+
+        obj = img;
         setPosition = img::setPosition;
-        
+
+    }
+
+    @Override
+    boolean within(int px, int py){
+        return px > x - (piece.height * (Game.SCALE)) && px < x + (piece.height * (Game.SCALE))
+                && py > y - (piece.height * (Game.SCALE)) && py < y + (piece.height * (Game.SCALE));
     }
 
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
-        // Do this if actor hits this object.
-        for (Actor a : actors) {
-            if (a.obj != obj && a.within(x, y)) {
-                if (a.x <= x) {
-                    a.x -= Game.spd;
-                } else if (a.x >= x) {
-                    a.x += Game.spd;
-                }
-                if (a.y <= y) {
-                    a.y -= Game.spd;
-                } else if (a.y >= y) {
-                    a.y += Game.spd;
-                }
-            }
-        }
+//        for (Actor a : actors) {
+//            if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
+//                System.out.println("Collision!");
+//                a.x = a.xv;
+//                a.y = a.yv;
+//            }else{
+//               a.xv = a.x;
+//               a.yv = a.y;
+//            }
+//        }
     }
-    
-    @Override
-    void draw(RenderWindow w) {
-        w.draw(img);
-    }
+
 }
