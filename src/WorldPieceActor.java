@@ -51,18 +51,8 @@ public class WorldPieceActor extends Actor {
                 && py > y - (piece.height * (Game.SCALE)) && py < y + (piece.height * (Game.SCALE));
     }
 
-    @Override
+   @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
-//        for (Actor a : actors) {
-//            if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
-//                System.out.println("Collision!");
-//                a.x = a.xv;
-//                a.y = a.yv;
-//            }else{
-//               a.xv = a.x;
-//               a.yv = a.y;
-//            }
-//        }
     }
 
 }
