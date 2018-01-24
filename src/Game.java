@@ -70,9 +70,9 @@ public class Game {
     private static final String Title = "The Dragon Within";
 
     // Textures for the game.
-    private static final Texture worldSpriteSheet = new Texture();
-    private static final Texture playerSpriteSheet = new Texture();
-    private static final Texture barrierTexture = new Texture();
+    public static final Texture worldSpriteSheet = new Texture();
+    public static final Texture playerSpriteSheet = new Texture();
+    public static final Texture barrierTexture = new Texture();
 
     // Audio for the game.
     private static final Music mainTheme = new Music();
@@ -88,10 +88,17 @@ public class Game {
     private String FontPath; // Where fonts were found.
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
-    private static final ArrayList<Actor> actors = new ArrayList<Actor>();
-    private static final ArrayList<WorldPiece> world = new ArrayList<WorldPiece>();
-    private static final ArrayList<WorldPiece> underlay = new ArrayList<WorldPiece>();
-    private static final ArrayList<WorldPiece> empty = new ArrayList<WorldPiece>();
+    private static final ArrayList<WorldPiece> underlay0 = new ArrayList<WorldPiece>();
+    private static final ArrayList<WorldPiece> overlay0 = new ArrayList<WorldPiece>();
+    private static final ArrayList<Actor> actorlay0 = new ArrayList<Actor>();
+
+    public static final ArrayList<WorldPiece> underlay1 = new ArrayList<WorldPiece>();
+    public static final ArrayList<WorldPiece> overlay1 = new ArrayList<WorldPiece>();
+    public static final ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
+
+    public static final ArrayList<WorldMap> maps = new ArrayList<>();
+
+    private static int worldNum = 0;
 
     /**
      * Array list of actors. Typically used for adding/removing from the list.
@@ -100,8 +107,13 @@ public class Game {
      * @return Array list of actors.
      */
     public static ArrayList<Actor> returnActors() {
-        return actors;
+        return actorlay0;
     }
+
+    public static void changeWorld(int w) {
+        worldNum = w;
+    }
+    
 
     /**
      * Array list of tiles. Typically used for creating a game map. Add
@@ -110,7 +122,11 @@ public class Game {
      * @return Arrays list of tiles.
      */
     public static ArrayList<WorldPiece> returnWorldPieces() {
-        return world;
+        return overlay0;
+    }
+
+    public static ArrayList<WorldPiece> returnUnderlayPieces() {
+        return underlay0;
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
@@ -142,16 +158,24 @@ public class Game {
 
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
 
-        WorldMap worldMap1 = new WorldMap(worldSpriteSheet, barrierTexture, "src/tilemaps/demo.txt", world,false);
-        WorldMap worldMap2 = new WorldMap(worldSpriteSheet, barrierTexture, "src/tilemaps/underlay.txt", underlay,false);
-        WorldMap worldMap3 = new WorldMap(worldSpriteSheet, barrierTexture, "src/tilemaps/demo_actor.txt", empty, true);
-
+        maps.add(new WorldMap(worldSpriteSheet,0));
+        maps.add(new WorldMap(worldSpriteSheet,1));
+        
         Player player1 = new Player(playerSpriteSheet);
+        
+        Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
+        Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
+        maps.get(0).getActor().add(portal1);
+        maps.get(0).getActor().add(portal2);
 
-        actors.add(player1);
-        WorldPiece door = new WorldPiece(worldSpriteSheet, 8, 4, 33, 0);
-        //world.add(door);
+        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
+        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
+        maps.get(1).getActor().add(portal3);
+        maps.get(1).getActor().add(portal4);
 
+        maps.get(0).getActor().add(player1);
+        maps.get(1).getActor().add(player1);
+        
         footsteps1.openFromFile(Paths.get("src/audio/rpg/footstep00.ogg"));
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
@@ -186,37 +210,36 @@ public class Game {
             }
 
             // Check for input (UP,DOWN,LEFT,RIGHT)
-            if (Keyboard.isKeyPressed(Keyboard.Key.UP)) {
+            if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                 player1.y -= spd;
                 playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.DOWN)) {
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
                 player1.y += spd;
                 playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.LEFT)) {
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
                 player1.x -= spd;
                 playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.RIGHT)) {
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
                 player1.x += spd;
                 playFootsteps();
             }
-            
+
             //Draws underlay tiles
-            for (WorldPiece ul : underlay) {
+            for (WorldPiece ul : maps.get(worldNum).getUnder()) {
                 ul.draw(window);
             }
 
             //Draws the backsground and main tiles.
-            for (WorldPiece wp : world) {
+            for (WorldPiece wp : maps.get(worldNum).getOver()) {
                 wp.draw(window);
             }
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
-            for (Actor actor : actors) {
+            for (Actor actor : maps.get(worldNum).getActor()) {
                 actor.calcMove(0, 0, screenWidth, screenHeight);
                 actor.performMove();
                 actor.draw(window);
             }
-
             // Update the display with any changes.
             window.display();
 
@@ -229,12 +252,16 @@ public class Game {
                 if (event.type == Event.Type.LOST_FOCUS) {
                     // Will set FPS to low if game is in background.
                     window.setFramerateLimit(8);
+                    mainTheme.pause();
                 } else if (event.type == Event.Type.GAINED_FOCUS) {
                     window.setFramerateLimit(30);
+                    mainTheme.play();
                 }
             }
         }
+
     }
+
     /**
      * Starts the game.
      *

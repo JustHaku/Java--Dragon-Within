@@ -7,78 +7,141 @@ import java.util.Scanner;
 import org.jsfml.graphics.Texture;
 
 /**
- * Changes the current world map based on a text file with coordinates. The text
- * file is also called a tileMap as it defines which types of tiles go where.
- * Each pair of numbers correlates to the coordinates of a piece on the sprite
- * sheet. Each location of the pairs of numbers in the text file correlates to
- * location of the game screen. The pairs of number can not exceed the grid size
- * e.g.
- *
- * Below is the correct format of the tileMap. 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
- * 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+ * Creates world map using the tilemaps at 
+ * "src/tilemaps/w/w/_underlay",
+ * "src/tilemaps/w/w/_overlay",
+ * "src/tilemaps/w/w/_actorlay"
+ * where x is the world number.
+ * 
+ * the -1 flag in all layers means do nothing. 
+ * the -2 flag in the over layer means add a barrier.
+ * 
  *
  * @author LBals
  */
 public class WorldMap {
 
+    private Scanner[] scanners;
+    private int layer;
+
+    private final ArrayList<WorldPiece> underlay = new ArrayList<>();
+    private final ArrayList<WorldPiece> overlay = new ArrayList<>();
+    private final ArrayList<Actor> actorlay = new ArrayList<>();
+    
+    String underlayTileMap = new String("src/tilemaps/");
+    String overlayTileMap = new String("src/tilemaps/");
+    String actorlayTileMap = new String("src/tilemaps/");
+
+    private Texture imgTexture;
+
+    private int[][] k;
+
     /**
-     * Constructs a new map based on a text file of coordinates. See class
-     * description for further details.
-     *
-     * @param imgTexture Spritesheet containing the pieces of the world.
-     * @param barrierTexture Texture of barrier.
-     * @param mapPath Text file containing the tileMap so that the constructor
-     * can build the pieces.
+     * Creates world map using the tilemaps at 
+     * "src/tilemaps/w/w/_underlay",
+     * "src/tilemaps/w/w/_overlay",
+     * "src/tilemaps/w/w/_actorlay"
+     * where x is the world number.
+     * @param imgTexture World texture sprite sheet
+     * @param w World number to load
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public WorldMap(Texture imgTexture, Texture barrierTexture, String mapPath, ArrayList<WorldPiece> world, boolean actor) throws FileNotFoundException, IOException {
-        world.clear(); // Clears current map so new one can take its' place
+    public WorldMap(Texture imgTexture, int w)
+            throws FileNotFoundException, IOException {
+        
+        this.imgTexture = imgTexture;
 
-        Scanner scanner = new Scanner(new File(mapPath)); // Reads the tileMap file.
+        Scanner[] scanners = new Scanner[3];
+        
+        underlayTileMap = underlayTileMap + w + "/" + w + "_underlay.txt";
+        overlayTileMap = overlayTileMap + w + "/" + w + "_overlay.txt";
+        actorlayTileMap = actorlayTileMap + w + "/" + w + "_actorlay.txt";
 
-        int[][] k = new int[Game.gridHeight][Game.gridWidth * 2];
+        // Clears current map so new one can take its' place
+        scanners[0] = new Scanner(new File(underlayTileMap)); // Reads the tileMap file.
+        scanners[1] = new Scanner(new File(overlayTileMap)); // Reads the tileMap file.
+        scanners[2] = new Scanner(new File(actorlayTileMap)); // Reads the tileMap file.
+
+        k = new int[Game.gridHeight][Game.gridWidth * 2];
+
+        layer = 0;
+        for (int i = 0; i < 3; i++) {
+            storeInts(scanners[i]);
+        }
+        // Creates new world pieces based on integers that were read from the tileMap.
+    }
+
+    /**
+     * Returns under layer of the map
+     * @return underlay
+     */
+    public ArrayList<WorldPiece> getUnder() {
+        return underlay;
+    }
+
+    /**
+     * Returns over layer of the map
+     * @return overlay
+     */
+    public ArrayList<WorldPiece> getOver() {
+        return overlay;
+    }
+
+    /**
+     * Returns actor layer of the map.
+     * @return actorlay
+     */
+    public ArrayList<Actor> getActor() {
+        return actorlay;
+    }
+
+    private void storeInts(Scanner sc) {
         int p = 0;
         int q = 0;
 
         //Stores integers from map file into an array
-        while (scanner.hasNextInt()) {
-            k[q][p] = scanner.nextInt();
+        while (sc.hasNextInt()) {
+            k[q][p] = sc.nextInt();
             p++;
             if (p % (Game.gridWidth * 2) == 0) {
                 p = 0;
                 q++;
             }
         }
+        layer++;
+        buildMaps();
+    }
 
-        // Creates new world pieces based on integers that were read from the tileMap.
+    private void buildMaps() {
         for (int i = 0; i < Game.gridWidth; i++) {
             for (int j = 0; j < Game.gridHeight; j++) {
-                if (actor) {
-                    if (k[j][i * 2] == 0 && k[j][(i * 2) + 1] == 0) {
+                if (layer == 1) {
+                    if (k[j][i * 2] == -1 && k[j][(i * 2) + 1] == -1) {
+
                     } else {
-                        Game.returnActors().add(new WorldPieceActor(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
+                        underlay.add(new WorldPiece(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
                     }
-                } else {
-                    if (k[j][i * 2] == -2 && k[j][(i * 2) + 1] == -2) {        
-                    }else{
-                        world.add(new WorldPiece(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
-                        if (k[j][i * 2] == -1 && k[j][(i * 2) + 1] == -1) {
-                            Game.returnActors().add(new Barrier(barrierTexture, i, j));
-                        }
+                }
+                if (layer == 2) {
+                    if (k[j][i * 2] == -1 && k[j][(i * 2) + 1] == -1) {
+
+                    } else if (k[j][i * 2] == -2 && k[j][(i * 2) + 1] == -2) {
+                        actorlay.add(new WorldPieceActor(imgTexture, i, j, 0, 5,actorlay));
+
+                    } else {
+                        overlay.add(new WorldPiece(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1]));
+                    }
+                }
+                if (layer == 3) {
+                    if (k[j][i * 2] == -1 && k[j][(i * 2) + 1] == -1) {
+                    }else {
+                        actorlay.add(new WorldPieceActor(imgTexture, i, j, k[j][i * 2], k[j][(i * 2) + 1],actorlay));
                     }
 
                 }
-
             }
         }
+
     }
 }

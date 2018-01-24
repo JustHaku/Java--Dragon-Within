@@ -33,6 +33,10 @@ public abstract class Actor {
         //rotate.accept(r);
         setPosition.accept((float) x, (float) y);
     }
+    
+    boolean isPlayer(){
+        return false;
+    }
 
     // Render the object at its new position.
     void draw(RenderWindow w) {

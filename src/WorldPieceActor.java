@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.RenderWindow;
 import org.jsfml.graphics.Sprite;
@@ -17,7 +18,7 @@ import org.jsfml.graphics.Texture;
 public class WorldPieceActor extends Actor {
     private final Sprite img;
     private final IntRect piece;
-
+    private final ArrayList<Actor> actors;
     /**
      * Selects a world piece from a Spritesheet.
      *
@@ -27,7 +28,8 @@ public class WorldPieceActor extends Actor {
      * @param c1 X coordinate of piece on Spritesheet.
      * @param c2 Y coordinate of piece on Spritesheet.
      */
-    public WorldPieceActor(Texture imgTexture, int x, int y, int c1, int c2) {
+    public WorldPieceActor(Texture imgTexture, int x, int y, int c1, int c2, ArrayList<Actor> actors) {
+        this.actors = actors;
         // Draws rectange around selected piece
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
 
@@ -44,7 +46,7 @@ public class WorldPieceActor extends Actor {
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
         // Do this if actor hits this object.
-        for (Actor a : Game.returnActors()) {
+        for (Actor a : actors) {
             if (a.obj != obj && a.within(x, y)) {
                 if (a.x <= x) {
                     a.x -= Game.spd;

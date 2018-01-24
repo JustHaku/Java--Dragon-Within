@@ -1,4 +1,5 @@
 
+
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
@@ -36,11 +37,21 @@ public class Player extends Actor {
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
     }
+    
+    void setPosition(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
 
     @Override // Uses a rectangle around the player to detect if this actor is within other actors.
     boolean within(int px, int py) {
         return px > x - (state.width * (Game.SCALE / (float) 1.333)) && px < x + (state.width * (Game.SCALE / (float) 1.333))
                 && py > y - (state.width * (Game.SCALE / (float) 1.333)) && py < y + (state.width * (Game.SCALE / (float) 1.333));
+    }
+    
+    @Override
+    boolean isPlayer(){
+        return true;
     }
 
     @Override
