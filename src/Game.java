@@ -113,7 +113,6 @@ public class Game {
     public static void changeWorld(int w) {
         worldNum = w;
     }
-    
 
     /**
      * Array list of tiles. Typically used for creating a game map. Add
@@ -158,24 +157,28 @@ public class Game {
 
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
 
-        maps.add(new WorldMap(worldSpriteSheet,0));
-        maps.add(new WorldMap(worldSpriteSheet,1));
-        
+        maps.add(new WorldMap(worldSpriteSheet, 0));
+        maps.add(new WorldMap(worldSpriteSheet, 1));
+        maps.add(new WorldMap(worldSpriteSheet, 2));
+
         Player player1 = new Player(playerSpriteSheet);
-        
-        Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
-        Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
-        maps.get(0).getActor().add(portal1);
-        maps.get(0).getActor().add(portal2);
 
-        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
-        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
-        maps.get(1).getActor().add(portal3);
-        maps.get(1).getActor().add(portal4);
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 8, 4, 33, 1, 8, 9, 2,maps.get(0).getActor())); //Door to interior
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor()));
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor()));
 
-        maps.get(0).getActor().add(player1);
-        maps.get(1).getActor().add(player1);
+        maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor()));
+        maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor()));
         
+        maps.get(2).getActor().add(new Portal(player1, worldSpriteSheet, 8, 10, 0, 5, 8, 5, 0, maps.get(2).getActor()));
+        
+        
+        for(WorldMap a: maps){
+            a.getActor().add(player1);     
+        }
+        
+        
+
         footsteps1.openFromFile(Paths.get("src/audio/rpg/footstep00.ogg"));
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
@@ -228,11 +231,11 @@ public class Game {
             for (WorldPiece ul : maps.get(worldNum).getUnder()) {
                 ul.draw(window);
             }
-
-            //Draws the backsground and main tiles.
+            //Draws the backsground and main tiles.ssdddw
             for (WorldPiece wp : maps.get(worldNum).getOver()) {
                 wp.draw(window);
             }
+            
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
             for (Actor actor : maps.get(worldNum).getActor()) {
@@ -253,9 +256,11 @@ public class Game {
                     // Will set FPS to low if game is in background.
                     window.setFramerateLimit(8);
                     mainTheme.pause();
+
                 } else if (event.type == Event.Type.GAINED_FOCUS) {
                     window.setFramerateLimit(30);
-                    mainTheme.play();
+                    mainTheme.play();;
+                    
                 }
             }
         }
