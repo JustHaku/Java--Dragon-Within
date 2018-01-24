@@ -98,7 +98,7 @@ public class Game {
 
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
-    private static int worldNum = 0;
+    public static int worldNum = 0;
 
     /**
      * Array list of actors. Typically used for adding/removing from the list.
@@ -209,23 +209,25 @@ public class Game {
             mainTheme.getStatus();
 
             if (window.isOpen()) { // Clear the screen.
-                //window.clear(Color.WHITE);
+                window.clear(Color.WHITE);
             }
-
+            
             // Check for input (UP,DOWN,LEFT,RIGHT)
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-                player1.y -= spd;
+                player1.moveUp();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-                player1.y += spd;
+                player1.moveDown();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-                player1.x -= spd;
+                player1.moveLeft();
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-                player1.x += spd;
+                player1.moveRight();
                 playFootsteps();
             }
+
+            
 
             //Draws underlay tiles
             for (WorldPiece ul : maps.get(worldNum).getUnder()) {
@@ -243,6 +245,7 @@ public class Game {
                 actor.performMove();
                 actor.draw(window);
             }
+            
             // Update the display with any changes.
             window.display();
 

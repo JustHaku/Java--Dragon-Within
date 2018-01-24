@@ -14,14 +14,24 @@ public abstract class Actor {
     Drawable obj; //The object to set for collision.
     IntConsumer rotate;
     BiConsumer<Float, Float> setPosition;
-
+    
     int x = 0;	// Current X-coordinate.
     int y = 0;	// Current Y-coordinate.
     int r = 0;	// Change in rotation per cycle.
+    int dx = 0;
+    int dy = 0;
+    int xv = 0;
+    int yv = 0;
+            
 
     // Method for detecting if it is inside another actor.
     boolean within(int x, int y) {
         return false;
+    }
+    
+    void setValid(int x,int y){
+        xv = x;
+        yv = y;
     }
 
     // Work out where object should be for next frame.
