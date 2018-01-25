@@ -1,4 +1,3 @@
-
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
@@ -10,11 +9,12 @@ import org.jsfml.graphics.Texture;
  */
 public class Player extends Actor {
 
-    private final Sprite img;
-    private final IntRect state; // The Players current character model from the spritesheet.
-    private final int c1;
-    private final int c2;
-    private final float ps = (float) 1;
+    protected Sprite img;
+    protected IntRect state; // The Players current character model from the spritesheet.
+    protected int c1, c2;
+
+
+    protected final float ps = (float)1;
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the

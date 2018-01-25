@@ -34,18 +34,30 @@ public abstract class Actor {
         yv = y;
     }
 
-    // Work out where object should be for next frame.
+    /**
+    * Work out where object should be for next frame.
+    */
     abstract void calcMove(int minx, int miny, int maxx, int maxy);
 
-    //
+    /**
+    *@param actor is the actor to be checked
+    *@return Determines if the actor can be interacted with or returns false if actor is redundant
+    */
+    boolean isInteractive(Actor actor){
+    //assume actor is redundant
+      return false;
+    }
+
+    /**
+    *@return Indicates if actor is the main player
+    */
     boolean isPlayer()
     {
-        return false;
+      return false;
     }
 
     // Reposition the object.
     void performMove() {
-        //rotate.accept(r);
         setPosition.accept((float) x, (float) y);
     }
 
