@@ -38,11 +38,6 @@ public abstract class Actor {
     }
 
     /**
-    * Work out where object should be for next frame.
-    */
-    abstract void calcMove(int minx, int miny, int maxx, int maxy);
-
-    /**
     *@param actor is the actor to be checked
     *@return Determines if the actor can be interacted with or returns false if actor is redundant
     */
