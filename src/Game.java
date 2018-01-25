@@ -20,12 +20,14 @@ import org.jsfml.system.Clock;
 public class Game {
 
     public static final int spd = 4; //The speed in which the player moves at.
-    public static final int SCALE = 4; //The scale of the game. This is changed when you want the game screen to change.
-    public static final int screenWidth = 288 * SCALE; //Width of the game screen. Must be a multiple of 288.
-    public static final int screenHeight = 160 * SCALE; //Height of the game screen. Must be a multiple of 160.
-    public static final int tileSize = 16 * SCALE; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
-    public static final int gridWidth = screenWidth / tileSize; //How many tiles wide the game screen is.
-    public static final int gridHeight = screenHeight / tileSize; //How may tiles high the game screen is.
+    public static  int SCALE; //The scale of the game. This is changed when you want the game screen to change.
+    public static  int screenWidth; //Width of the game screen. Must be a multiple of 288.
+    public static  int screenHeight; //Height of the game screen. Must be a multiple of 160.
+    public static  int tileSize; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
+    public static  int gridWidth; //How many tiles wide the game screen is.
+    public static  int gridHeight; //How may tiles high the game screen is.
+    private RenderWindow window;
+    private Player player1;
 
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
@@ -74,6 +76,18 @@ public class Game {
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
     public static int worldNum = 0;
+    
+    public Game(RenderWindow window, int scale) throws InterruptedException, IOException
+    {
+      this.window = window;
+      this.SCALE = scale;
+      this.screenWidth = 288 * scale;
+      this.screenHeight = 160 * scale;
+      this.tileSize = 16 * scale;
+      this.gridWidth = screenWidth / tileSize;
+      this.gridHeight = screenHeight / tileSize;
+      init();
+    }
 
     /**
      * Array list of actors. Typically used for adding/removing from the list.
@@ -131,7 +145,7 @@ public class Game {
      * @throws FileNotFoundException
      * @throws IOException
      */
-    public void run() throws InterruptedException, FileNotFoundException, IOException {
+    public void init() throws InterruptedException, FileNotFoundException, IOException {
         worldSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeSheet_transparent.png"));
         playerSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeChar_transparent.png"));
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
@@ -139,7 +153,7 @@ public class Game {
         maps.add(new WorldMap(worldSpriteSheet,0));
         maps.add(new WorldMap(worldSpriteSheet,1));
 
-        Player player1 = new Player(playerSpriteSheet);
+        player1 = new Player(playerSpriteSheet);
 
         Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
         Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
@@ -161,7 +175,6 @@ public class Game {
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
-        mainTheme.play();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
@@ -170,14 +183,12 @@ public class Game {
         else {
             FontPath = JdkFontPath;
         }
-
-        // Create a window.
-        RenderWindow window = new RenderWindow();
-        window.create(new VideoMode(screenWidth, screenHeight), Title, WindowStyle.CLOSE);
-        window.setFramerateLimit(30); // Avoid excessive updates.
-
-        //main game loop
-        while (window.isOpen())
+    }
+    public int run()
+    {
+    boolean paused = false;
+        mainTheme.play();
+        while (window.isOpen() && paused == false)
         {
           mainTheme.getStatus();
             if (window.isOpen()) {
@@ -198,6 +209,9 @@ public class Game {
             } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
                 player1.moveRight();
                 playFootsteps();
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE)) {
+                mainTheme.pause();
+                paused = true;
             }
 
             //Draws underlay tiles
@@ -236,20 +250,7 @@ public class Game {
                 }
             }
         }
-
+        return 0;
     }
 
-    /**
-     * Starts the game.
-     *
-     * @param args
-     * @throws InterruptedException
-     * @throws FileNotFoundException
-     * @throws IOException
-     */
-    public static void main(String args[]) throws InterruptedException, FileNotFoundException, IOException {
-        Game game1 = new Game();
-        game1.run();
-
-    }
 }

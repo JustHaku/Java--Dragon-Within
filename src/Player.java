@@ -11,8 +11,7 @@ public class Player extends Actor {
 
     protected Sprite img;
     protected IntRect state; // The Players current character model from the spritesheet.
-    protected int c1, c2;
-
+    protected int c1, c2, health, mana, exp;
 
     protected final float ps = (float)1;
 
