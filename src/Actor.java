@@ -24,6 +24,9 @@ public abstract class Actor {
     int yv = 0;
 
 
+    // Work out where object should be for next frame.
+    abstract void calcMove(int minX, int minY, int maxX, int maxY);
+
     // Method for detecting if it is inside another actor.
     boolean within(int x, int y) {
         return false;
@@ -55,6 +58,7 @@ public abstract class Actor {
     {
       return false;
     }
+
 
     // Reposition the object.
     void performMove() {
