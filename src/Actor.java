@@ -36,7 +36,12 @@ public abstract class Actor {
 
     // Work out where object should be for next frame.
     abstract void calcMove(int minx, int miny, int maxx, int maxy);
-    abstract boolean isPlayer();
+
+    //
+    boolean isPlayer()
+    {
+        return false;
+    }
 
     // Reposition the object.
     void performMove() {

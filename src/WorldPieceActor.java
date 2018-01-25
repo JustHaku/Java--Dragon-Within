@@ -51,6 +51,7 @@ public class WorldPieceActor extends Actor {
                 && py > y - (piece.height * (Game.SCALE)) && py < y + (piece.height * (Game.SCALE));
     }
 
+   
    @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
     }

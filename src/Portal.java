@@ -35,6 +35,8 @@ public class Portal extends Actor {
      * @param w Index of world number to port to
      * @param actors The arraylist of actors you want to act upon(The one containing the player)
      */
+    
+    
     public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors) {
         // Draws rectange around selected piece
         this.actors = actors;
@@ -65,6 +67,7 @@ public class Portal extends Actor {
         }
     }
 
+    
     @Override
     void draw(RenderWindow w) {
         w.draw(img);
