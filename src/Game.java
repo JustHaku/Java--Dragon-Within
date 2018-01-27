@@ -17,7 +17,7 @@ import org.jsfml.system.Clock;
  *
  * @author LBals
  */
-public class Game {
+public class Game extends State{
 
     public static final int spd = 4; //The speed in which the player moves at.
     public static  int SCALE; //The scale of the game. This is changed when you want the game screen to change.
@@ -184,6 +184,8 @@ public class Game {
             FontPath = JdkFontPath;
         }
     }
+    
+    @Override
     public int run()
     {
     boolean paused = false;

@@ -11,7 +11,7 @@ import org.jsfml.audio.*;
  *
  * @author Kirk Sparnenn
  */
-public class MainMenu
+public class MainMenu extends State
 { 
   private RenderWindow window;
   private int screenWith;
@@ -73,7 +73,7 @@ public class MainMenu
     menuSound = new Sound();
     menuSound.setBuffer(soundBuffer);
   }
-  
+  @Override
   public int run()
   {
       boolean paused = false;
@@ -122,6 +122,11 @@ public class MainMenu
               menuMusic.stop();
               paused = true;
             }            
+          }
+          
+          else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
+          {
+              window.close();         
           }
           if (option == 1)
           {
