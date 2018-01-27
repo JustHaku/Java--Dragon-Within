@@ -14,6 +14,7 @@ import org.jsfml.audio.*;
 public class MainMenu extends State
 { 
   private RenderWindow window;
+  private int scale;
   private int screenWith;
   private int screenHight;
   private int option = 1;
@@ -27,11 +28,12 @@ public class MainMenu extends State
   private Sound menuSound;
   private Music menuMusic;
   
-  public MainMenu(RenderWindow window)
+  public MainMenu(RenderWindow window, int scale)
   {
     this.window = window;
-    this.screenWith = 640;
-    this.screenHight = 480;
+    this.scale = scale;
+    this.screenWith = 288*scale;
+    this.screenHight = 160*scale;
     
     mainBG = new Texture();
     stayWildy = new Font();

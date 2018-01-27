@@ -21,7 +21,7 @@ public class StateMachine
     // Limit the framerate to 60.
     window.setFramerateLimit(60);
 
-    State mainMenu = new MainMenu(window);
+    State mainMenu = new MainMenu(window, scale);
     State gameWorld = new Game(window, scale);
     State[] states = new State[2];
     states[0] = mainMenu;

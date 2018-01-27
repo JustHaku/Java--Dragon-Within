@@ -28,6 +28,7 @@ public class Game extends State{
     public static  int gridHeight; //How may tiles high the game screen is.
     private RenderWindow window;
     private Player player1;
+    private int battleChance = 0;
 
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
@@ -128,10 +129,12 @@ public class Game extends State{
             {
                 footsteps1.play();
                 footstepsState = 1;
+                battleChance++;
             }
             else if (footstepsState == 1) {
                 footsteps2.play();
                 footstepsState = 0;
+                battleChance++;
             }
             footstepsTimer.restart();
         }
@@ -188,20 +191,31 @@ public class Game extends State{
     @Override
     public int run()
     {
-    boolean paused = false;
+    int paused = 1;
+    battleChance = 0;
         mainTheme.play();
-        while (window.isOpen() && paused == false)
+        while (window.isOpen() && paused == 1)
         {
           mainTheme.getStatus();
             if (window.isOpen()) {
               // Clear the screen
-              window.clear(Color.WHITE);
+              window.clear(Color.WHITE);              
             }
 
+            // Starts a battle every 10 steps.
+            if (battleChance >= 10)
+            {
+              mainTheme.pause();
+              paused = 0;
+            }
+                
+            
+            System.out.print(battleChance + "\n");
+              
             // Check for input (UP,DOWN,LEFT,RIGHT)
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                 player1.moveUp();
-                playFootsteps();
+                playFootsteps();                
             } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
                 player1.moveDown();
                 playFootsteps();
@@ -213,7 +227,7 @@ public class Game extends State{
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE)) {
                 mainTheme.pause();
-                paused = true;
+                paused = 0;
             }
 
             //Draws underlay tiles
@@ -252,7 +266,7 @@ public class Game extends State{
                 }
             }
         }
-        return 0;
+        return paused;
     }
 
 }
