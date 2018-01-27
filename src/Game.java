@@ -191,10 +191,10 @@ public class Game extends State{
     @Override
     public int run()
     {
-    int paused = 1;
-    battleChance = 0;
+        int state = 1;
+        battleChance = 0;
         mainTheme.play();
-        while (window.isOpen() && paused == 1)
+        while (window.isOpen() && state == 1)
         {
           mainTheme.getStatus();
             if (window.isOpen()) {
@@ -206,7 +206,7 @@ public class Game extends State{
             if (battleChance >= 10)
             {
               mainTheme.pause();
-              paused = 0;
+              state = 2;
             }
                 
             
@@ -225,9 +225,9 @@ public class Game extends State{
             } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
                 player1.moveRight();
                 playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE)) {
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && battleChance !=0) {
                 mainTheme.pause();
-                paused = 0;
+                state = 0;
             }
 
             //Draws underlay tiles
@@ -266,7 +266,7 @@ public class Game extends State{
                 }
             }
         }
-        return paused;
+        return state;
     }
 
 }
