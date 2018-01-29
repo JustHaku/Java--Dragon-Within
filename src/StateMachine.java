@@ -24,10 +24,12 @@ public class StateMachine
     State mainMenu = new MainMenu(window, scale);
     State gameWorld = new Game(window, scale);
     State battleSystem = new BattleSystem(window, scale);
-    State[] states = new State[3];
+    State inventoryMenu = new InventoryMenu(window, scale);
+    State[] states = new State[4];
     states[0] = mainMenu;
     states[1] = gameWorld;
     states[2] = battleSystem;
+    states[3] = inventoryMenu;
     
     while (window.isOpen())
     {

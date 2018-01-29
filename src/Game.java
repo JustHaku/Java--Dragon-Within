@@ -208,9 +208,6 @@ public class Game extends State{
               mainTheme.pause();
               state = 2;
             }
-                
-            
-            System.out.print(battleChance + "\n");
               
             // Check for input (UP,DOWN,LEFT,RIGHT)
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
@@ -227,7 +224,7 @@ public class Game extends State{
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && battleChance !=0) {
                 mainTheme.pause();
-                state = 0;
+                state = 3;
             }
 
             //Draws underlay tiles
