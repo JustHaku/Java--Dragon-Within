@@ -241,7 +241,7 @@ public class Game {
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
             for (Actor actor : maps.get(worldNum).getActor()) {
-                actor.calcMove(0, 0, screenWidth, screenHeight);
+                actor.calcMove(0, 0, screenWidth - 60, screenHeight);
                 actor.performMove();
                 actor.draw(window);
             }

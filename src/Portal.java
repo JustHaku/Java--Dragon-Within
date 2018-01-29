@@ -36,7 +36,7 @@ public class Portal extends Actor {
      * @param actors The arraylist of actors you want to act upon(The one containing the player)
      */
     public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors) {
-        // Draws rectange around selected piece
+        // Draws rectangle around selected piece
         this.actors = actors;
         this.w = w;
         this.p1 = p1 * Game.tileSize;
@@ -58,7 +58,8 @@ public class Portal extends Actor {
     void calcMove(int minx, int miny, int maxx, int maxy) {
         // Do this if actor hits this object.
         for (Actor a : actors) {
-            if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
+            if (a.obj != obj && a.within(x, y) && a.isPlayer()) {	
+				
                 Game.changeWorld(w);
                 player1.setPosition(p1,p2);
             }
