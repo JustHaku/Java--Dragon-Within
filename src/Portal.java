@@ -60,7 +60,7 @@ public class Portal extends Actor {
         for (Actor a : actors) {
             if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
                 Game.changeWorld(w);
-                player1.setPosition(p1, p2);
+                player1.setPosition(p1,p2);
             }
         }
     }

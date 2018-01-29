@@ -202,7 +202,7 @@ public class Game {
                 screenWidth, screenHeight),
                 Title,
                 WindowStyle.CLOSE);
-        window.setFramerateLimit(30); // Avoid excessive updates.
+        window.setFramerateLimit(60); // Avoid excessive updates.
 
         while (window.isOpen()) {
 
@@ -261,7 +261,7 @@ public class Game {
                     mainTheme.pause();
 
                 } else if (event.type == Event.Type.GAINED_FOCUS) {
-                    window.setFramerateLimit(30);
+                    window.setFramerateLimit(60);
                     mainTheme.play();;
                     
                 }
