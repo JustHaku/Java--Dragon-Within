@@ -194,7 +194,7 @@ public class Game extends State{
     public int run()
     {
         int state = 1;
-        battleChance = 0;
+        int menuSleep = 15;
         mainTheme.play();
         while (window.isOpen() && state == 1)
         {
@@ -207,6 +207,7 @@ public class Game extends State{
             // Starts a battle every 10 steps.
             if (battleChance >= 10)
             {
+              battleChance = 0;
               mainTheme.pause();
               state = 2;
             }
@@ -224,11 +225,12 @@ public class Game extends State{
             } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
                 player1.moveRight();
                 playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && battleChance !=0) {
+            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                 mainTheme.pause();
                 state = 3;
             }
-
+            if (menuSleep >0)
+                menuSleep--;
             //Draws underlay tiles
             for (WorldPiece ul : maps.get(worldNum).getUnder()) {
                 ul.draw(window);
