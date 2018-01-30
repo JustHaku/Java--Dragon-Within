@@ -34,6 +34,11 @@ public class StateMachine
     while (window.isOpen())
     {
       state = states[state].run();
+      if (state == 99)
+      {
+          state = 1;
+          //states[1] = new Game(window, scale);
+      }
     }
   }
 }

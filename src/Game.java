@@ -68,11 +68,11 @@ public class Game extends State{
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
     private static final ArrayList<WorldPiece> underlay0 = new ArrayList<WorldPiece>();
     private static final ArrayList<WorldPiece> overlay0 = new ArrayList<WorldPiece>();
-    private static final ArrayList<Actor> actorlay0 = new ArrayList<Actor>();
+    private static  ArrayList<Actor> actorlay0 = new ArrayList<Actor>();
 
     public static final ArrayList<WorldPiece> underlay1 = new ArrayList<WorldPiece>();
     public static final ArrayList<WorldPiece> overlay1 = new ArrayList<WorldPiece>();
-    public static final ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
+    public static  ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
 
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
@@ -227,7 +227,8 @@ public class Game extends State{
                 playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                 mainTheme.pause();
-                state = 3;
+                state = 0;
+
             }
             if (menuSleep >0)
                 menuSleep--;
@@ -262,7 +263,7 @@ public class Game extends State{
                 }
                 else if (event.type == Event.Type.GAINED_FOCUS) {
                     isMinimized = false;
-                    window.setFramerateLimit(30);
+                    window.setFramerateLimit(60);
                     mainTheme.play();
                 }
             }

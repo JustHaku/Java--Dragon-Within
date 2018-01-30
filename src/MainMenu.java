@@ -60,7 +60,7 @@ public class MainMenu extends State
     text1.setOrigin(text1bounds.width / 2, text1bounds.height / 2);
     text1.setPosition(screenWith/2, screenHight/4);
     
-    text2 = new Text("Load Game", stayWildy, screenHight/10);
+    text2 = new Text("continue", stayWildy, screenHight/10);
     FloatRect text2bounds = text2.getLocalBounds();
     text2.setOrigin(text2bounds.width / 2, text2bounds.height / 2);
     text2.setPosition(screenWith/2, screenHight/4 + screenHight/10);
@@ -80,6 +80,7 @@ public class MainMenu extends State
   {
       boolean paused = false;
       menuMusic.play();
+      option = 1;
     while(window.isOpen() && paused == false) 
     {
       window.clear(Color.WHITE);
@@ -123,7 +124,13 @@ public class MainMenu extends State
             {
               menuMusic.stop();
               paused = true;
-            }            
+              option = 99;
+            } else if (option == 2)
+            {
+              menuMusic.stop();
+              paused = true;
+              option = 1;
+            }           
           }
           
           else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
