@@ -10,4 +10,8 @@
  */
 public class Weapon extends Item{
     
+    public Weapon(int id, String name) {
+        super(id,name);
+    }
+    
 }
