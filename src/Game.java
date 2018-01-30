@@ -162,6 +162,8 @@ public class Game extends State{
         Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
+        
+        maps.get(0).getActor().add(new Activator(worldSpriteSheet, "I have been activated",1,2));
 
         Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
         Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());

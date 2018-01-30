@@ -1,6 +1,7 @@
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
+import org.jsfml.window.Keyboard;
 
 /**
  * Main class for creating players in the game.
@@ -88,7 +89,7 @@ public class Player extends Actor {
         }
 
         for (Actor a : Game.maps.get(Game.worldNum).getActor()) {
-                if (a.obj != obj && a.within(x, y)) {
+                if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
                     if(x > a.x){
                         moveRight();
                     }
@@ -103,7 +104,10 @@ public class Player extends Actor {
                         moveUp();
                     }
                 }
-
+                
+                if(a.isInteractive() == true && a.within(x,y) && Keyboard.isKeyPressed(Keyboard.Key.E)){
+                    a.activate();
+                }
         }
     }
 }

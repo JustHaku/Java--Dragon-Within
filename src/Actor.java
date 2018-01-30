@@ -41,9 +41,13 @@ public abstract class Actor {
     *@param actor is the actor to be checked
     *@return Determines if the actor can be interacted with or returns false if actor is redundant
     */
-    boolean isInteractive(Actor actor){
+    boolean isInteractive(){
     //assume actor is redundant
       return false;
+    }
+    
+    void activate(){
+        
     }
 
     /**
