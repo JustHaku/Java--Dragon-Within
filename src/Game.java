@@ -46,6 +46,7 @@ public class Game extends State{
     public static final Texture worldSpriteSheet = new Texture();
     public static final Texture playerSpriteSheet = new Texture();
     public static final Texture barrierTexture = new Texture();
+    public static final Texture uiTexture = new Texture();
 
     // Audio for the game.
     private static final Music mainTheme = new Music();
@@ -72,7 +73,10 @@ public class Game extends State{
 
     public static final ArrayList<WorldPiece> underlay1 = new ArrayList<WorldPiece>();
     public static final ArrayList<WorldPiece> overlay1 = new ArrayList<WorldPiece>();
-    public static  ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
+    public static final ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
+    
+    
+    
 
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
@@ -163,7 +167,14 @@ public class Game extends State{
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
         
-        maps.get(0).getActor().add(new Activator(worldSpriteSheet, "I have been activated",1,2));
+        Consumable test = new Consumable(1,"The Drink", 100, 100);
+        
+        Inventory playerInv = new Inventory();
+        
+        
+        AddItem addDrink = new AddItem(worldSpriteSheet, "",0,5, test,playerInv);
+        maps.get(0).getActor().add(addDrink);
+        
 
         Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
         Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
@@ -177,6 +188,8 @@ public class Game extends State{
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
         footsteps2.setVolume(50);
+        
+        
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
@@ -188,11 +201,12 @@ public class Game extends State{
         else {
             FontPath = JdkFontPath;
         }
+        
     }
     
     @Override
     public int run()
-    {
+    { 
         int state = 1;
         int menuSleep = 15;
         mainTheme.play();
@@ -248,6 +262,16 @@ public class Game extends State{
                 actor.performMove();
                 actor.draw(window);
             }
+            
+            for(MessageBox m: AddItem.messages){
+                if(m.hidden == false){
+                    m.draw(window);
+                }         
+            }
+            
+            
+            
+            
             // Update the display with any changes.
             window.display();
 

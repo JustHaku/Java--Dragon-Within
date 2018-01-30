@@ -29,7 +29,7 @@ public class Activator extends Actor {
         this.text = text;
         
         int c1 = 0;
-        int c2 = 6;
+        int c2 = 5;
         
         thing = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 

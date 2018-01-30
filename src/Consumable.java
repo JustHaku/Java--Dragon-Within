@@ -10,4 +10,23 @@
  */
 public class Consumable extends Item {
     
+    private int heal;
+    private int regen;
+    
+    public Consumable(int id,String name, int heal, int regen) {
+        super(id,name);
+        
+        this.heal = heal;
+        this.regen = regen;
+        
+        
+        
+    }
+    
+    public void use(Player p){
+        p.health += heal;
+        p.mana += regen;
+        
+    }
+    
 }
