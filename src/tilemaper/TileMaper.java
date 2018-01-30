@@ -232,7 +232,7 @@ public class TileMaper extends JFrame {
 
         //set create a grid layout with no gap between the buttons
         GridLayout gl = new GridLayout(y, x);
-        gl.setVgap(1);
+        gl.setVgap(-2);
         gl.setHgap(1);
 
         //make a panel for the buttons and give it size 

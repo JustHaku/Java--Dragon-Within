@@ -18,39 +18,40 @@ import javax.swing.JOptionPane;
  * @author valka
  */
 public class TileDisplayer extends JButton {
-
+    
     public static final int UNDERLAY = 0;
     public static final int OVERLAY = 1;
     public static final int ACTOR = 2;
-
-    private static final int RESIZE_RATIO = 5;
+    
+    private static final double RESIZE_RATIO = 4;
     private final TileTuple[] layers = new TileTuple[3];
-
+    
     public TileDisplayer(TileMaper tm, TileTuple t) {
         for (int i = 0; i < layers.length; i++) {
             layers[i] = t;
         }
         super.setIcon(overlay());
         super.setBorderPainted(false);
-
+        
         super.addActionListener((e) -> {
             changeLayer(tm.getSelectedLayer(), tm.getSelected());
         });
+        super.setPreferredSize(new Dimension((int)(Configs.SPRITE_WIDTH * RESIZE_RATIO + 1),(int) (Configs.SPRITE_HEIGHT * RESIZE_RATIO + 1)));
     }
-
+    
     public final void changeLayer(int layerNum, TileTuple t) {
         layers[layerNum] = t;
         ImageIcon icon = overlay();
-
+        
         this.setIcon(icon);
 
         //JOptionPane.showMessageDialog(null, getIcon());
     }
-
+    
     public TileTuple getLayer(int layerNum) {
         return layers[layerNum];
     }
-
+    
     private ImageIcon overlay() {
         // checks if any of the layes has an image if not there is no need to overlay
         TileTuple presentImage;
@@ -64,7 +65,7 @@ public class TileDisplayer extends JButton {
             }
             return null;
         }
-
+        
         BufferedImage fImg = new BufferedImage(presentImage.image.getWidth(), presentImage.image.getHeight(), presentImage.image.getType());
         Graphics2D grph = fImg.createGraphics();
 
@@ -75,7 +76,7 @@ public class TileDisplayer extends JButton {
             }
         }
         grph.dispose();
-
+        
         return new ImageIcon(resize(fImg, RESIZE_RATIO));
     }
 
@@ -86,16 +87,16 @@ public class TileDisplayer extends JButton {
      * @param ratio the ratio of resizing
      * @return a new instance of the image resized
      */
-    private BufferedImage resize(BufferedImage image, int ratio) {
-        BufferedImage resize = new BufferedImage(image.getWidth() * ratio, image.getHeight() * ratio, image.getType());
+    private BufferedImage resize(BufferedImage image, double ratio) {
+        BufferedImage resize = new BufferedImage((int) (image.getWidth() * ratio),(int) (image.getHeight() * ratio), image.getType());
         Graphics2D grp = resize.createGraphics();
-
-        grp.drawImage(image, 0, 0, image.getWidth() * ratio, image.getHeight() * ratio, null);
+        
+        grp.drawImage(image, 0, 0, (int) (image.getWidth() * ratio),(int) (image.getHeight() * ratio), null);
         grp.dispose();
-
-        this.setPreferredSize(new Dimension(image.getWidth() * ratio + 5, image.getHeight() * ratio));
-
+        
+        //this.setPreferredSize(new Dimension(image.getWidth() * ratio + 5, image.getHeight() * ratio));
+        
         return resize;
     }
-
+    
 }
