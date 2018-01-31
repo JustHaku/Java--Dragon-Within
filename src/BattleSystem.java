@@ -6,6 +6,7 @@ import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
+
 public class BattleSystem implements State
 {
   private RenderWindow window;
@@ -15,7 +16,7 @@ public class BattleSystem implements State
   private Font stayWildy;
   private Text text1;
 
-  public BattleSystem(RenderWindow window, int scale)
+  public BattleSystem(RenderWindow window, int scale) throws IOException
   {
     this.window = window;
     this.scale = scale;
@@ -23,11 +24,7 @@ public class BattleSystem implements State
     this.screenHight = 160*scale;
 
     stayWildy = new Font();
-    try {
-      stayWildy.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    }
+    stayWildy.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
 
     text1 = new Text("Battle System\nPlace Holder", stayWildy, screenHight/10);
     FloatRect text1bounds = text1.getLocalBounds();
@@ -41,7 +38,7 @@ public class BattleSystem implements State
   public int run()
   {
     boolean end = false;
-    //System.out.print("sad\n");
+    
     while(window.isOpen() && end == false)
     {
       window.clear(Color.WHITE);
