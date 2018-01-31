@@ -1,7 +1,4 @@
-public class State 
+public interface State
 {
-  public int run()
-  {
-      return 0;
-  }
+  abstract int run();
 }

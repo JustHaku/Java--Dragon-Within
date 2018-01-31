@@ -17,7 +17,7 @@ import org.jsfml.system.Clock;
  *
  * @author LBals
  */
-public class Game extends State{
+public class Game implements State{
 
     public static final int spd = 4; //The speed in which the player moves at.
     public static  int SCALE; //The scale of the game. This is changed when you want the game screen to change.
@@ -74,14 +74,14 @@ public class Game extends State{
     public static final ArrayList<WorldPiece> underlay1 = new ArrayList<WorldPiece>();
     public static final ArrayList<WorldPiece> overlay1 = new ArrayList<WorldPiece>();
     public static final ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
-    
-    
-    
+
+
+
 
     public static final ArrayList<WorldMap> maps = new ArrayList<>();
 
     public static int worldNum = 0;
-    
+
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException
     {
       this.window = window;
@@ -166,15 +166,15 @@ public class Game extends State{
         Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
-        
+
         Consumable test = new Consumable(1,"The Drink", 100, 100);
-        
+
         Inventory playerInv = new Inventory();
-        
-        
+
+
         AddItem addDrink = new AddItem(worldSpriteSheet, "",0,5, test,playerInv);
         maps.get(0).getActor().add(addDrink);
-        
+
 
         Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
         Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
@@ -188,8 +188,8 @@ public class Game extends State{
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
         footsteps2.setVolume(50);
-        
-        
+
+
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
@@ -201,12 +201,12 @@ public class Game extends State{
         else {
             FontPath = JdkFontPath;
         }
-        
+
     }
-    
+
     @Override
     public int run()
-    { 
+    {
         int state = 1;
         int menuSleep = 15;
         mainTheme.play();
@@ -215,7 +215,7 @@ public class Game extends State{
           mainTheme.getStatus();
             if (window.isOpen()) {
               // Clear the screen
-              window.clear(Color.WHITE);              
+              window.clear(Color.WHITE);
             }
 
             // Starts a battle every 10 steps.
@@ -225,11 +225,11 @@ public class Game extends State{
               mainTheme.pause();
               state = 2;
             }
-              
+
             // Check for input (UP,DOWN,LEFT,RIGHT)
             if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                 player1.moveUp();
-                playFootsteps();                
+                playFootsteps();
             } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
                 player1.moveDown();
                 playFootsteps();
@@ -262,16 +262,16 @@ public class Game extends State{
                 actor.performMove();
                 actor.draw(window);
             }
-            
+
             for(MessageBox m: AddItem.messages){
                 if(m.hidden == false){
                     m.draw(window);
-                }         
+                }
             }
-            
-            
-            
-            
+
+
+
+
             // Update the display with any changes.
             window.display();
 
