@@ -14,7 +14,9 @@ public class Player extends Actor {
 
     protected Sprite img;
     protected IntRect state; // The Players current character model from the spritesheet.
-    protected int c1, c2, health, mana, exp, maxHealth, maxMana;
+    protected int[] held_items = new int[4];
+    protected int c1, c2, level, exp, health, mana, speed, attack, defence;
+    protected final int max_health, max_mana;
 
     protected final float ps = (float)1;
 
@@ -27,9 +29,9 @@ public class Player extends Actor {
     public Player(Texture imgTexture) {
         c1 = 1; // Both c1 and c2 represent the hardcoded character sprite from the sheet.
         c2 = 6;
-        
-        maxHealth = 100;
-        maxMana = 100;
+
+        max_health = 100;
+        max_mana = 100;
 
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 
@@ -42,21 +44,21 @@ public class Player extends Actor {
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
     }
-    
+
     void heal(int heal){
-        if(health + heal >= maxHealth ){
-            health = maxHealth;
+        if(health + heal >= max_health ){
+            health = max_health;
         }else{
             health += heal;
-        }  
+        }
     }
-    
+
     void regen(int regen){
-        if(mana + regen >= maxMana ){
-            mana = maxMana;
+        if(mana + regen >= max_mana ){
+            mana = max_mana;
         }else{
             mana += regen;
-        }  
+        }
     }
 
     void setPosition(int x, int y) {
@@ -125,7 +127,7 @@ public class Player extends Actor {
                         moveUp();
                     }
                 }
-                
+
                 if(a.isInteractive() == true && a.within(x,y) && Keyboard.isKeyPressed(Keyboard.Key.E)){
                     try {
                         a.activate();
