@@ -6,7 +6,8 @@ import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
-public class BattleSystem extends State
+
+public class BattleSystem implements State
 {
   private RenderWindow window;
   private int scale;
@@ -37,7 +38,7 @@ public class BattleSystem extends State
   public int run()
   {
     boolean end = false;
-    //System.out.print("sad\n");
+    
     while(window.isOpen() && end == false)
     {
       window.clear(Color.WHITE);

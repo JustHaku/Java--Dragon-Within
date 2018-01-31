@@ -11,7 +11,7 @@ import org.jsfml.audio.*;
  *
  * @author Kirk Sparnenn
  */
-public class MainMenu extends State
+public class MainMenu implements State
 {
   private RenderWindow window;
   private int scale;
