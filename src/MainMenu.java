@@ -12,11 +12,11 @@ import org.jsfml.audio.*;
  * @author Kirk Sparnenn
  */
 public class MainMenu extends State
-{ 
+{
   private RenderWindow window;
   private int scale;
-  private int screenWith;
-  private int screenHight;
+  private int screenWidth;
+  private int screenHeight;
   private int option = 1;
   private Texture mainBG;
   private Sprite mainBGsp;
@@ -27,14 +27,14 @@ public class MainMenu extends State
   private Text text3;
   private Sound menuSound;
   private Music menuMusic;
-  
+
   public MainMenu(RenderWindow window, int scale)
   {
     this.window = window;
     this.scale = scale;
-    this.screenWith = 288*scale;
-    this.screenHight = 160*scale;
-    
+    this.screenWidth = 288*scale;
+    this.screenHeight = 160*scale;
+
     mainBG = new Texture();
     stayWildy = new Font();
     soundBuffer = new SoundBuffer();
@@ -50,28 +50,28 @@ public class MainMenu extends State
     }
     mainBG.setSmooth(true);
     mainBGsp = new Sprite(mainBG);
-    
+
     mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
-    mainBGsp.setPosition(screenWith/2, screenHight/2);
-    
-    text1 = new Text("New Game", stayWildy, screenHight/10);
+    mainBGsp.setPosition(screenWidth/2, screenHeight/2);
+
+    text1 = new Text("New Game", stayWildy, screenHeight/10);
     FloatRect text1bounds = text1.getLocalBounds();
     text1.setColor(Color.BLACK);
     text1.setOrigin(text1bounds.width / 2, text1bounds.height / 2);
-    text1.setPosition(screenWith/2, screenHight/4);
-    
-    text2 = new Text("continue", stayWildy, screenHight/10);
+    text1.setPosition(screenWidth/2, screenHeight/4);
+
+    text2 = new Text("continue", stayWildy, screenHeight/10);
     FloatRect text2bounds = text2.getLocalBounds();
     text2.setOrigin(text2bounds.width / 2, text2bounds.height / 2);
-    text2.setPosition(screenWith/2, screenHight/4 + screenHight/10);
-    
-    text3 = new Text("Settings", stayWildy, screenHight/10);
+    text2.setPosition(screenWidth/2, screenHeight/4 + screenHeight/10);
+
+    text3 = new Text("Settings", stayWildy, screenHeight/10);
     FloatRect text3bounds = text3.getLocalBounds();
     text3.setOrigin(text3bounds.width / 2, text3bounds.height / 2);
-    text3.setPosition(screenWith/2, screenHight/4 + screenHight/5);
-    
+    text3.setPosition(screenWidth/2, screenHeight/4 + screenHeight/5);
 
-    
+
+
     menuSound = new Sound();
     menuSound.setBuffer(soundBuffer);
   }
@@ -81,7 +81,7 @@ public class MainMenu extends State
       boolean paused = false;
       menuMusic.play();
       option = 1;
-    while(window.isOpen() && paused == false) 
+    while(window.isOpen() && paused == false)
     {
       window.clear(Color.WHITE);
       window.draw(mainBGsp);
@@ -90,9 +90,9 @@ public class MainMenu extends State
       window.draw(text3);
       window.display();
 
-      for(Event event : window.pollEvents()) 
+      for(Event event : window.pollEvents())
       {
-        if(event.type == Event.Type.CLOSED) 
+        if(event.type == Event.Type.CLOSED)
         {
           // User closes window.
           window.close();
@@ -106,8 +106,8 @@ public class MainMenu extends State
             option++;
             if (option >=3)
             {
-              option=3;              
-            }            
+              option=3;
+            }
           }
           else if (keyEvent.key == Keyboard.Key.valueOf("W"))
           {
@@ -130,12 +130,12 @@ public class MainMenu extends State
               menuMusic.stop();
               paused = true;
               option = 1;
-            }           
+            }
           }
-          
+
           else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
           {
-              window.close();         
+              window.close();
           }
           if (option == 1)
           {
