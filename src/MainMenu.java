@@ -11,66 +11,51 @@ import org.jsfml.audio.*;
  *
  * @author Kirk Sparnenn
  */
-public class MainMenu implements State
+public class MainMenu extends Menu implements State
 {
-  private RenderWindow window;
-  private int scale;
-  private int screenWidth;
-  private int screenHeight;
-  private int option = 1;
   private Texture mainBG;
   private Sprite mainBGsp;
-  private Font stayWildy;
   private SoundBuffer soundBuffer;
-  private Text text1;
-  private Text text2;
-  private Text text3;
   private Sound menuSound;
   private Music menuMusic;
 
-  public MainMenu(RenderWindow window, int scale)
+  public MainMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
-    this.window = window;
-    this.scale = scale;
-    this.screenWidth = 288*scale;
-    this.screenHeight = 160*scale;
 
-    mainBG = new Texture();
-    stayWildy = new Font();
+    menuWindow(window, scale, 288, 160, options_num);
+
+    text_font = new Font();
+    text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+
     soundBuffer = new SoundBuffer();
+    soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
+
     menuMusic = new Music();
     menuMusic.setLoop(true);
-    try {
-        mainBG.loadFromFile(Paths.get("src/graphics/Menu/main_m.jpg"));
-        stayWildy.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
-        menuMusic.openFromFile(Paths.get("src/audio/Menu/Soliloquy.wav"));
-        soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
-    } catch (IOException ex) {
-        ex.printStackTrace();
-    }
-    mainBG.setSmooth(true);
-    mainBGsp = new Sprite(mainBG);
+    menuMusic.openFromFile(Paths.get("src/audio/Menu/Soliloquy.wav"));
 
+    mainBG = new Texture();
+    mainBG.loadFromFile(Paths.get("src/graphics/Menu/main_m.jpg"));
+    mainBG.setSmooth(true);
+
+    mainBGsp = new Sprite(mainBG);
     mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
     mainBGsp.setPosition(screenWidth/2, screenHeight/2);
 
-    text1 = new Text("New Game", stayWildy, screenHeight/10);
-    FloatRect text1bounds = text1.getLocalBounds();
-    text1.setColor(Color.BLACK);
-    text1.setOrigin(text1bounds.width / 2, text1bounds.height / 2);
-    text1.setPosition(screenWidth/2, screenHeight/4);
+    text[0] = new Text("New Game", text_font, screenHeight/10);
+    bounds = text[0].getLocalBounds();
+    text[0].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[0].setPosition(screenWidth/2, screenHeight/4);
 
-    text2 = new Text("continue", stayWildy, screenHeight/10);
-    FloatRect text2bounds = text2.getLocalBounds();
-    text2.setOrigin(text2bounds.width / 2, text2bounds.height / 2);
-    text2.setPosition(screenWidth/2, screenHeight/4 + screenHeight/10);
+    text[1] = new Text("Continue", text_font, screenHeight/10);
+    bounds = text[1].getLocalBounds();
+    text[1].setOrigin(bounds.width/2, bounds.height/2);
+    text[1].setPosition(screenWidth/2, screenHeight/4 + screenHeight/10);
 
-    text3 = new Text("Settings", stayWildy, screenHeight/10);
-    FloatRect text3bounds = text3.getLocalBounds();
-    text3.setOrigin(text3bounds.width / 2, text3bounds.height / 2);
-    text3.setPosition(screenWidth/2, screenHeight/4 + screenHeight/5);
-
-
+    text[2] = new Text("Settings", text_font, screenHeight/10);
+    bounds = text[2].getLocalBounds();
+    text[2].setOrigin(bounds.width/2, bounds.height/2);
+    text[2].setPosition(screenWidth/2, screenHeight/4 + screenHeight/5);
 
     menuSound = new Sound();
     menuSound.setBuffer(soundBuffer);
@@ -78,16 +63,20 @@ public class MainMenu implements State
   @Override
   public int run()
   {
-      boolean paused = false;
-      menuMusic.play();
-      option = 1;
+    boolean paused = false;
+    menuMusic.play();
+    option = 1;
+    text[0].setColor(Color.BLACK);
+
     while(window.isOpen() && paused == false)
     {
       window.clear(Color.WHITE);
       window.draw(mainBGsp);
-      window.draw(text1);
-      window.draw(text2);
-      window.draw(text3);
+      for(int i=0; i<options_num; i++)
+      {
+        window.draw(text[i]);
+      }
+
       window.display();
 
       for(Event event : window.pollEvents())
@@ -125,7 +114,8 @@ public class MainMenu implements State
               menuMusic.stop();
               paused = true;
               option = 99;
-            } else if (option == 2)
+            }
+            else if (option == 2)
             {
               menuMusic.stop();
               paused = true;
@@ -137,22 +127,15 @@ public class MainMenu implements State
           {
               window.close();
           }
-          if (option == 1)
+
+          for(int i=0; i<options_num; i++)
           {
-            text1.setColor(Color.BLACK);
-            text2.setColor(Color.WHITE);
-            text3.setColor(Color.WHITE);
-          } else if (option == 2)
-          {
-            text1.setColor(Color.WHITE);
-            text2.setColor(Color.BLACK);
-            text3.setColor(Color.WHITE);
-          } else if (option == 3)
-          {
-            text1.setColor(Color.WHITE);
-            text2.setColor(Color.WHITE);
-            text3.setColor(Color.BLACK);
+            if((i+1) == option)
+              text[i].setColor(Color.BLACK);
+            else
+              text[i].setColor(Color.WHITE);
           }
+
         }
       }
     }
