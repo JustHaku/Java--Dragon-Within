@@ -10,7 +10,7 @@ import org.jsfml.audio.*;
 public class BattleSystem extends Menu implements State
 {
 
-    //private Character[] party = new Character[6];
+    private Character[] party = new Character[6];
     private int[] turn_state = new int[6]; //move turn_state array's elements in accordance to speed_array
     private int[] speed_array = new int[6];
 
