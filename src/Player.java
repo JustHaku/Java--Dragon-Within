@@ -28,7 +28,7 @@ public class Player extends Actor {
      * @param imgTexture Spritesheet for player texture.
      */
     public Player(Texture imgTexture) {
-        c1 = 1; // Both c1 and c2 represent the hardcoded character sprite from the sheet.
+        c1 = 1; // Both c1 and c2 represent the hardcoded co-ordinates for character sprite from the sheet.
         c2 = 6;
 
         max_health = 100;
