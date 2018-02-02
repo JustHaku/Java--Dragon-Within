@@ -1,3 +1,4 @@
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsfml.graphics.IntRect;
@@ -18,7 +19,7 @@ public class Player extends Actor {
     protected int c1, c2, level, exp, health, mana, speed, attack, defence;
     protected final int max_health, max_mana;
 
-    protected final float ps = (float)1;
+    protected final float ps = (float) 1;
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
@@ -45,20 +46,12 @@ public class Player extends Actor {
         setPosition = img::setPosition;
     }
 
-    void heal(int heal){
-        if(health + heal >= max_health ){
-            health = max_health;
-        }else{
-            health += heal;
-        }
+    void heal(int heal) {
+        health = Math.min(health + heal, max_health);
     }
 
-    void regen(int regen){
-        if(mana + regen >= max_mana ){
-            mana = max_mana;
-        }else{
-            mana += regen;
-        }
+    void regen(int regen) {
+        mana = Math.min(mana + regen,max_mana);
     }
 
     void setPosition(int x, int y) {
@@ -112,30 +105,30 @@ public class Player extends Actor {
         }
 
         for (Actor a : Game.maps.get(Game.worldNum).getActor()) {
-                if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
-                    if(x > a.x){
-                        moveRight();
-                    }
-                    if(x < a.x){
-                        moveLeft();
-                    }
-
-                    if(y > a.y){
-                        moveDown();
-                    }
-                    if(y < a.y){
-                        moveUp();
-                    }
+            if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
+                if (x > a.x) {
+                    moveRight();
+                }
+                if (x < a.x) {
+                    moveLeft();
                 }
 
-                if(a.isInteractive() == true && a.within(x,y) && Keyboard.isKeyPressed(Keyboard.Key.E)){
-                    try {
-                        a.activate();
-                        Thread.sleep(200);
-                    } catch (InterruptedException ex) {
-                        Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                if (y > a.y) {
+                    moveDown();
                 }
+                if (y < a.y) {
+                    moveUp();
+                }
+            }
+
+            if (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E)) {
+                try {
+                    a.activate();
+                    Thread.sleep(200);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
         }
     }
 }
