@@ -9,7 +9,6 @@
  * @author LBals
  */
 public class Item {
-    
     int id;
     String name;
     
