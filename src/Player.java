@@ -7,19 +7,11 @@ import org.jsfml.graphics.Texture;
 import org.jsfml.window.Keyboard;
 
 /**
- * Main class for creating players in the game.
+ * Class for creating main player of the game.
  *
  * @author LBals
  */
-public class Player extends Actor {
-
-    protected Sprite img;
-    protected IntRect state; // The Players current character model from the spritesheet.
-    protected int[] held_items = new int[4];
-    protected int c1, c2, level, exp, health, mana, speed, attack, defence;
-    protected final int max_health, max_mana;
-
-    protected final float ps = (float) 1;
+public class Player extends Character {
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
@@ -33,7 +25,12 @@ public class Player extends Actor {
 
         max_health = 100;
         max_mana = 100;
-
+        health = max_health;
+        mana = max_mana;
+        attack = 10;
+        defence = 10;
+        speed = 10;
+        exp = 30;
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 
         img = new Sprite(imgTexture, state);
