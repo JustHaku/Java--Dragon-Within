@@ -5,7 +5,10 @@ import org.jsfml.window.*;
 import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
-
+/**
+*Base-Class of which other menu-classes will be children-classes
+*@author Petros Soutzis
+*/
 public class Menu
 {
   protected int option = 1;
