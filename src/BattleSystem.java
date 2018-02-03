@@ -88,16 +88,16 @@ public class BattleSystem extends Menu implements State
   *@param enemy is the array of NPC's that the player fought. (It could be an array of a single element)
   *@return the total experience that the player would receive for defeating given enemy(ies)
   */
-    public int exp_gain_calc(NPC[] enemy)
+  public int exp_gain_calc(NPC[] enemy)
+  {
+    int total_exp = 0;
+    for(int i = 0; i<enemy.length; i++)
     {
-      int total_exp = 0;
-      for(int i = 0; i<enemy.length; i++)
-      {
-        total_exp += enemy[i].getLevel()*20;
-      }
-      return total_exp;
+      total_exp += enemy[i].getLevel()*20;
     }
-    
+    return total_exp;
+  }
+
 
   @Override
   public int run()
