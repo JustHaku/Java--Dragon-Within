@@ -15,7 +15,7 @@ public class Player extends Character {
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
-     * hard-coded value around the desired sprite.
+     * hard-coded value around the desired sprite
      *
      * @param imgTexture Spritesheet for player texture.
      */
@@ -30,7 +30,9 @@ public class Player extends Character {
         attack = 10;
         defence = 10;
         speed = 10;
-        exp = 30;
+        exp = 0;
+        level = 1;
+
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 
         img = new Sprite(imgTexture, state);
@@ -41,19 +43,6 @@ public class Player extends Character {
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
-    }
-
-    void heal(int heal) {
-        health = Math.min(health + heal, max_health);
-    }
-
-    void regen(int regen) {
-        mana = Math.min(mana + regen,max_mana);
-    }
-
-    void setPosition(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     void moveLeft() {
@@ -101,7 +90,7 @@ public class Player extends Character {
             }
         }
 
-        for (Actor a : Game.maps.get(Game.worldNum).getActor()) {
+        Game.maps.get(Game.worldNum).getActor().stream().map((a) -> {
             if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
                 if (x > a.x) {
                     moveRight();
@@ -117,15 +106,14 @@ public class Player extends Character {
                     moveUp();
                 }
             }
-
-            if (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E)) {
-                try {
-                    a.activate();
-                    Thread.sleep(200);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                }
+            return a;
+        }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
+            try {
+                a.activate();
+                Thread.sleep(200);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        });
     }
 }

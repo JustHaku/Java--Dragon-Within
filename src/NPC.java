@@ -1,0 +1,74 @@
+import java.util.*;
+import org.jsfml.graphics.IntRect;
+import org.jsfml.graphics.Sprite;
+import org.jsfml.graphics.Texture;
+import org.jsfml.window.Keyboard;
+
+public class NPC extends Character
+{
+  /**
+  *Constructs a unique character, with all the required information manually entered.
+  *Most of the character created this way will be playable and the player will have the ability to
+  *add them to his party
+  *@param name The identifier of each unique character. Also its name :)
+  *@param health The health that the character will have
+  *@param mana The mana that the character will have
+  *@param atk The attack points that the character will have
+  *@param def The defence points that the character will have
+  *@param spd The speed that the character will have
+  *@param lvl The level of the character at the time of creation
+  */
+  public NPC(String name, int health, int mana, int atk, int def, int spd, int lvl/*, Item item*/)
+  {
+    this.name = name;
+    max_health = health;
+    this.health = health;
+    max_mana = mana;
+    this.mana = mana;
+    attack = atk;
+    defence = def;
+    speed = spd;
+    level = lvl;
+    exp = exp_calc(exp_const, level);
+    //held_items[0] = item;
+  }
+
+  /**
+  *Constructs a character with random stats, based on the level inputted
+  *Characters created this way, will most likely be enemies spawned at battle
+  *@param lvl The level that the character will have at the time of creation
+  */
+  public NPC(int lvl)
+  {
+    Random rand = new Random();
+    int[] stats = new int[5];
+    int randomInt;
+
+    max_health = 80;
+    max_mana = 80;
+    attack = 7;
+    defence = 7;
+    speed = 6;
+    for(int i = 0; i<stats.length; i++){
+      stats[i] = 0;
+      for(int j = 0; j<lvl; j++){
+        randomInt = rand.nextInt((8 - 3) + 1) + 3;
+        stats[i] += randomInt;
+      }
+    }
+    max_health += stats[0];
+    max_mana += stats[1];
+    attack += stats[2];
+    defence += stats[3];
+    speed += stats[4];
+    health = max_health;
+    mana = max_mana;
+  }
+
+/**
+*@return the character's level
+*/
+  public int getLevel(){
+    return level;
+  }
+}
