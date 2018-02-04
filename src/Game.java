@@ -26,8 +26,8 @@ public class Game implements State{
     public static  int tileSize; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
     public static  int gridWidth; //How many tiles wide the game screen is.
     public static  int gridHeight; //How may tiles high the game screen is.
+    public static Player player1;
     private RenderWindow window;
-    private Player player1;
     private int battleChance = 0;
 
     // The Java install comes with a set of fonts but these will
@@ -59,9 +59,7 @@ public class Game implements State{
     // State of footsteps for swapping audio.
     private static int footstepsState = 0;
 
-    /**********
-    TEMPORARY, TESTS WETHER IS MINIMISED OR NOT
-    ***********/
+    //Tests whether window is minimised or not
     static boolean isMinimized = false;
 
     private String FontPath; // Where fonts were found.

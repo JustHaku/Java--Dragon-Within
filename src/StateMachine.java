@@ -11,6 +11,8 @@ public class StateMachine
 {
   public void run() throws InterruptedException, IOException
   {
+    Character[] team = new Character[6];
+    State[] states = new State[4];
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = 6;
@@ -22,9 +24,16 @@ public class StateMachine
 
     State mainMenu = new MainMenu(window, scale, 3);
     State gameWorld = new Game(window, scale);
-    State battleSystem = new BattleSystem(window, scale, 3);
+
+    team[0] = Game.player1;
+    /*team[1] = Game.player2;
+    team[2] = Game.player3;
+    team[3] = Game.player4;
+    team[4] = Game.player5;
+    team[5] = Game.player6;*/
+
+    State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale);
-    State[] states = new State[4];
     states[0] = mainMenu;
     states[1] = gameWorld;
     states[2] = battleSystem;

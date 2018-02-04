@@ -13,6 +13,7 @@ public class Character extends Actor
   protected String name;
   protected IntRect state; // The Players current character model from the spritesheet.
   protected int[] held_items = new int[4];
+  protected int[] stats = new int[9];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
 
   protected final int exp_const = 50;
@@ -20,6 +21,27 @@ public class Character extends Actor
 
   @Override
   void calcMove(int minX, int minY, int maxX, int maxY){
+  }
+
+  /**
+  *@return An array containing all the stats of the player.
+  *The stats are in this order: maxHealth, maxMana, health, mana, attack, defence, speed, experience, level.
+  */
+  protected int[] getStats()
+  {
+    int[] statuses = new int[9];
+
+    statuses[0] = this.max_health;
+    statuses[1] = this.max_mana;
+    statuses[2] = this.health;
+    statuses[3] = this.mana;
+    statuses[4] = this.attack;
+    statuses[5] = this.defence;
+    statuses[6] = this.speed;
+    statuses[7] = this.exp;
+    statuses[8] = this.level;
+
+    return statuses;
   }
 
   /**
@@ -97,7 +119,7 @@ public class Character extends Actor
   /**
   *@return the character's level
   */
-    public int getLevel(){
+    public int getLevel(){  //might not be needed if stats[x][8] is used instead
       return level;
     }
 

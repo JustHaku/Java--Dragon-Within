@@ -5,70 +5,24 @@ import org.jsfml.window.*;
 import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
-
+/**
+*Class where the mechanics of turn-based battles are implemented
+*@author Petros Soutzis
+*/
 
 public class BattleSystem extends Menu implements State
 {
 
-    private Character[] party = new Character[6];
+    private Character[] team;
     private int[] turn_state = new int[6]; //move turn_state array's elements in accordance to speed_array
-    private int[] speed_array = new int[6];
+    private int[][] teamStats;
+    private int exp_gain, temp, attack;
 
     private final int FRIENDLY_START = 0;
     private final int FRIENDLY_END = 3;
     private final int ENEMY_END = 6;
-    private int exp_gain, temp;
 
-
-    /*void initTeams()
-    {
-      for(int i=0; i<party.length; i++)
-      {
-        turn_state[i] = i;
-
-        if(party[i] != null)
-        {
-          if(i < FRIENDLY_END)
-          {
-            party[i] = new MainCharacter(int characterID); //tell apart unique characters
-            party[i].getStats();
-          }
-          else if(i >= FRIENDLY_END)
-          {
-            party[i] = new NPC();
-            party[i].generateStats();
-          }
-          speed_array[i] = party[i].getSpeed();
-         }
-       }
-       turn_state = bubbleSort(speed_array, turn_state);
-    }*/
-
-    int[] bubbleSort(int[] arr, int[] turns)
-    {
-      int length = arr.length;
-      int temp = 0;
-      for (int i = 0; i<length-1; i++)
-      {
-        for (int j = 1; j<length-i; j++)
-        {
-          if(turns[j-1] < turns[j])
-          {
-            temp = turns[j-1];
-            turns[j-1] = turns[j];
-            turns[j] = temp;    // order the array of turn
-            if(arr[j-1] < arr[j])
-            {
-              temp = arr[j-1];
-              arr[j-1] = arr[j];
-              arr[j] = temp;
-            }
-          }
-        }
-      }
-      return arr;
-    }
-  public BattleSystem(RenderWindow window, int scale, int options_num) throws IOException
+  public BattleSystem(RenderWindow window, int scale, int options_num, Character[] team) throws IOException
   {
 
     menuWindow(window, scale, 288, 160, options_num);
@@ -77,21 +31,63 @@ public class BattleSystem extends Menu implements State
     text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
     text[0] = new Text("Attack", text_font, screenHeight/14);
-    /*bounds = text[0].getLocalBounds();
-
-    text[0].setOrigin(bounds.width/2, bounds.height/2);*/
     text[0].setPosition(35, 700);
 
     text[1] = new Text("Items", text_font, screenHeight/14);
-    /*bounds = text[1].getLocalBounds();
-    text[1].setOrigin(bounds.width/2, bounds.height/2);*/
     text[1].setPosition(35, 770);
 
     text[2] = new Text("Escape", text_font, screenHeight/14);
-    /*bounds = text[2].getLocalBounds();
-    text[2].setOrigin(bounds.width/2, bounds.height/2);*/
     text[2].setPosition(35, 840);
 
+    this.team = team;
+    teamStats = new int[team.length][9];
+
+  }
+
+/**
+*Initializes an array called turn_state in the order that the players can Attack (fastest goes first)
+*This method also initializes a 2-D array (teamStats) with each player's stats.
+*The order of stats is: MaxHealth, MaxMana, health, mana, attack, defence, speed, experience, level.
+*/
+  void getTurns()
+  {
+    int[] speed_array = new int[6];
+
+    for (int i = 0; i<1; i++){
+      turn_state[i] = i;
+      for(int j = 0; j<9; j++){
+        teamStats[i][j] = team[i].stats[j];
+      }
+      speed_array[i] = teamStats[i][6];
+    }
+
+    turn_state = bubbleSort(speed_array, turn_state);
+  }
+
+  int[] bubbleSort(int[] arr, int[] turns)
+  {
+    int length = arr.length;
+    int temp = 0;
+
+    for (int i = 0; i<length-1; i++)
+    {
+      for (int j = 1; j<length-i; j++)
+      {
+        if(turns[j-1] < turns[j])
+        {
+          temp = turns[j-1];
+          turns[j-1] = turns[j];
+          turns[j] = temp;    // order the array of turn
+          if(arr[j-1] < arr[j])
+          {
+            temp = arr[j-1];
+            arr[j-1] = arr[j];
+            arr[j] = temp;
+          }
+        }
+      }
+    }
+    return arr;
   }
 
   /**
@@ -112,6 +108,9 @@ public class BattleSystem extends Menu implements State
   @Override
   public int run()
   {
+    getTurns();
+    System.out.println("The speed points of player are: "+teamStats[0][6]+"\nThe attack points are: "+teamStats[0][4]+"\nThe defence points are: "+teamStats[0][5]+"\nThe health points are: "+teamStats[0][0]);
+    System.out.println("Player who attacks first is player "+turn_state[0]);
     boolean end = false;
     option = 1;
     text[0].setColor(Color.BLACK);
