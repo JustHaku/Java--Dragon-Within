@@ -94,4 +94,11 @@ public class Character extends Actor
       this.y = y;
   }
 
+  /**
+  *@return the character's level
+  */
+    public int getLevel(){
+      return level;
+    }
+
 }

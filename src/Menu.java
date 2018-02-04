@@ -11,12 +11,19 @@ import org.jsfml.audio.*;
 */
 public class Menu
 {
-  protected int option = 1;
+  protected int option;
   protected int scale, screenHeight, screenWidth, options_num;
+  protected SoundBuffer soundBuffer;
+  protected Sound menuSound;
   protected FloatRect bounds;
   protected RenderWindow window;
   protected Font text_font;
   protected Text[] text;
+
+  private Texture mainBG;
+  private Sprite mainBGsp;
+  private Music menuMusic;
+
 
   void menuWindow(RenderWindow window, int scale, int width, int height, int options_num)
   {
@@ -26,5 +33,56 @@ public class Menu
     this.screenWidth = width*scale;
     this.screenHeight = height*scale;
     text = new Text[options_num];
+  }
+
+  /**
+  *Creates a new texture for usage as background for the menu
+  *@return a new Texture object to be used as background
+  */
+  Texture getBackground(){
+    return mainBG = new Texture();
+  }
+
+  /**
+  *Creates a new Sprite for usage as background for the menu
+  *@param texture the specified texture with which the sprite will be constructed
+  *@return a new Sprite object to be used as a background
+  */
+  Sprite getBGSprite(Texture texture){
+    return mainBGsp =new Sprite(texture);
+  }
+
+  /**
+  *@return a new Music object, to play while menu is open
+  */
+  Music getMenuMusic(){
+     return menuMusic = new Music();
+  }
+
+  /**
+  *Draw the options that the player will have to choose from.
+  *@param textArray The array with the initialized Text objects
+  */
+  void drawText(Text[] textArray)
+  {
+    for(int i=0; i<textArray.length; i++)
+    {
+      window.draw(textArray[i]);
+    }
+  }
+  /**
+  *Highlight the selected option in the menu box
+  *@param textArray The array with the initialized Text objects
+  *@param optionValue The value of the option selected
+  */
+  void showSelection(Text[] textArray, int optionValue)
+  {
+    for(int i=0; i<textArray.length; i++)
+    {
+      if((i+1) == optionValue)
+        textArray[i].setColor(Color.BLACK);
+      else
+        textArray[i].setColor(Color.WHITE);
+    }
   }
 }

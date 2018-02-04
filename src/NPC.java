@@ -6,6 +6,7 @@ import org.jsfml.window.Keyboard;
 
 public class NPC extends Character
 {
+
   /**
   *Constructs a unique character, with all the required information manually entered.
   *Most of the character created this way will be playable and the player will have the ability to
@@ -18,7 +19,9 @@ public class NPC extends Character
   *@param spd The speed that the character will have
   *@param lvl The level of the character at the time of creation
   */
-  public NPC(String name, int health, int mana, int atk, int def, int spd, int lvl/*, Item item*/)
+  //*@param item The held item(s) by given character
+  //*@param imgTexture spritesheet for character
+  public NPC(String name, int health, int mana, int atk, int def, int spd, int lvl/*, Item[] item, Texture imgTexture*/)
   {
     this.name = name;
     max_health = health;
@@ -30,7 +33,20 @@ public class NPC extends Character
     speed = spd;
     level = lvl;
     exp = exp_calc(exp_const, level);
-    //held_items[0] = item;
+    /*held_items[0] = item;
+    c1 = ?;
+    c2 = ?;
+    state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
+
+    img = new Sprite(imgTexture, state);
+    img.setScale(Game.SCALE / ps, Game.SCALE / ps); // Changes player scale to 2/3 of tile size.
+
+    x = 0; // Default position.
+    y = 0;
+
+    obj = img; // Sets img as collision object.
+    setPosition = img::setPosition;
+    */
   }
 
   /**
@@ -63,12 +79,7 @@ public class NPC extends Character
     speed += stats[4];
     health = max_health;
     mana = max_mana;
+    level = lvl;
   }
 
-/**
-*@return the character's level
-*/
-  public int getLevel(){
-    return level;
-  }
 }

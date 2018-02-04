@@ -15,13 +15,10 @@ public class MainMenu extends Menu implements State
 {
   private Texture mainBG;
   private Sprite mainBGsp;
-  private SoundBuffer soundBuffer;
-  private Sound menuSound;
   private Music menuMusic;
 
   public MainMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
-
     menuWindow(window, scale, 288, 160, options_num);
 
     text_font = new Font();
@@ -30,15 +27,15 @@ public class MainMenu extends Menu implements State
     soundBuffer = new SoundBuffer();
     soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
 
-    menuMusic = new Music();
+    this.menuMusic = getMenuMusic();
     menuMusic.setLoop(true);
     menuMusic.openFromFile(Paths.get("src/audio/Menu/Soliloquy.wav"));
 
-    mainBG = new Texture();
+    this.mainBG = getBackground();
     mainBG.loadFromFile(Paths.get("src/graphics/Menu/main_m.jpg"));
     mainBG.setSmooth(true);
 
-    mainBGsp = new Sprite(mainBG);
+    this.mainBGsp = getBGSprite(mainBG);
     mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
     mainBGsp.setPosition(screenWidth/2, screenHeight/2);
 
@@ -72,23 +69,25 @@ public class MainMenu extends Menu implements State
     {
       window.clear(Color.WHITE);
       window.draw(mainBGsp);
-      for(int i=0; i<options_num; i++)
-      {
-        window.draw(text[i]);
-      }
-
+      drawText(text);
       window.display();
 
       for(Event event : window.pollEvents())
       {
+        KeyEvent keyEvent = event.asKeyEvent();
+
         if(event.type == Event.Type.CLOSED)
         {
-          // User closes window.
           window.close();
         }
+
         else if (event.type == Event.Type.KEY_PRESSED)
         {
-          KeyEvent keyEvent = event.asKeyEvent();
+          /*if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
+          {
+              window.close();
+          }*/
+
           if (keyEvent.key == Keyboard.Key.valueOf("S"))
           {
             menuSound.play();
@@ -122,20 +121,7 @@ public class MainMenu extends Menu implements State
               option = 1;
             }
           }
-
-          else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
-          {
-              window.close();
-          }
-
-          for(int i=0; i<options_num; i++)
-          {
-            if((i+1) == option)
-              text[i].setColor(Color.BLACK);
-            else
-              text[i].setColor(Color.WHITE);
-          }
-
+          showSelection(text, option);
         }
       }
     }

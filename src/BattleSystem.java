@@ -76,11 +76,21 @@ public class BattleSystem extends Menu implements State
     text_font = new Font();
     text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
-    text[0] = new Text("Battle System\nPlace Holder", text_font, screenHeight/10);
-    bounds = text[0].getLocalBounds();
-    text[0].setColor(Color.BLACK);
-    text[0].setOrigin(bounds.width/2, bounds.height/2);
-    text[0].setPosition(screenWidth/2, screenHeight/4);
+    text[0] = new Text("Attack", text_font, screenHeight/14);
+    /*bounds = text[0].getLocalBounds();
+
+    text[0].setOrigin(bounds.width/2, bounds.height/2);*/
+    text[0].setPosition(35, 700);
+
+    text[1] = new Text("Items", text_font, screenHeight/14);
+    /*bounds = text[1].getLocalBounds();
+    text[1].setOrigin(bounds.width/2, bounds.height/2);*/
+    text[1].setPosition(35, 770);
+
+    text[2] = new Text("Escape", text_font, screenHeight/14);
+    /*bounds = text[2].getLocalBounds();
+    text[2].setOrigin(bounds.width/2, bounds.height/2);*/
+    text[2].setPosition(35, 840);
 
   }
 
@@ -103,30 +113,82 @@ public class BattleSystem extends Menu implements State
   public int run()
   {
     boolean end = false;
+    option = 1;
+    text[0].setColor(Color.BLACK);
+
+    try
+    {
+      soundBuffer = new SoundBuffer();
+      menuSound = new Sound();
+      soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
+      menuSound.setBuffer(soundBuffer);
+    }
+    catch(IOException e){
+      e.printStackTrace();
+    }
 
     while(window.isOpen() && end == false)
     {
-      window.clear(Color.WHITE);
-      window.draw(text[0]);
+      window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
+      drawText(text);  //method that draws all elements in text[] array on the screen
       window.display();
 
       for(Event event : window.pollEvents())
       {
+        KeyEvent keyEvent = event.asKeyEvent();
+
         if(event.type == Event.Type.CLOSED)
         {
-          // User closes window.
-          window.close();
+          window.close(); //User closes window.
         }
+
+
         else if (event.type == Event.Type.KEY_PRESSED)
         {
-          KeyEvent keyEvent = event.asKeyEvent();
           if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
           {
+            option = 0;
             end = true;
           }
+          else if (keyEvent.key == Keyboard.Key.valueOf("S"))
+          {
+            menuSound.play();
+            if(option != 3)
+            {
+              option++;
+            }
+          }
+          else if (keyEvent.key == Keyboard.Key.valueOf("W"))
+          {
+            menuSound.play();
+            if(option != 1)
+            {
+              option--;
+            }
+          }
+          else if (keyEvent.key == Keyboard.Key.valueOf("E"))
+          {
+            if(option == 1)
+            {
+              //Attack
+              //end = true;
+            }
+            else if(option == 2)
+            {
+              //open inventoryMenu
+              //end = true;
+            }
+            else if(option == 3)
+            {
+              //go back to gameWorld
+              option = 99;
+              end = true;
+            }
+          }
+          showSelection(text, option);
         }
       }
     }
-      return 1;
+      return option;
   }
 }
