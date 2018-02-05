@@ -1,6 +1,7 @@
 import java.io.IOException;
 import org.jsfml.window.*;
 import org.jsfml.graphics.*;
+import java.util.*;
 
 /**
  * The class that changes the scenes of the game controlling what the player sees.
@@ -11,7 +12,7 @@ public class StateMachine
 {
   public void run() throws InterruptedException, IOException
   {
-    Character[] team = new Character[6];
+    ArrayList<Character> team = new ArrayList<>();
     State[] states = new State[4];
     int screenWidth = 288;
     int screenHeight = 160;
@@ -25,7 +26,7 @@ public class StateMachine
     State mainMenu = new MainMenu(window, scale, 3);
     State gameWorld = new Game(window, scale);
 
-    team[0] = Game.player1;
+    team.add(Game.player1);
     /*team[1] = Game.player2;
     team[2] = Game.player3;
     team[3] = Game.player4;

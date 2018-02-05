@@ -3,7 +3,7 @@ import java.util.*;
 
 public class Sort
 {
-  int[] array = {6, 2, 8, 12, 25, 1};
+  int[] array = {6, 2, 8, 12, 25, 3};
   int[] turns = {0, 1, 2, 3, 4, 5};
   int[] dummy;
   int level, exp, exp_gain;
@@ -138,7 +138,13 @@ public class Sort
     System.out.println(max_mana);
     System.out.println(attack);
     System.out.println(defence);
-    System.out.println(speed);
+    System.out.println(speed+"\n\n");
+
+    int[] result = new int[6];
+    result = bubbleSort(turns, array);
+    for(int i = 0; i<6; i++){
+      System.out.println(result[i]);
+    }
   }
 
   public static void main(String[] args)
@@ -146,5 +152,6 @@ public class Sort
     Sort s = new Sort();
     System.out.println();
     s.newPlayer(5);
+
   }
 }
