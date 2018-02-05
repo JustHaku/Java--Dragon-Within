@@ -24,7 +24,9 @@ public class Skills {
     public final boolean unary;
     private boolean revertable;
 
-    public Skills(String name, int cost, int value, BiConsumer<Character, Integer> wayofpaying, BiConsumer<Character, Integer> wayofapplying, boolean isUnary,boolean isRevertable) {
+    public Skills(String name, int cost, int value, BiConsumer<Character, Integer> wayofpaying, 
+                  BiConsumer<Character, Integer> wayofapplying, boolean isUnary,boolean isRevertable) 
+    {
         this.name = name;
         unary = isUnary;
         revertable = isRevertable;
