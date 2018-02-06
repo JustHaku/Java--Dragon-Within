@@ -21,7 +21,7 @@ public class Portal extends Actor {
     private final int p2;
     private final int w;
     private final ArrayList<Actor> actors;
-
+    private Game m;
     /**
      * Creates a portal which loads another map when the player is within() it.
      * @param player1 The player which interacts with portal
@@ -37,13 +37,14 @@ public class Portal extends Actor {
      */
     
     
-    public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors) {
+    public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors, Game m) {
         // Draws rectange around selected piece
         this.actors = actors;
         this.w = w;
         this.p1 = p1 * Game.tileSize;
         this.p2 = p2 * Game.tileSize;
         this.player1 = player1;
+        this.m = m;
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
         
         img = new Sprite(imgTexture, piece);
@@ -61,7 +62,7 @@ public class Portal extends Actor {
         // Do this if actor hits this object.
         for (Actor a : actors) {
             if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
-                Game.changeWorld(w);
+                m.changeWorld(w);
                 player1.setPosition(p1, p2);
             }
         }

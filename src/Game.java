@@ -33,31 +33,31 @@ public class Game implements State{
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
     // of Java and whether the JDK or JRE version is being used.
-    private static final String JavaVersion = Runtime.class.getPackage().getImplementationVersion();
-    private static final String JdkFontPath = "C:\\Program Files\\Java\\jdk" + JavaVersion + "\\jre\\lib\\fonts\\";
-    private static final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
+    private final String JavaVersion = Runtime.class.getPackage().getImplementationVersion();
+    private final String JdkFontPath = "C:\\Program Files\\Java\\jdk" + JavaVersion + "\\jre\\lib\\fonts\\";
+    private final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
 
     //The game title
-    private static final String Title = "The Dragon Within Pt.1";
+    private final String Title = "The Dragon Within Pt.1";
 
     //private Event event;
 
     // Textures for the game.
-    public static final Texture worldSpriteSheet = new Texture();
-    public static final Texture playerSpriteSheet = new Texture();
-    public static final Texture barrierTexture = new Texture();
-    public static final Texture uiTexture = new Texture();
+    public final Texture worldSpriteSheet = new Texture();
+    public final Texture playerSpriteSheet = new Texture();
+    public final Texture barrierTexture = new Texture();
+    public final Texture uiTexture = new Texture();
 
     // Audio for the game.
-    private static final Music mainTheme = new Music();
-    private static final Music footsteps1 = new Music();
-    private static final Music footsteps2 = new Music();
+    private final Music mainTheme = new Music();
+    private final Music footsteps1 = new Music();
+    private final Music footsteps2 = new Music();
 
     // Clocks for the game.
-    private static final Clock footstepsTimer = new Clock();
+    private final Clock footstepsTimer = new Clock();
 
     // State of footsteps for swapping audio.
-    private static int footstepsState = 0;
+    private int footstepsState = 0;
 
     //Tests whether window is minimised or not
     static boolean isMinimized = false;
@@ -65,20 +65,13 @@ public class Game implements State{
     private String FontPath; // Where fonts were found.
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
-    private static final ArrayList<WorldPiece> underlay0 = new ArrayList<WorldPiece>();
-    private static final ArrayList<WorldPiece> overlay0 = new ArrayList<WorldPiece>();
-    private static  ArrayList<Actor> actorlay0 = new ArrayList<Actor>();
-
-    public static final ArrayList<WorldPiece> underlay1 = new ArrayList<WorldPiece>();
-    public static final ArrayList<WorldPiece> overlay1 = new ArrayList<WorldPiece>();
-    public static final ArrayList<Actor> actorlay1 = new ArrayList<Actor>();
 
 
 
 
-    public static final ArrayList<WorldMap> maps = new ArrayList<>();
+    private final ArrayList<WorldMap> maps = new ArrayList<>();
 
-    public static int worldNum = 0;
+    public int worldNum = 0;
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException
     {
@@ -96,29 +89,12 @@ public class Game implements State{
      * Array list of actors. Typically used for adding/removing from the list.
      * Add actors when you want them to be displayed in game.
      *
+     * @param w
      * @return Array list of actors.
      */
-    public static ArrayList<Actor> returnActors() {
-        return actorlay0;
-    }
 
-    public static void changeWorld(int w) {
+    public void changeWorld(int w) {
         worldNum = w;
-    }
-
-
-    /**
-     * Array list of tiles. Typically used for creating a game map. Add
-     * WorldPieces when you want them to be displayed in game.
-     *
-     * @return Arrays list of tiles.
-     */
-    public static ArrayList<WorldPiece> returnWorldPieces() {
-        return overlay0;
-    }
-
-    public static ArrayList<WorldPiece> returnUnderlayPieces() {
-        return underlay0;
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
@@ -142,6 +118,10 @@ public class Game implements State{
         }
       }
     }
+    
+    private void refresh(){
+        
+    }
 
     /**
      * Main game loop for starting the game. Call this method to start the game.
@@ -158,10 +138,10 @@ public class Game implements State{
         maps.add(new WorldMap(worldSpriteSheet,0));
         maps.add(new WorldMap(worldSpriteSheet,1));
 
-        player1 = new Player(playerSpriteSheet);
+        player1 = new Player(playerSpriteSheet, maps, this);
 
-        Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
-        Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor());
+        Portal portal1 = new Portal(player1, worldSpriteSheet, 6, 10, 33, 0, 6, 1, 1, maps.get(0).getActor(), this);
+        Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor(), this);
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
 
@@ -174,8 +154,8 @@ public class Game implements State{
         maps.get(0).getActor().add(addDrink);
 
 
-        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
-        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor());
+        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(),this);
+        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(),this);
         maps.get(1).getActor().add(portal3);
         maps.get(1).getActor().add(portal4);
 

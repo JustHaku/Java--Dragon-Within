@@ -24,8 +24,8 @@ public class Consumable extends Item {
     }
     
     public void use(Player p){
-        p.health += heal;
-        p.mana += regen;
+        p.heal(heal);
+        p.regen(regen);
         
     }
     

@@ -28,7 +28,7 @@ public class MessageBox {
     public MessageBox(int x, int y, String message, Color color) {
         Font endor = new Font();
         try {
-            endor.loadFromFile(Paths.get("src/fonts/endor.ttf"));
+            endor.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
         } catch (IOException ex) {
             Logger.getLogger(MessageBox.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -1,4 +1,5 @@
 
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsfml.graphics.IntRect;
@@ -12,16 +13,20 @@ import org.jsfml.window.Keyboard;
  * @author LBals
  */
 public class Player extends Character {
-
+    ArrayList<WorldMap> m = new ArrayList<>();
+    private Game g;
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
      * hard-coded value around the desired sprite
      *
      * @param imgTexture Spritesheet for player texture.
      */
-    public Player(Texture imgTexture) {
+    
+    public Player(Texture imgTexture, ArrayList<WorldMap> m, Game g) {
         c1 = 1; // Both c1 and c2 represent the hardcoded co-ordinates for character sprite from the sheet.
         c2 = 6;
+        this.g = g;
+        this.m = m;
 
         max_health = 100;
         max_mana = 100;
@@ -91,7 +96,7 @@ public class Player extends Character {
             }
         }
 
-        Game.maps.get(Game.worldNum).getActor().stream().map((a) -> {
+        m.get(g.worldNum).getActor().stream().map((a) -> {
             if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
                 if (x > a.x) {
                     moveRight();
