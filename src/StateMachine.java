@@ -42,7 +42,7 @@ public class StateMachine
     states[3] = inventoryMenu;
     
     Vector2i v = new Vector2i(100,100);
-    
+    window.setKeyRepeatEnabled(false);
     while (window.isOpen())
     {
       state = states[state].run();

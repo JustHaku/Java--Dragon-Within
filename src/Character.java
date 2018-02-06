@@ -106,7 +106,7 @@ public class Character extends Actor
   void heal(int heal) {
       health = Math.min(health + heal, max_health);
   }
-
+  
   void regen(int regen) {
       mana = Math.min(mana + regen,max_mana);
   }

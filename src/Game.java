@@ -17,15 +17,15 @@ import org.jsfml.system.Clock;
  *
  * @author LBals
  */
-public class Game implements State{
+public class Game implements State {
 
     public static final int spd = 4; //The speed in which the player moves at.
-    public static  int SCALE; //The scale of the game. This is changed when you want the game screen to change.
-    public static  int screenWidth; //Width of the game screen. Must be a multiple of 288.
-    public static  int screenHeight; //Height of the game screen. Must be a multiple of 160.
-    public static  int tileSize; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
-    public static  int gridWidth; //How many tiles wide the game screen is.
-    public static  int gridHeight; //How may tiles high the game screen is.
+    public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
+    public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
+    public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
+    public static int tileSize; //Size of the tile. Must be a multiple of 16 Allows for easy scaling.
+    public static int gridWidth; //How many tiles wide the game screen is.
+    public static int gridHeight; //How may tiles high the game screen is.
     public static Player player1;
     private RenderWindow window;
     private int battleChance = 0;
@@ -41,7 +41,6 @@ public class Game implements State{
     private final String Title = "The Dragon Within Pt.1";
 
     //private Event event;
-
     // Textures for the game.
     public final Texture worldSpriteSheet = new Texture();
     public final Texture playerSpriteSheet = new Texture();
@@ -65,24 +64,20 @@ public class Game implements State{
     private String FontPath; // Where fonts were found.
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
-
-
-
-
     private final ArrayList<WorldMap> maps = new ArrayList<>();
 
     public int worldNum = 0;
 
-    public Game(RenderWindow window, int scale) throws InterruptedException, IOException
-    {
-      this.window = window;
-      this.SCALE = scale;
-      this.screenWidth = 288 * scale;
-      this.screenHeight = 160 * scale;
-      this.tileSize = 16 * scale;
-      this.gridWidth = screenWidth / tileSize;
-      this.gridHeight = screenHeight / tileSize;
-      init();
+    public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
+        this.window = window;
+        this.SCALE = scale;
+        this.screenWidth = 288 * scale;
+        this.screenHeight = 160 * scale;
+        this.tileSize = 16 * scale;
+        this.gridWidth = screenWidth / tileSize;
+        this.gridHeight = screenHeight / tileSize;
+        window.setKeyRepeatEnabled(true);
+        init();
     }
 
     /**
@@ -92,35 +87,30 @@ public class Game implements State{
      * @param w
      * @return Array list of actors.
      */
-
     public void changeWorld(int w) {
         worldNum = w;
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
     private void playFootsteps() {
-      if(!isMinimized)
-      {
-        if (footstepsTimer.getElapsedTime().asMilliseconds() > 500)
-        {
-            if (footstepsState == 0)
-            {
-                footsteps1.play();
-                footstepsState = 1;
-                battleChance++;
+        if (!isMinimized) {
+            if (footstepsTimer.getElapsedTime().asMilliseconds() > 100) {
+                if (footstepsState == 0) {
+                    footsteps1.play();
+                    footstepsState = 1;
+                    //battleChance++;
+                } else if (footstepsState == 1) {
+                    footsteps2.play();
+                    footstepsState = 0;
+                    //battleChance++;
+                }
+                footstepsTimer.restart();
             }
-            else if (footstepsState == 1) {
-                footsteps2.play();
-                footstepsState = 0;
-                battleChance++;
-            }
-            footstepsTimer.restart();
         }
-      }
     }
-    
-    private void refresh(){
-        
+
+    private void refresh() {
+
     }
 
     /**
@@ -135,8 +125,8 @@ public class Game implements State{
         playerSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeChar_transparent.png"));
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
 
-        maps.add(new WorldMap(worldSpriteSheet,0));
-        maps.add(new WorldMap(worldSpriteSheet,1));
+        maps.add(new WorldMap(worldSpriteSheet, 0));
+        maps.add(new WorldMap(worldSpriteSheet, 1));
 
         player1 = new Player(playerSpriteSheet, maps, this);
 
@@ -145,17 +135,15 @@ public class Game implements State{
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
 
-        Consumable test = new Consumable(1,"The Drink", 100, 100);
+        Consumable test = new Consumable(1, "The Drink", 100, 100);
 
         Inventory playerInv = new Inventory();
 
-
-        AddItem addDrink = new AddItem(worldSpriteSheet, "",0,5, test,playerInv);
+        AddItem addDrink = new AddItem(worldSpriteSheet, "", 0, 5, test, playerInv);
         maps.get(0).getActor().add(addDrink);
 
-
-        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(),this);
-        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(),this);
+        Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(), this);
+        Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(), this);
         maps.get(1).getActor().add(portal3);
         maps.get(1).getActor().add(portal4);
 
@@ -167,63 +155,41 @@ public class Game implements State{
         footsteps1.setVolume(50);
         footsteps2.setVolume(50);
 
-
-
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
             FontPath = JreFontPath;
-        }
-        else {
+        } else {
             FontPath = JdkFontPath;
         }
 
     }
 
     @Override
-    public int run()
-    {
+    public int run() {
         int state = 1;
         int menuSleep = 15;
         mainTheme.play();
-        while (window.isOpen() && state == 1)
-        {
-          mainTheme.getStatus();
+        while (window.isOpen() && state == 1) {
+            mainTheme.getStatus();
             if (window.isOpen()) {
-              // Clear the screen
-              window.clear(Color.WHITE);
+                // Clear the screen
+                window.clear(Color.WHITE);
             }
 
             // Starts a battle every 10 steps.
-            if (battleChance >= 10)
-            {
-              battleChance = 0;
-              mainTheme.pause();
-              state = 2;
+            if (battleChance >= 10) {
+                battleChance = 0;
+                mainTheme.pause();
+                state = 2;
             }
 
             // Check for input (UP,DOWN,LEFT,RIGHT)
-            if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-                player1.moveUp();
-                playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-                player1.moveDown();
-                playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-                player1.moveLeft();
-                playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-                player1.moveRight();
-                playFootsteps();
-            } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
-                mainTheme.pause();
-                state = 0;
-
-            }
-            if (menuSleep >0)
+            if (menuSleep > 0) {
                 menuSleep--;
+            }
             //Draws underlay tiles
             for (WorldPiece ul : maps.get(worldNum).getUnder()) {
                 ul.draw(window);
@@ -241,14 +207,11 @@ public class Game implements State{
                 actor.draw(window);
             }
 
-            for(MessageBox m: AddItem.messages){
-                if(m.hidden == false){
+            for (MessageBox m : AddItem.messages) {
+                if (m.hidden == false) {
                     m.draw(window);
                 }
             }
-
-
-
 
             // Update the display with any changes.
             window.display();
@@ -262,12 +225,32 @@ public class Game implements State{
                     isMinimized = true;
                     window.setFramerateLimit(2); // Will set FPS to low if game is in background.
                     mainTheme.pause();
-                }
-                else if (event.type == Event.Type.GAINED_FOCUS) {
+                } else if (event.type == Event.Type.GAINED_FOCUS) {
                     isMinimized = false;
                     window.setFramerateLimit(60);
                     mainTheme.play();
                 }
+                if (event.type == Event.Type.KEY_PRESSED && player1.isMoving() == false) {
+                    if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
+                        player1.moveUp();
+                        playFootsteps();
+                    } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
+                        player1.moveDown();
+                        playFootsteps();
+                    } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
+                        player1.moveLeft();
+                        playFootsteps();
+                    } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
+                        player1.moveRight();
+                        playFootsteps();
+                    } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
+                        mainTheme.pause();
+                        state = 0;
+
+                    }
+
+                }
+
             }
         }
         return state;

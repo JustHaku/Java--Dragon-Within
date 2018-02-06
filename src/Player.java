@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Texture;
+import org.jsfml.system.Clock;
 import org.jsfml.window.Keyboard;
 
 /**
@@ -13,15 +14,19 @@ import org.jsfml.window.Keyboard;
  * @author LBals
  */
 public class Player extends Character {
+
     ArrayList<WorldMap> m = new ArrayList<>();
     private Game g;
+    private boolean moving = false;
+    private final Clock footstepsTimer = new Clock();
+    private int speed = 50;
+
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
      * hard-coded value around the desired sprite
      *
      * @param imgTexture Spritesheet for player texture.
      */
-    
     public Player(Texture imgTexture, ArrayList<WorldMap> m, Game g) {
         c1 = 1; // Both c1 and c2 represent the hardcoded co-ordinates for character sprite from the sheet.
         c2 = 6;
@@ -51,20 +56,38 @@ public class Player extends Character {
         setPosition = img::setPosition;
     }
 
+    boolean isMoving() {
+        return moving;
+    }
+
     void moveLeft() {
-        x -= Game.spd;
+        //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+            x -= (Game.spd * Game.SCALE);
+            footstepsTimer.restart();
+        //}
     }
 
     void moveRight() {
-        x += Game.spd;
+        //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+            x += (Game.spd * Game.SCALE);
+            footstepsTimer.restart();
+        //}
     }
 
     void moveUp() {
-        y -= Game.spd;
+        //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+            y -= (Game.spd * Game.SCALE);
+            footstepsTimer.restart();
+        //}
+
     }
 
     void moveDown() {
-        y += Game.spd;
+        //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+            y += (Game.spd * Game.SCALE);
+            footstepsTimer.restart();
+        //}
+
     }
 
     @Override // Uses a rectangle around the player to detect if this actor is within other actors.
@@ -83,16 +106,16 @@ public class Player extends Character {
         // Do this if object hits window (stops out of bounds).
         if (x <= minx || x >= maxx) {
             if (x <= minx) {
-                x += Game.spd;
+                x += Game.spd * Game.SCALE;
             } else {
-                x -= Game.spd;
+                x -= Game.spd * Game.SCALE;
             }
         }
         if (y <= miny || y >= maxy) {
             if (y <= minx) {
-                y += Game.spd;
+                y += Game.spd * Game.SCALE;
             } else {
-                y -= Game.spd;
+                y -= Game.spd * Game.SCALE;
             }
         }
 

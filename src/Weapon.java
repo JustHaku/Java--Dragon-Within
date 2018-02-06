@@ -10,8 +10,11 @@
  */
 public class Weapon extends Item{
     
-    public Weapon(int id, String name) {
+    int dmg;
+    
+    public Weapon(int id, String name, int Damage) {
         super(id,name);
+        this.dmg = Damage;
     }
     
 }
