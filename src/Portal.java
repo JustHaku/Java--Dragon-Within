@@ -59,7 +59,6 @@ public class Portal extends Actor {
         // Do this if actor hits this object.
         for (Actor a : actors) {
             if (a.obj != obj && a.within(x, y) && a.isPlayer()) {	
-				
                 Game.changeWorld(w);
                 player1.setPosition(p1,p2);
             }

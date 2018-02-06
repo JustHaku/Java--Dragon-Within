@@ -57,7 +57,7 @@ public class TileMaper extends JFrame {
 
     // radio buttons
     private JRadioButton[] rbs;
-    private String[] rbls = {"Underlay", "Overlay", "Actor"};
+    private String[] rbls = {"_underlay", "_overlay", "_actorlay"};
 
     private JMenuBar menuBar = new JMenuBar();
 
