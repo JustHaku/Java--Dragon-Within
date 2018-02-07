@@ -191,7 +191,7 @@ public class BattleSystem extends Menu implements State
             else if(option == 3)
             {
               //go back to gameWorld
-              option = 99;
+              option = 1;
               end = true;
             }
           }
