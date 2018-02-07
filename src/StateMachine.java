@@ -1,7 +1,11 @@
+import java.io.EOFException;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import org.jsfml.window.*;
 import org.jsfml.graphics.*;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsfml.system.Vector2i;
 
 /**
@@ -23,9 +27,35 @@ public class StateMachine
     RenderWindow window = new RenderWindow();
     window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
+    
+//      try {
+//          gameWorld = FileManager.read("src/saves/save000");
+//      } catch (FileNotFoundException ex) {
+//          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+//      } catch (ClassNotFoundException ex) {
+//          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+//      } catch (EOFException ex){
+//          System.out.println("Save file does not exist");
+//          gameWorld = new Game(window, scale);          
+//      }
+    
+    Game gameWorld = new Game(window, scale);
+      try {
+          Save s = Save.load("src/saves/save000");
+          gameWorld.load(s);
+      } catch (FileNotFoundException ex) {
+          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (ClassNotFoundException ex) {
+          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+      } catch (EOFException ex){
+          
+      }
+
+
 
     State mainMenu = new MainMenu(window, scale, 3);
-    State gameWorld = new Game(window, scale);
+    
+    
 
     team.add(Game.player1);
     /*team[1] = Game.player2;
@@ -42,14 +72,18 @@ public class StateMachine
     states[3] = inventoryMenu;
     
     Vector2i v = new Vector2i(100,100);
-    window.setKeyRepeatEnabled(false);
+    window.setKeyRepeatEnabled(true);
+    
+    
     while (window.isOpen())
     {
       state = states[state].run();
+      //FileManager.save("src/saves/save000", (Game)gameWorld);
       if (state == 99)
       {
+          
           gameWorld = new Game(window, scale);
-          window.setSize(new Vector2i(100,100));
+          //window.setSize(new Vector2i(100,100));
           System.out.println(window.getSize());
           states[1] = gameWorld;
           state = 1;

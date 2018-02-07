@@ -1,9 +1,13 @@
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsfml.audio.Music;
 import org.jsfml.window.*;
 import org.jsfml.window.event.*;
@@ -17,7 +21,7 @@ import org.jsfml.system.Clock;
  *
  * @author LBals
  */
-public class Game implements State {
+public class Game implements State, Serializable {
 
     public static final int spd = 4; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
@@ -29,6 +33,8 @@ public class Game implements State {
     public static Player player1;
     private RenderWindow window;
     private int battleChance = 0;
+    
+    private Save s;
 
     // The Java install comes with a set of fonts but these will
     // be on different filesystem paths depending on the version
@@ -36,7 +42,10 @@ public class Game implements State {
     private final String JavaVersion = Runtime.class.getPackage().getImplementationVersion();
     private final String JdkFontPath = "C:\\Program Files\\Java\\jdk" + JavaVersion + "\\jre\\lib\\fonts\\";
     private final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
-
+    
+    private FileManager f;
+    Inventory playerInv;
+    
     //The game title
     private final String Title = "The Dragon Within Pt.1";
 
@@ -54,6 +63,7 @@ public class Game implements State {
 
     // Clocks for the game.
     private final Clock footstepsTimer = new Clock();
+    private final Clock saveTimer = new Clock();
 
     // State of footsteps for swapping audio.
     private int footstepsState = 0;
@@ -89,6 +99,20 @@ public class Game implements State {
      */
     public void changeWorld(int w) {
         worldNum = w;
+    }
+    
+    public int getWorldNum(){
+        return worldNum;
+    }
+    
+    public void load(Save s){
+        changeWorld(s.getWorld());
+        player1.setPosition(s.getX(), (s.getY()));
+        playerInv = s.getInventory();
+        int index = 0;
+        for(Activator a: Activator.activators){ 
+            a.activated = s.getActivators().get(Activator.activators.indexOf(a));            
+        }      
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
@@ -135,12 +159,15 @@ public class Game implements State {
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
 
-        Consumable test = new Consumable(1, "The Drink", 100, 100);
-
+        Consumable potion = new Consumable(1, "Potion", 20, 0);
+        Consumable ether = new Consumable(2, "Ether", 0, 20);   
+        
         Inventory playerInv = new Inventory();
 
-        AddItem addDrink = new AddItem(worldSpriteSheet, "", 0, 5, test, playerInv);
-        maps.get(0).getActor().add(addDrink);
+        AddItem addPotion = new AddItem(worldSpriteSheet, "", 0, 5, potion, playerInv);
+        AddItem addEther = new AddItem(worldSpriteSheet, "", 0, 4, ether, playerInv);
+        maps.get(0).getActor().add(addPotion);
+        maps.get(0).getActor().add(addEther);
 
         Portal portal3 = new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(), this);
         Portal portal4 = new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 6, 9, 0, maps.get(1).getActor(), this);
@@ -157,7 +184,9 @@ public class Game implements State {
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
-
+        
+        
+        
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
             FontPath = JreFontPath;
@@ -212,9 +241,22 @@ public class Game implements State {
                     m.draw(window);
                 }
             }
+            
 
             // Update the display with any changes.
             window.display();
+            
+            if(saveTimer.getElapsedTime().asSeconds() > 10){
+                try {
+                    System.out.println("Saved");
+                    s = new Save(playerInv, player1,this, Activator.activators);
+                    Save.save("src/saves/save000", s);
+                } catch (IOException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                saveTimer.restart();
+            }
+            
 
             // Handle any events.
             for (Event event : window.pollEvents()) {
@@ -246,7 +288,6 @@ public class Game implements State {
                     } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                         mainTheme.pause();
                         state = 0;
-
                     }
 
                 }

@@ -2,6 +2,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Scanner;
 import org.jsfml.graphics.Texture;
@@ -19,7 +20,7 @@ import org.jsfml.graphics.Texture;
  *
  * @author LBals
  */
-public class WorldMap
+public class WorldMap implements Serializable
 {
 
     private Scanner[] scanners;

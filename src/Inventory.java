@@ -1,4 +1,5 @@
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /*
@@ -11,7 +12,9 @@ import java.util.ArrayList;
  *
  * @author LBals
  */
-public class Inventory {
+public class Inventory implements Serializable {
+    
+    static final long serialVersionUID = 42L;
     
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();   
@@ -107,6 +110,13 @@ public class Inventory {
             if(c.getId() == id){
                 consumables.remove(c);
             }            
+        }
+    }
+    
+    void dumpContents(){
+        System.out.println("Consumables:");
+        for(Consumable c: consumables){
+            System.out.println(c.name);
         }
     }
     

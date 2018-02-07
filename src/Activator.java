@@ -1,6 +1,8 @@
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsfml.graphics.IntRect;
@@ -17,12 +19,13 @@ import org.jsfml.graphics.Texture;
  *
  * @author LBals
  */
-public class Activator extends Actor {
+public class Activator extends Actor implements Serializable {
     
     protected Sprite img;
     protected IntRect thing;
     protected String text;
-    protected boolean activated = false;
+    protected boolean activated;
+    public static ArrayList<Activator> activators = new ArrayList<>();
     
     
     public Activator(Texture imgTexture, String text, int x, int y){
@@ -42,7 +45,15 @@ public class Activator extends Actor {
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
         
+        activated = false;
+        
+        activators.add(this);  
     }
+    
+    void setActivated(){
+        activated = true;
+    }
+    
     
     @Override
     boolean isInteractive(){

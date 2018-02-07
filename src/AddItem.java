@@ -22,10 +22,12 @@ public class AddItem extends Activator {
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(2 * Game.SCALE, Game.screenHeight - 100, "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(2 * Game.SCALE, Game.screenHeight - (12 * Game.SCALE), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
+        
+        
     }
 
     @Override
@@ -36,20 +38,33 @@ public class AddItem extends Activator {
             System.out.println(item.getName());
             inventory.addItem(item);
             messages.add(p);
+            boolean done = true;
+            while (true) {
+                done = true;                
+                for (MessageBox m : messages) {
+                    if (p != m && m.hidden == false) {
+                        done = false;
+                    }
+                }
+                if(done == true){
+                    break;
+                }
+
+            }
+
             p.showHide();
             activated = true;
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
-
                     long startTime = System.currentTimeMillis(); //fetch starting time
                     while (false || (System.currentTimeMillis() - startTime) < 2000) {
                         // do something
                     }
-                    p.showHide();
+                    p.hide();
 
                 }
             });
-            
+
             t1.start();
 
         } else {

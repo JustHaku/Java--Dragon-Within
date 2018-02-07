@@ -89,6 +89,14 @@ public class Player extends Character {
         //}
 
     }
+    
+    public int getX(){
+        return x;
+    }
+    
+    public int getY(){
+        return y;
+    }
 
     @Override // Uses a rectangle around the player to detect if this actor is within other actors.
     boolean within(int px, int py) {
@@ -100,6 +108,8 @@ public class Player extends Character {
     boolean isPlayer() {
         return true;
     }
+    
+    
 
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {

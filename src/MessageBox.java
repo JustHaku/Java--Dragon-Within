@@ -33,7 +33,7 @@ public class MessageBox {
             Logger.getLogger(MessageBox.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        text = new Text(message, endor, 4*Game.SCALE);
+        text = new Text(message, endor, 8*Game.SCALE);
         text.setColor(Color.BLACK);
         
         
@@ -49,6 +49,10 @@ public class MessageBox {
     void draw(RenderWindow w) {
         
         w.draw(text);
+    }
+    
+    void hide(){
+        hidden = true;
     }
     
     void showHide(){
