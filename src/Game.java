@@ -287,7 +287,7 @@ public class Game implements State, Serializable {
                         playFootsteps();
                     } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                         mainTheme.pause();
-                        state = 0;
+                        state = 3;
                     }
 
                 }

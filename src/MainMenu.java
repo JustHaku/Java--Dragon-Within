@@ -63,7 +63,7 @@ public class MainMenu extends Menu implements State
     boolean paused = false;
     menuMusic.play();
     option = 1;
-    text[0].setColor(Color.BLACK);
+    showSelection(text, option);
 
     while(window.isOpen() && paused == false)
     {
