@@ -151,6 +151,11 @@ public class Game implements State, Serializable {
 
         maps.add(new WorldMap(worldSpriteSheet, 0));
         maps.add(new WorldMap(worldSpriteSheet, 1));
+        maps.add(new WorldMap(worldSpriteSheet, 2));
+        maps.add(new WorldMap(worldSpriteSheet, 3));
+        maps.add(new WorldMap(worldSpriteSheet, 4));
+        maps.add(new WorldMap(worldSpriteSheet, 5));
+        maps.add(new WorldMap(worldSpriteSheet, 6));
 
         player1 = new Player(playerSpriteSheet, maps, this);
 
@@ -158,6 +163,34 @@ public class Game implements State, Serializable {
         Portal portal2 = new Portal(player1, worldSpriteSheet, 7, 10, 33, 0, 6, 1, 1, maps.get(0).getActor(), this);
         maps.get(0).getActor().add(portal1);
         maps.get(0).getActor().add(portal2);
+        
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 8, 4, 37, 2, 8, 8, 2,maps.get(0).getActor(),this)); //Door to Orphanage
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 4, 9, 0, 5, 4, 1, 1, maps.get(0).getActor(),this)); //Path to fishing
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 5, 9, 0, 5, 5, 1, 1, maps.get(0).getActor(),this)); //Path to fishing
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 6, 9, 0, 5, 6, 1, 1, maps.get(0).getActor(),this)); //Path to fishing
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 7, 9, 0, 5, 7, 1, 1, maps.get(0).getActor(),this)); //Path to fishing
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 17, 6, 0, 5, 1, 5, 6, maps.get(0).getActor(),this)); //Path to forest
+        maps.get(0).getActor().add(new Portal(player1, worldSpriteSheet, 17, 5, 0, 5, 1, 5, 6, maps.get(0).getActor(),this)); //Path to forest
+
+	maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 4, 0, 0, 5, 4, 8, 0, maps.get(1).getActor(),this)); //Fishing to Main
+	maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 5, 0, 0, 5, 5, 8, 0, maps.get(1).getActor(),this)); //Fishing to Main
+        maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 6, 0, 0, 5, 6, 8, 0, maps.get(1).getActor(),this)); //Fishing to Main
+        maps.get(1).getActor().add(new Portal(player1, worldSpriteSheet, 7, 0, 0, 5, 7, 8, 0, maps.get(1).getActor(),this)); //Fishing to Main
+     
+        maps.get(2).getActor().add(new Portal(player1, worldSpriteSheet, 8, 9, 0, 5, 8, 5, 0, maps.get(2).getActor(),this)); //Orphanage exit
+        maps.get(2).getActor().add(new Portal(player1, worldSpriteSheet, 0, 2, 35, 18, 2, 4, 3, maps.get(2).getActor(),this)); //Orphanage left stairs to 1st floor
+        maps.get(2).getActor().add(new Portal(player1, worldSpriteSheet, 17, 2, 34, 18, 15, 4, 3, maps.get(2).getActor(),this)); //Orphanage right stairs to 1st floor
+        
+        maps.get(3).getActor().add(new Portal(player1, worldSpriteSheet, 0, 5, 36, 18, 2, 3, 2, maps.get(3).getActor(),this)); //Orphanage left stairs to ground floor
+        maps.get(3).getActor().add(new Portal(player1, worldSpriteSheet, 17, 5, 37, 18, 15, 3, 2, maps.get(3).getActor(),this)); //Orphanage right stairs to ground floor
+        maps.get(3).getActor().add(new Portal(player1, worldSpriteSheet, 2, 2, 37, 1, 8, 7, 4, maps.get(3).getActor(),this)); //Orphanage hall to left bedroom
+        maps.get(3).getActor().add(new Portal(player1, worldSpriteSheet, 12, 2, 37, 1, 8, 7, 5, maps.get(3).getActor(),this)); //Orphanage hall to right bedroom
+        
+        maps.get(4).getActor().add(new Portal(player1, worldSpriteSheet, 8, 9, 0, 5, 2, 3, 3, maps.get(4).getActor(),this)); //Orphanage left bedroom to hall
+        maps.get(4).getActor().add(new Portal(player1, worldSpriteSheet, 9, 9, 0, 5, 2, 3, 3, maps.get(4).getActor(),this)); //Orphanage left bedroom to hall
+        
+        maps.get(5).getActor().add(new Portal(player1, worldSpriteSheet, 8, 9, 0, 5, 12, 3, 3, maps.get(5).getActor(),this)); //Orphanage right bedroom to hall
+        maps.get(5).getActor().add(new Portal(player1, worldSpriteSheet, 9, 9, 0, 5, 12, 3, 3, maps.get(5).getActor(),this)); //Orphanage right bedroom to hall
 
         Consumable potion = new Consumable(1, "Potion", 20, 0);
         Consumable ether = new Consumable(2, "Ether", 0, 20);   
@@ -174,8 +207,9 @@ public class Game implements State, Serializable {
         maps.get(1).getActor().add(portal3);
         maps.get(1).getActor().add(portal4);
 
-        maps.get(0).getActor().add(player1);
-        maps.get(1).getActor().add(player1);
+        for(WorldMap a: maps){
+            a.getActor().add(player1);     
+        }
 
         footsteps1.openFromFile(Paths.get("src/audio/rpg/footstep00.ogg"));
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
@@ -287,7 +321,7 @@ public class Game implements State, Serializable {
                         playFootsteps();
                     } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                         mainTheme.pause();
-                        state = 0;
+                        state = 3;
                     }
 
                 }

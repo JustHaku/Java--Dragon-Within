@@ -43,6 +43,11 @@ public class Character extends Actor
 
     return statuses;
   }
+  
+  protected String getName()
+  {
+      return name;
+  }
 
   /**
   *@param constant will be the value needed (quadratically) for each level-up.

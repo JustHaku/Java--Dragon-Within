@@ -1,70 +1,156 @@
 import java.io.IOException;
 import java.nio.file.*;
+import java.util.ArrayList;
 import org.jsfml.system.*;
 import org.jsfml.window.*;
 import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
-public class InventoryMenu implements State
+public class InventoryMenu extends Menu implements State
 {
-  private RenderWindow window;
-  private int scale;
-  private int screenWith;
-  private int screenHight;
-  private Font stayWildy;
-  private Text text1;
+  private Font text_font;
+  private boolean paused = false;
+  private RectangleShape menuRect;
+  private RectangleShape playerRect;
+  private ArrayList<Character> team;
+  private ArrayList<RectangleShape> teamRect = new ArrayList<>();
+  private ArrayList<Text> teamText = new ArrayList<>();
+  
 
-  public InventoryMenu(RenderWindow window, int scale)
+  public InventoryMenu(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException
   {
-    this.window = window;
-    this.scale = scale;
-    this.screenWith = 288*scale;
-    this.screenHight = 160*scale;
+    menuWindow(window, scale, 288, 160, options_num);
+    this.team = team;
 
-    stayWildy = new Font();
-    try {
-      stayWildy.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
-    } catch (IOException ex) {
-        ex.printStackTrace();
+    text_font = new Font();
+    text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+    
+    soundBuffer = new SoundBuffer();
+    soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
+    
+    menuSound = new Sound();
+    menuSound.setBuffer(soundBuffer);
+    
+    menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
+    menuRect.setFillColor(new Color(11,2,138));
+    menuRect.setPosition(5,5);
+    
+    playerRect = new RectangleShape(new Vector2f((screenWidth/4) - 15, screenHeight - 10));
+    playerRect.setFillColor(new Color(11,2,138));
+    playerRect.setPosition(((screenWidth/4)*3)+10,5);
+    
+    for (int i = 0; i<team.size(); i++)
+    {
+      teamRect.add(new RectangleShape(new Vector2f((screenWidth/4)*3 - 10, screenHeight/6 - 10)));
+      (teamRect.get(i)).setFillColor(new Color(50,45,138));
+      (teamRect.get(i)).setPosition(10,10+((screenHeight/6-2)*i));
+      int[] stats = (team.get(i)).getStats();
+      teamText.add(new Text((team.get(i)).getName() + "     LV: " + stats[8] + "\nHP:" + stats[2] + " / " + stats[3] + "     MP:" + stats[1] + " / " + stats[0], text_font, screenHeight/15));
+      (teamText.get(i)).setPosition(15,5+((screenHeight/6-2)*i));
     }
 
-    text1 = new Text("Inventory Menu\nPlace Holder", stayWildy, screenHight/10);
-    FloatRect text1bounds = text1.getLocalBounds();
-    text1.setColor(Color.BLACK);
-    text1.setOrigin(text1bounds.width / 2, text1bounds.height / 2);
-    text1.setPosition(screenWith/2, screenHight/4);
-
+    text[0] = new Text("Loadout", text_font, screenHeight/10);
+    bounds = text[0].getLocalBounds();
+    text[0].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[0].setPosition((screenWidth/8)*7, screenHeight/20);
+    
+    text[1] = new Text("Items", text_font, screenHeight/10);
+    bounds = text[1].getLocalBounds();
+    text[1].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[1].setPosition((screenWidth/8)*7, screenHeight/20*3);
+    
+    text[2] = new Text("Skills", text_font, screenHeight/10);
+    bounds = text[2].getLocalBounds();
+    text[2].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[2].setPosition((screenWidth/8)*7, screenHeight/20*5);
+    
+    text[3] = new Text("Magic", text_font, screenHeight/10);
+    bounds = text[3].getLocalBounds();
+    text[3].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[3].setPosition((screenWidth/8)*7, screenHeight/20*7);
+    
+    text[4] = new Text("Config", text_font, screenHeight/10);
+    bounds = text[4].getLocalBounds();
+    text[4].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[4].setPosition((screenWidth/8)*7, screenHeight/20*13);
+    
+    text[5] = new Text("Main Menu", text_font, screenHeight/10);
+    bounds = text[5].getLocalBounds();
+    text[5].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[5].setPosition((screenWidth/8)*7, screenHeight/20*15);
+    
+    text[6] = new Text("Quit", text_font, screenHeight/10);
+    bounds = text[6].getLocalBounds();
+    text[6].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[6].setPosition((screenWidth/8)*7, screenHeight/20*17);
   }
 
   @Override
   public int run()
   {
-    boolean end = false;
-    //System.out.print("sad\n");
-    while(window.isOpen() && end == false)
+    paused = false;
+    option = 1;
+    showSelection(text, option);
+    while(window.isOpen() && paused == false)
     {
-      window.clear(Color.WHITE);
-      window.draw(text1);
+      window.clear(Color.BLACK);
+      window.draw(menuRect);
+      window.draw(playerRect);
+      drawText(text);
+      
+      for (int i = 0; i<teamRect.size(); i++)
+    {
+      window.draw(teamRect.get(i));
+      window.draw(teamText.get(i));
+    }
+    
       window.display();
 
       for(Event event : window.pollEvents())
       {
+        KeyEvent keyEvent = event.asKeyEvent();
+
         if(event.type == Event.Type.CLOSED)
         {
-          // User closes window.
           window.close();
         }
+        
         else if (event.type == Event.Type.KEY_PRESSED)
         {
-          KeyEvent keyEvent = event.asKeyEvent();
-          if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
+          if (keyEvent.key == Keyboard.Key.valueOf("S"))
           {
-            end = true;
+            menuSound.play();
+            option++;
+            if (option >=options_num)
+            {
+              option=options_num;
+            }
           }
+          else if (keyEvent.key == Keyboard.Key.valueOf("W"))
+          {
+            menuSound.play();
+            option--;
+            if (option <=1)
+            {
+              option=1;
+            }
+          }
+          else if (keyEvent.key == Keyboard.Key.valueOf("E"))
+          {
+            paused = true;
+            if (option == 7)
+              window.close();
+            else if (option > 4)
+              option = 0;
+            else 
+              option = 1;
+              
+          }
+          showSelection(text, option);
         }
       }
     }
-      return 1;
+    return option;
   }
 }
