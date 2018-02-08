@@ -13,6 +13,8 @@ public class Consumable extends Item {
     private int heal;
     private int regen;
     
+    
+    
     public Consumable(int id,String name, int heal, int regen) {
         super(id,name);
         
@@ -20,6 +22,13 @@ public class Consumable extends Item {
         this.regen = regen;
         
         
+        
+    }
+    
+    Consumable(int id, String name, Consumable c){
+        super(id,name);
+        heal = c.heal;
+        regen = c.regen;
         
     }
     
