@@ -122,7 +122,8 @@ public class Game implements State, Serializable {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         worldNum = w;
-        routeMessage = new MessageBox(Game.screenWidth-(190*(Game.SCALE)),0,"World: " + Integer.toString(worldNum),Color.BLACK);
+        String worldName = maps.get(worldNum).getWorldName();
+        routeMessage = new MessageBox(Game.screenWidth-(190*(Game.SCALE)),0,worldName,Color.BLACK);
         routeClock.restart();
         
 
@@ -275,6 +276,14 @@ public class Game implements State, Serializable {
                 break;
             }
         }
+        
+        maps.get(0).setWorldName("Initium");
+        maps.get(1).setWorldName("Flodowth Landing");
+        maps.get(2).setWorldName("Orphanage 1F");
+        maps.get(3).setWorldName("Orphanage 2F");
+        maps.get(4).setWorldName("Bedroom 1");
+        maps.get(5).setWorldName("Bedroom 2");
+        
     }
 
     private void initActivators() {

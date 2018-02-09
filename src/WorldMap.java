@@ -25,6 +25,8 @@ public class WorldMap implements Serializable
 
     private Scanner[] scanners;
     private int layer;
+    private String worldName = null;
+    private int w;
 
     private final ArrayList<WorldPiece> underlay = new ArrayList<>();
     private final ArrayList<WorldPiece> overlay = new ArrayList<>();
@@ -49,6 +51,7 @@ public class WorldMap implements Serializable
      */
     public WorldMap(Texture imgTexture, int w)
             throws FileNotFoundException, IOException {
+        this.w = w;
 
         this.imgTexture = imgTexture;
 
@@ -114,6 +117,20 @@ public class WorldMap implements Serializable
         layer++;
         buildMaps();
     }
+    
+    public void setWorldName(String s){
+        worldName = s;
+    }
+    
+    public String getWorldName(){
+        if(worldName != null){
+            return worldName;
+            
+        }else{
+            return "World: " + Integer.toString(w);
+        }
+    }
+
 
     private void buildMaps() {
         for (int map_width = 0; map_width < Game.gridWidth; map_width++)
