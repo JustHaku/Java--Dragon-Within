@@ -46,7 +46,7 @@ public class InventoryMenu extends Menu implements State
       (teamRect.get(i)).setFillColor(new Color(50,45,138));
       (teamRect.get(i)).setPosition(10,10+((screenHeight/6-2)*i));
       int[] stats = (team.get(i)).getStats();
-      teamText.add(new Text((team.get(i)).getName() + "     LV: " + stats[8] + "\nHP:" + stats[2] + " / " + stats[3] + "     MP:" + stats[1] + " / " + stats[0], text_font, screenHeight/15));
+      teamText.add(new Text((team.get(i)).getName() + "     LV: " + i + "\nHP:" + stats[2] + " / " + stats[3] + "     MP:" + stats[1] + " / " + stats[0], text_font, screenHeight/15));
       (teamText.get(i)).setPosition(15,5+((screenHeight/6-2)*i));
     }
 
@@ -92,8 +92,9 @@ public class InventoryMenu extends Menu implements State
     paused = false;
     option = 1;
     showSelection(text, option);
+    boolean closeReq = false;
     while(window.isOpen() && paused == false)
-    {
+    {      
       window.clear(Color.BLACK);
       window.draw(menuRect);
       window.draw(playerRect);
@@ -111,7 +112,7 @@ public class InventoryMenu extends Menu implements State
       {
         KeyEvent keyEvent = event.asKeyEvent();
 
-        if(event.type == Event.Type.CLOSED)
+        if(event.type == Event.Type.CLOSED || closeReq == true)
         {
           window.close();
         }
@@ -127,6 +128,7 @@ public class InventoryMenu extends Menu implements State
               option=options_num;
             }
           }
+          
           else if (keyEvent.key == Keyboard.Key.valueOf("W"))
           {
             menuSound.play();
@@ -136,17 +138,131 @@ public class InventoryMenu extends Menu implements State
               option=1;
             }
           }
+          
           else if (keyEvent.key == Keyboard.Key.valueOf("E"))
           {
-            paused = true;
             if (option == 7)
               window.close();
+            else if (option == 1)
+            {
+                int hover = 0;
+                int select = -1;
+                boolean selected = false;
+                boolean breakOut = false;                
+                while(breakOut == false)
+                {
+                    for(Event events : window.pollEvents())
+                    {
+                        KeyEvent keyEvents = events.asKeyEvent();
+
+                        if(events.type == Event.Type.CLOSED)
+                        {
+                          closeReq = true;
+                          breakOut = true;
+                        }
+
+                        else if (events.type == Event.Type.KEY_PRESSED)
+                        {
+                            if (keyEvents.key == Keyboard.Key.valueOf("S"))
+                            {
+                                menuSound.play();
+                                hover++;
+                                if (hover >=teamRect.size())
+                                {
+                                    hover = teamRect.size()-1;
+                                }
+                            }
+                            else if (keyEvents.key == Keyboard.Key.valueOf("W"))
+                            {
+                                menuSound.play();
+                                hover--;
+                                if (hover <=0)
+                                {
+                                    hover=0;
+                                }
+                            }
+                            else if (keyEvents.key == Keyboard.Key.valueOf("E"))
+                            {
+                              if (selected == false)
+                              {
+                                select = hover;
+                                selected = true;
+                                (teamRect.get(hover)).setFillColor(new Color(10,45,138));
+                              }
+                              else if (selected == true)
+                              {
+                                if (hover == select)
+                                {
+                                  select = -1;
+                                  selected = false;
+                                  (teamRect.get(hover)).setFillColor(new Color(50,45,138));
+                                }
+                                else
+                                {
+                                  Character tempChar = team.get(select);
+                                  team.set(select, team.get(hover));
+                                  team.set(hover, tempChar);
+                                  Text tempText = teamText.get(select);
+                                  teamText.set(select, teamText.get(hover));
+                                  teamText.set(hover, tempText);
+                                  (teamRect.get(select)).setFillColor(new Color(50,45,138));
+                                  select = -1;
+                                  selected = false;                                  
+                                }
+                              }
+                            }
+                            else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE"))
+                            {
+                              breakOut = true;
+                              hover = -1;
+                              for (int i = 0; i<teamRect.size(); i++)
+                              {
+                                (teamRect.get(i)).setFillColor(new Color(50,45,138));
+                              }                                
+                            }
+                        }
+                              
+                    }
+                    window.clear(Color.BLACK);
+                    window.draw(menuRect);
+                    window.draw(playerRect);
+                    drawText(text);
+
+                    for (int i = 0; i<teamRect.size(); i++)
+                    {
+                      if (select != i)
+                      {
+                        if (hover == i)
+                            (teamRect.get(i)).setFillColor(new Color(104,89,183));
+                        else
+                            (teamRect.get(i)).setFillColor(new Color(50,45,138));
+                      }                            
+                        window.draw(teamRect.get(i));
+                        window.draw(teamText.get(i));
+                    }
+
+                    window.display();
+                    
+                }
+            }
+            
             else if (option > 4)
+            {
+              paused = true;
               option = 0;
+            }
             else 
+            {
+              paused = true;
               option = 1;
-              
+            }
           }
+          else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
+          {
+            paused = true;
+            option = 1;
+          }
+          
           showSelection(text, option);
         }
       }
