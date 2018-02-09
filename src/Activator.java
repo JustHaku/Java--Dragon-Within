@@ -25,6 +25,8 @@ public class Activator extends Actor implements Serializable {
     protected IntRect thing;
     protected String text;
     protected boolean activated;
+    public static int idInc = 0;
+    int id;
     public static ArrayList<Activator> activators = new ArrayList<>();
     
     
@@ -47,7 +49,9 @@ public class Activator extends Actor implements Serializable {
         
         activated = false;
         
-        activators.add(this);  
+        activators.add(this);
+        
+        id = idInc++;
     }
     
     void setActivated(){
@@ -70,8 +74,7 @@ public class Activator extends Actor implements Serializable {
     void activate(){
         if(activated == false){
             System.out.println(text);            
-        }
-               
+        }     
         activated = true;
     }
 

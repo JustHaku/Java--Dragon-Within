@@ -18,6 +18,7 @@ public class WorldPieceActor extends Actor {
 
     private final Sprite img;
     private final IntRect piece;
+    private IntRect alt = null;
     private final ArrayList<Actor> actors;
 
     /**
@@ -43,6 +44,33 @@ public class WorldPieceActor extends Actor {
         obj = img;
         setPosition = img::setPosition;
 
+    }
+    
+    public WorldPieceActor(Texture imgTexture, int x, int y, int c1, int c2, int d1, int d2, ArrayList<Actor> actors) {
+        this.actors = actors;
+        // Draws rectange around selected piece
+        piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
+        
+        img = new Sprite(imgTexture, piece);
+        img.setScale(Game.SCALE, Game.SCALE); // Sets scale
+
+        this.x = x * Game.tileSize;
+        this.y = y * Game.tileSize;
+
+        obj = img;
+        setPosition = img::setPosition;
+
+    }
+    
+    public void addAlt(int c1, int c2){
+        alt = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);                
+    }
+    
+    public void setAlt(){
+        if(alt != null){
+            img.setTextureRect(alt);            
+        }
+        
     }
 
     @Override

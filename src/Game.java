@@ -60,6 +60,10 @@ public class Game implements State, Serializable {
     private final Music mainTheme = new Music();
     private final Music footsteps1 = new Music();
     private final Music footsteps2 = new Music();
+    private final Music openChest = new Music();
+    private final Music openDoor = new Music();
+    private final Music closeDoor = new Music();
+    private final Music stairs = new Music();
 
     // Clocks for the game.
     private final Clock footstepsTimer = new Clock();
@@ -75,14 +79,17 @@ public class Game implements State, Serializable {
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
     private final ArrayList<WorldMap> maps = new ArrayList<>();
-    
+
     //Definition of item list
     Consumable potion = new Consumable(1, "Potion", 20, 0);
     Consumable ether = new Consumable(2, "Ether", 0, 20);
 
+    Weapon dagger = new Weapon(1, "Dagger", 60);
+
     public int worldNum = 0;
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
+        Activator.activators.clear();
         this.window = window;
         this.SCALE = scale;
         this.screenWidth = 288 * scale;
@@ -102,6 +109,7 @@ public class Game implements State, Serializable {
      * @return Array list of actors.
      */
     public void changeWorld(int w) {
+
         try {
             System.out.println("Saved");
             s = new Save(playerInv, player1, this, Activator.activators);
@@ -110,8 +118,7 @@ public class Game implements State, Serializable {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         worldNum = w;
-        
-        
+
     }
 
     public int getWorldNum() {
@@ -122,9 +129,14 @@ public class Game implements State, Serializable {
         changeWorld(s.getWorld());
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
-        int index = 0;
         for (Activator a : Activator.activators) {
-            a.activated = s.getActivators().get(Activator.activators.indexOf(a));
+            System.out.println(a.activated);
+            if (s.getID().get(Activator.activators.indexOf(a)) == true) {
+                a.setActivated();
+            }
+        }
+        for (Boolean a : s.getID()) {
+            System.out.println("Save file: " + a);
         }
     }
 
@@ -145,19 +157,47 @@ public class Game implements State, Serializable {
             }
         }
     }
-    
+
     //Creates copy of item and makes it an activator and then adds it to the world    
-    private void addActivator(int m, int x, int y, Consumable c){
-        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(),c.getName(),c), playerInv)); 
+    private void addActivator(int m, int x, int y, Consumable c) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(), c), playerInv));
     }
-    private void addActivator(int m, int x, int y, Weapon c){
-        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(),c.getName(),c.dmg), playerInv)); 
+
+    private void addActivator(int m, int x, int y, Consumable c, Music f) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(), c), playerInv, f));
     }
-    private void addActivator(int m, int x, int y, Trinket c){
-        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Trinket(c.getId(),c.getName()), playerInv)); 
+
+    private void addActivator(int m, int x, int y, Weapon c) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv));
     }
-    private void addActivator(int m, int x, int y, KeyItem c){
-        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new KeyItem(c.getId(),c.getName()), playerInv)); 
+
+    private void addActivator(int m, int x, int y, Weapon c, Music f) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f));
+    }
+
+    private void addActivator(int m, int x, int y, Weapon c, Music f, int x2, int y2) {
+        AddItem d = null;
+        for (Actor a : maps.get(m).getActor()) {
+            if (a.x == x * Game.tileSize && a.y == y * Game.tileSize && a.getClass() == WorldPieceActor.class) {
+                d = new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f, (WorldPieceActor) a);
+            }
+        }
+        if (d != null) {
+            maps.get(m).getActor().add(d);
+            d.addAlt(x2, y2);
+        }else{
+            throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
+        }
+
+        //System.out.println(x + " " + y);
+    }
+
+    private void addActivator(int m, int x, int y, Trinket c) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Trinket(c.getId(), c.getName()), playerInv));
+    }
+
+    private void addActivator(int m, int x, int y, KeyItem c) {
+        maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new KeyItem(c.getId(), c.getName()), playerInv));
     }
 
     //Creates portal with texture and size
@@ -170,16 +210,32 @@ public class Game implements State, Serializable {
         }
     }
 
+    private void addPort(int m, int t, int x1, int y1, int x2, int y2, int x3, int y3, int w, int h, Music k) {
+        for (int i = 0; i < w; i++) {
+            for (int j = 0; j < h; j++) {
+                maps.get(m).getActor().add(new Portal(player1, worldSpriteSheet, x1 + i, y1 + j, x2, y2, x3, y3, t, maps.get(m).getActor(), this, k));
+            }
+        }
+    }
+
     //Creates portal with texture
     //m = map number, t = target world, x1 y1 = position of piece, x2 y2 = which sprite, x3 y3 = set player location
     private void addPort(int m, int t, int x1, int y1, int x2, int y2, int x3, int y3) {
         maps.get(m).getActor().add(new Portal(player1, worldSpriteSheet, x1, y1, x2, y2, x3, y3, t, maps.get(m).getActor(), this));
     }
 
+    private void addPort(int m, int t, int x1, int y1, int x2, int y2, int x3, int y3, Music k) {
+        maps.get(m).getActor().add(new Portal(player1, worldSpriteSheet, x1, y1, x2, y2, x3, y3, t, maps.get(m).getActor(), this, k));
+    }
+
     //Creates portal without texture
     //m = map number, t = target world x1 y1 = position of piece, x2 y2 = set player location
     private void addPort(int m, int t, int x1, int y1, int x2, int y2) {
         maps.get(m).getActor().add(new Portal(player1, worldSpriteSheet, x1, y1, 0, 5, x2, y2, t, maps.get(m).getActor(), this));
+    }
+
+    private void addPort(int m, int t, int x1, int y1, int x2, int y2, Music k) {
+        maps.get(m).getActor().add(new Portal(player1, worldSpriteSheet, x1, y1, 0, 5, x2, y2, t, maps.get(m).getActor(), this, k));
     }
 
     //Creates portals on each map
@@ -213,10 +269,12 @@ public class Game implements State, Serializable {
             }
         }
     }
-    
+
     private void initActivators() {
         addActivator(0, 0, 5, potion);
-        addActivator(0, 0, 4, ether);        
+        addActivator(0, 0, 4, ether);
+        addActivator(1, 5, 6, dagger, openChest, 38, 11);
+
     }
 
     private void initPlayer() throws IOException {
@@ -229,6 +287,11 @@ public class Game implements State, Serializable {
         footsteps2.openFromFile(Paths.get("src/audio/rpg/footstep01.ogg"));
         footsteps1.setVolume(50);
         footsteps2.setVolume(50);
+
+        openChest.openFromFile(Paths.get("src/audio/rpg/dropLeather.ogg"));
+        openDoor.openFromFile(Paths.get("src/audio/rpg/doorOpen_1.ogg"));
+        closeDoor.openFromFile(Paths.get("src/audio/rpg/doorClose_4.ogg"));
+        stairs.openFromFile(Paths.get("src/audio/rpg/stairs.ogg"));
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
@@ -244,19 +307,25 @@ public class Game implements State, Serializable {
     private void loadPortals() throws IOException {
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
-        addPort(0, 2, 8, 4, 37, 2, 8, 8); //Door to Orphanage 
+        addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage 
 
-        addPort(2, 0, 8, 9, 8, 5); //Orphanage exit
-        addPort(2, 3, 0, 2, 35, 18, 2, 4); //Orphanage left stairs to 1st floor
-        addPort(2, 3, 17, 2, 34, 18, 15, 4); //Orphanage right stairs to 1st floor
+        addPort(2, 0, 8, 9, 8, 5, closeDoor); //Orphanage exit
+        addPort(2, 3, 0, 2, 35, 18, 2, 4, stairs); //Orphanage left stairs to 1st floor
+        addPort(2, 3, 17, 2, 34, 18, 15, 4, stairs); //Orphanage right stairs to 1st floor
 
-        addPort(3, 2, 0, 5, 36, 18, 2, 3); //Orphanage left stairs to ground floor
-        addPort(3, 2, 17, 5, 37, 18, 15, 3); //Orphanage right stairs to ground floor
-        addPort(3, 4, 2, 2, 37, 1, 8, 7); //Orphanage hall to left bedroom 
-        addPort(3, 5, 12, 2, 37, 1, 8, 7); //Orphanage hall to right bedroom
-        
-        addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1); //Orphanage left bedroom to hall
-        addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1); //Orphanage right bedroom to hall
+        addPort(3, 2, 0, 5, 36, 18, 2, 3, stairs); //Orphanage left stairs to ground floor
+        addPort(3, 2, 17, 5, 37, 18, 15, 3, stairs); //Orphanage right stairs to ground floor
+        addPort(3, 4, 2, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to left bedroom 
+        addPort(3, 5, 12, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to right bedroom
+
+        addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
+        addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
+    }
+
+    private void referencePlayer() {
+        for (WorldMap a : maps) {
+            a.getActor().add(player1);
+        }
     }
 
     /**
@@ -273,10 +342,7 @@ public class Game implements State, Serializable {
         loadPortals();
         initActivators();
         loadSounds();
-
-        for (WorldMap a : maps) {
-            a.getActor().add(player1);
-        }
+        referencePlayer();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
@@ -336,7 +402,7 @@ public class Game implements State, Serializable {
             // Update the display with any changes.
             window.display();
 
-            if (saveTimer.getElapsedTime().asSeconds() > 60) {
+            if (saveTimer.getElapsedTime().asSeconds() > 20) {
                 try {
                     System.out.println("Saved");
                     s = new Save(playerInv, player1, this, Activator.activators);

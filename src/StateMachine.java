@@ -81,10 +81,9 @@ public class StateMachine
       //FileManager.save("src/saves/save000", (Game)gameWorld);
       if (state == 99)
       {
-          
           gameWorld = new Game(window, scale);
           //window.setSize(new Vector2i(100,100));
-          System.out.println(window.getSize());
+          //System.out.println(window.getSize());
           states[1] = gameWorld;
           state = 1;
       }

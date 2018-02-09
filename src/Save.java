@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 /*
@@ -26,16 +29,16 @@ public class Save implements Serializable {
     private int x;
     private int y;
     private Inventory i;
-    private ArrayList<Boolean> b = new ArrayList<>();
+    private ArrayList<Boolean> active = new ArrayList<>();
     
     
     public Save(Inventory i, Player p, Game g, ArrayList<Activator> a){
         worldNum = g.getWorldNum();
         x = p.getX();
         y = p.getY();
-        this.i = i;   
-        for(Activator activator: a){
-            b.add(activator.activated);            
+        this.i = i;     
+        for(Activator k: a){
+            active.add(k.activated);
         }
     } 
     
@@ -55,11 +58,21 @@ public class Save implements Serializable {
         return i;  
     }
     
-    public ArrayList<Boolean> getActivators(){
-        return b;
-    } 
+    public ArrayList<Boolean> getID(){
+        return active;
+    }
     
     public static void save(String fn, Save s) throws FileNotFoundException, IOException {
+        try{
+            Files.delete(Paths.get(fn));
+            
+        }catch(NoSuchFileException e){
+            
+        }
+        
+        Files.createFile(Paths.get(fn));            
+        
+        
         FileOutputStream fout = new FileOutputStream(fn);
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         oos.writeObject(s);
