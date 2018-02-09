@@ -23,7 +23,7 @@ import org.jsfml.system.Clock;
  */
 public class Game implements State, Serializable {
 
-    public static final int spd = 4; //The speed in which the player moves at.
+    public static final int spd = 1; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
     public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
     public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
@@ -68,6 +68,9 @@ public class Game implements State, Serializable {
     // Clocks for the game.
     private final Clock footstepsTimer = new Clock();
     private final Clock saveTimer = new Clock();
+    private final Clock routeClock = new Clock();
+    
+    private MessageBox routeMessage;
 
     // State of footsteps for swapping audio.
     private int footstepsState = 0;
@@ -85,6 +88,7 @@ public class Game implements State, Serializable {
     Consumable ether = new Consumable(2, "Ether", 0, 20);
 
     Weapon dagger = new Weapon(1, "Dagger", 60);
+    Weapon cleaver = new Weapon(2, "Cleaver", 100);
 
     public int worldNum = 0;
 
@@ -118,6 +122,9 @@ public class Game implements State, Serializable {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
         worldNum = w;
+        routeMessage = new MessageBox(Game.screenWidth-(190*(Game.SCALE)),0,"World: " + Integer.toString(worldNum),Color.BLACK);
+        routeClock.restart();
+        
 
     }
 
@@ -143,7 +150,7 @@ public class Game implements State, Serializable {
     //Slows down the footsteps and also has 2 sounds for footsteps.
     private void playFootsteps() {
         if (!isMinimized) {
-            if (footstepsTimer.getElapsedTime().asMilliseconds() > 100) {
+            if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
@@ -185,7 +192,7 @@ public class Game implements State, Serializable {
         if (d != null) {
             maps.get(m).getActor().add(d);
             d.addAlt(x2, y2);
-        }else{
+        } else {
             throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
         }
 
@@ -274,6 +281,7 @@ public class Game implements State, Serializable {
         addActivator(0, 0, 5, potion);
         addActivator(0, 0, 4, ether);
         addActivator(1, 5, 6, dagger, openChest, 38, 11);
+        //addActivator();
 
     }
 
@@ -295,6 +303,7 @@ public class Game implements State, Serializable {
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
+        mainTheme.setVolume(80);
 
     }
 
@@ -359,6 +368,22 @@ public class Game implements State, Serializable {
         int menuSleep = 15;
         mainTheme.play();
         while (window.isOpen() && state == 1) {
+            if (Activator.locked == false) {
+                if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
+                    player1.moveUp();
+                    playFootsteps();
+                } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
+                    player1.moveDown();
+                    playFootsteps();
+                } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
+                    player1.moveLeft();
+                    playFootsteps();
+                } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
+                    player1.moveRight();
+                    playFootsteps();
+                }
+            }
+
             mainTheme.getStatus();
             if (window.isOpen()) {
                 // Clear the screen
@@ -398,9 +423,15 @@ public class Game implements State, Serializable {
                     m.draw(window);
                 }
             }
+            
+            if(routeClock.getElapsedTime().asSeconds() < 1.6){
+                routeMessage.draw(window);
+            }
 
             // Update the display with any changes.
             window.display();
+            
+            
 
             if (saveTimer.getElapsedTime().asSeconds() > 20) {
                 try {
@@ -428,19 +459,7 @@ public class Game implements State, Serializable {
                     mainTheme.play();
                 }
                 if (event.type == Event.Type.KEY_PRESSED && player1.isMoving() == false) {
-                    if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
-                        player1.moveUp();
-                        playFootsteps();
-                    } else if (Keyboard.isKeyPressed(Keyboard.Key.S)) {
-                        player1.moveDown();
-                        playFootsteps();
-                    } else if (Keyboard.isKeyPressed(Keyboard.Key.A)) {
-                        player1.moveLeft();
-                        playFootsteps();
-                    } else if (Keyboard.isKeyPressed(Keyboard.Key.D)) {
-                        player1.moveRight();
-                        playFootsteps();
-                    } else if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
+                    if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
                         mainTheme.pause();
                         state = 3;
                     }

@@ -1,8 +1,11 @@
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.jsfml.audio.Music;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Texture;
+import org.jsfml.window.Keyboard;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -25,55 +28,51 @@ public class AddItem extends Activator {
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(2 * Game.SCALE, Game.screenHeight - (12 * Game.SCALE), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
     }
-    
+
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory, Music m) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(2 * Game.SCALE, Game.screenHeight - (12 * Game.SCALE), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
-        
+
         this.m = m;
     }
-    
+
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory, Music m, WorldPieceActor wp) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(2 * Game.SCALE, Game.screenHeight - (12 * Game.SCALE), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
-        
+
         this.m = m;
         this.wp = wp;
-        
+
     }
-    
-    public void addAlt(int c1, int c2){
-        if(wp != null){
+
+    public void addAlt(int c1, int c2) {
+        if (wp != null) {
             wp.addAlt(c1, c2);
         }
     }
-    
+
     @Override
-    public void setActivated(){
+    public void setActivated() {
         activated = true;
 
-        if(wp != null){
+        if (wp != null) {
             wp.setAlt();
-         }
-        
-        
+        }
+
     }
-    
-    
-    
 
     @Override
     void activate() {
@@ -87,25 +86,26 @@ public class AddItem extends Activator {
             messages.add(p);
             boolean done = true;
             while (true) {
-                done = true;                
+                done = true;
                 for (MessageBox m : messages) {
                     if (p != m && m.hidden == false) {
                         done = false;
                     }
                 }
-                if(done == true){
+                if (done == true) {
                     break;
                 }
             }
-            if(wp != null){
+            if (wp != null) {
                 wp.setAlt();
             }
-            if(m != null){
+            if (m != null) {
                 m.play();
             }
 
-            p.showHide();
             
+            p.showHide();
+
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
                     long startTime = System.currentTimeMillis(); //fetch starting time
@@ -118,9 +118,8 @@ public class AddItem extends Activator {
             });
 
             t1.start();
-
         } else {
-            p.hidden = true;
+            //p.hidden = true;
         }
 
     }

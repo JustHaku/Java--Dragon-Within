@@ -7,7 +7,9 @@ import java.util.logging.Logger;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.Sprite;
 import org.jsfml.graphics.Text;
+import org.jsfml.graphics.Texture;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -21,6 +23,7 @@ import org.jsfml.graphics.Text;
  */
 public class MessageBox {
     private Text text;
+    private Sprite background;
     int x;
     int y;
     boolean hidden = true;
@@ -32,8 +35,17 @@ public class MessageBox {
         } catch (IOException ex) {
             Logger.getLogger(MessageBox.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        text = new Text(message, endor, 8*Game.SCALE);
+        
+        Texture t = new Texture();
+        try {
+            t.loadFromFile(Paths.get("src/graphics/ui/spritesheet/messageBox.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(MessageBox.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        background = new Sprite(t);
+        
+        text = new Text(message, endor, (12*Game.SCALE));
         text.setColor(Color.BLACK);
         
         
@@ -41,13 +53,17 @@ public class MessageBox {
         this.x = x;
         this.y = y;
         
-        text.setPosition(x, y);
         
+        
+        text.setPosition(x + 8*(Game.SCALE) , y + 6*(Game.SCALE/2));
+        background.setPosition(x, y);
+        background.setScale(Game.SCALE/1, Game.SCALE/2);
+        this.background = background;
         this.text = text;   
     }
     
     void draw(RenderWindow w) {
-        
+        w.draw(background);
         w.draw(text);
     }
     

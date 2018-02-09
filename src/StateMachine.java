@@ -21,7 +21,7 @@ public class StateMachine
     State[] states = new State[4];
     int screenWidth = 288;
     int screenHeight = 160;
-    int scale = 3;
+    int scale = 6;
     int state = 0;
 
     RenderWindow window = new RenderWindow();

@@ -147,12 +147,7 @@ public class Player extends Character {
             }
             return a;
         }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
-            try {
-                a.activate();
-                Thread.sleep(200);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            a.activate();
         });
     }
 }

@@ -27,6 +27,7 @@ public class Activator extends Actor implements Serializable {
     protected boolean activated;
     public static int idInc = 0;
     int id;
+    public static boolean locked = false;
     public static ArrayList<Activator> activators = new ArrayList<>();
     
     
