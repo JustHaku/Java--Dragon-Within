@@ -74,6 +74,7 @@ public class WorldMap implements Serializable
             storeInts(scanners[i]);
         }
     }
+    
 
     /**
      * Returns under layer of the map
@@ -124,13 +125,13 @@ public class WorldMap implements Serializable
     
     public String getWorldName(){
         if(worldName != null){
-            return worldName;
+            return worldName + " (" + Integer.toString(w) + ")";
             
         }else{
             return "World: " + Integer.toString(w);
         }
     }
-
+    
 
     private void buildMaps() {
         for (int map_width = 0; map_width < Game.gridWidth; map_width++)

@@ -45,6 +45,7 @@ public class Game implements State, Serializable {
 
     private FileManager f;
     Inventory playerInv;
+    Helper h;
 
     //The game title
     private final String Title = "The Dragon Within Pt.1";
@@ -296,6 +297,8 @@ public class Game implements State, Serializable {
 
     private void initPlayer() throws IOException {
         player1 = new Player(playerSpriteSheet, maps, this);
+        player1.setTilePosition(1, 4);
+        worldNum = 5;
         playerInv = new Inventory();
     }
 
@@ -361,6 +364,9 @@ public class Game implements State, Serializable {
         initActivators();
         loadSounds();
         referencePlayer();
+        
+        h = new Helper();
+        h.toggleHidden();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
@@ -433,10 +439,14 @@ public class Game implements State, Serializable {
                 }
             }
             
-            if(routeClock.getElapsedTime().asSeconds() < 1.6 && routeMessage != null){
+            //if(routeClock.getElapsedTime().asSeconds() < 1.6 && routeMessage != null){
                 routeMessage.draw(window);
+            //}
+            
+            if(h != null){
+                h.Draw(window);
             }
-
+            
             // Update the display with any changes.
             window.display();
             

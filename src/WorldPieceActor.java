@@ -72,6 +72,9 @@ public class WorldPieceActor extends Actor {
         }
         
     }
+    
+    void setSmooth(){
+    }
 
     @Override
     boolean within(int px, int py){

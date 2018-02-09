@@ -90,6 +90,10 @@ public class Player extends Character {
 
     }
     
+    public void setTilePosition(int x, int y){
+        this.setPosition(x*Game.tileSize, y*Game.tileSize);
+    }
+    
     public int getX(){
         return x;
     }
