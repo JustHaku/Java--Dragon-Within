@@ -424,7 +424,7 @@ public class Game implements State, Serializable {
                 }
             }
             
-            if(routeClock.getElapsedTime().asSeconds() < 1.6){
+            if(routeClock.getElapsedTime().asSeconds() < 1.6 && routeMessage != null){
                 routeMessage.draw(window);
             }
 
