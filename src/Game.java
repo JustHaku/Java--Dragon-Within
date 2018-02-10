@@ -156,11 +156,11 @@ public class Game implements State, Serializable {
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
-                    //battleChance++;
+                    battleChance++;
                 } else if (footstepsState == 1) {
                     footsteps2.play();
                     footstepsState = 0;
-                    //battleChance++;
+                    battleChance++;
                 }
                 footstepsTimer.restart();
             }
