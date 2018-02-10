@@ -42,7 +42,6 @@ public class Player extends Character {
         speed = 10;
         exp = 0;
         level = 1;
-        this.stats = getStats();
 
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 

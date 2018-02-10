@@ -13,7 +13,7 @@ public class Character extends Actor
   protected String name;
   protected IntRect state; // The Players current character model from the spritesheet.
   protected int[] held_items = new int[4];
-  protected int[] stats = new int[9];
+  //protected int[] stats = new int[9];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
 
   protected final int exp_const = 50;
@@ -23,10 +23,10 @@ public class Character extends Actor
   void calcMove(int minX, int minY, int maxX, int maxY){
   }
 
-  /**
+  /*
   *@return An array containing all the stats of the player.
   *The stats are in this order: maxHealth, maxMana, health, mana, attack, defence, speed, experience, level.
-  */
+
   protected int[] getStats()
   {
     int[] statuses = new int[9];
@@ -47,7 +47,7 @@ public class Character extends Actor
   protected String getName()
   {
       return name;
-  }
+  }*/
 
   /**
   *@param constant will be the value needed (quadratically) for each level-up.
