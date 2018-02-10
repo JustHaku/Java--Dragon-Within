@@ -108,7 +108,6 @@ public class Character extends Actor
 
     rand_number = rand.nextInt(4) + 1;
     a.speed += rand_number;
-
   }
 
   void heal(int heal) {
