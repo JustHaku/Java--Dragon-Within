@@ -114,6 +114,7 @@ public class Game implements State, Serializable {
      * @return Array list of actors.
      */
     public void changeWorld(int w) {
+        battleChance = 0;
 
         try {
             System.out.println("Saved");
@@ -153,14 +154,15 @@ public class Game implements State, Serializable {
     private void playFootsteps() {
         if (!isMinimized) {
             if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
+                if(maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0)
+                        battleChance = 10;
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
-                    //battleChance++;
+                    
                 } else if (footstepsState == 1) {
                     footsteps2.play();
                     footstepsState = 0;
-                    //battleChance++;
                 }
                 footstepsTimer.restart();
             }
@@ -284,6 +286,8 @@ public class Game implements State, Serializable {
         maps.get(3).setWorldName("Orphanage 2F");
         maps.get(4).setWorldName("Bedroom 1");
         maps.get(5).setWorldName("Bedroom 2");
+        
+        maps.get(0).setHostile();
 
     }
 

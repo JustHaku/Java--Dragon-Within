@@ -27,6 +27,8 @@ public class WorldMap implements Serializable
     private int layer;
     private String worldName = null;
     private int w;
+    
+    private boolean hostile = false;
 
     private final ArrayList<WorldPiece> underlay = new ArrayList<>();
     private final ArrayList<WorldPiece> overlay = new ArrayList<>();
@@ -130,6 +132,14 @@ public class WorldMap implements Serializable
         }else{
             return "World: " + Integer.toString(w);
         }
+    }
+    
+    public void setHostile(){
+        hostile = true;
+    }
+    
+    public boolean isHostile(){
+        return hostile;
     }
     
 
