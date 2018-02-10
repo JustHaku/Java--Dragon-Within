@@ -16,12 +16,8 @@ public class BattleSystem extends Menu implements State
 
     private Character[] team;
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
-    //private int[][] teamStats;
-    private int exp_gain, temp, attack, characters_num;
+    private int exp_gain, temp, attack, characters_num, team_size;
 
-    /*private final int FRIENDLY_START = 0;
-    private final int FRIENDLY_END = 3;
-    private final int ENEMY_END = 6;*/
 
   public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException
   {
@@ -40,30 +36,24 @@ public class BattleSystem extends Menu implements State
     text[2] = new Text("Escape", text_font, screenHeight/14);
     text[2].setPosition(35, 840);
 
-    characters_num = team.size() * 2; //the number of enemies you get is the same as the number of characters in your party
+    team_size = team.size();
+    characters_num = team_size * 2; //the number of enemies you get is the same as the number of characters in your party
     this.team = new Character[characters_num];
     turn_state = new int[characters_num];
-    for(int i=0; i<characters_num/2; i++){ //copies the parsed team[] array into this class' team array
+    for(int i=0; i<team_size; i++){ //copies the parsed team[] array into this class' team array
       this.team[i] = team.get(i);
     }
-    //teamStats = new int[characters_num][9];
   }
 
 /**
-*Initializes an array called turn_state in the order that the players can Attack (fastest goes first)
-*This method also initializes a 2-D array (teamStats) with each player's stats.
-*The order of stats is: MaxHealth, MaxMana, health, mana, attack, defence, speed, experience, level. character.heal(int 30, int array[2][2])
+*Initializes an array called turn_state in the order that each character can Attack (fastest goes first)
 */
   void getTurns()
   {
     int[] speed_array = new int[characters_num];
 
-    for (int i = 0; i<1; i++){
+    for (int i = 0; i<team_size; i++){
       turn_state[i] = i;
-      /*for(int j = 0; j<9; j++){
-        teamStats[i][j] = team[i].stats[j];
-      }
-      speed_array[i] = teamStats[i][6];*/
       speed_array[i] = team[i].speed;
     }
 
@@ -115,13 +105,14 @@ public class BattleSystem extends Menu implements State
   public int run()
   {
     getTurns();
-    //System.out.println("The speed points of player are: "+teamStats[0][6]+"\nThe attack points are: "+teamStats[0][4]+"\nThe defence points are: "+teamStats[0][5]+"\nThe health points are: "+teamStats[0][0]);
-    //System.out.println("Player who attacks first is player "+turn_state[0]);
+    /*System.out.println("Player who attacks first is player "+turn_state[0]);
     System.out.println("The speed of player is "+team[0].speed);
+    team[0].levelUP(team[0]);
+    System.out.println("The attack of player is "+team[0].attack);
     for(int i = 0; i<turn_state.length; i++)
     {
       System.out.println(turn_state[i]);
-    }
+    }*/
     boolean end = false;
     option = 1;
     text[0].setColor(Color.BLACK);

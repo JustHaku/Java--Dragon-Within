@@ -70,7 +70,7 @@ public class Game implements State, Serializable {
     private final Clock footstepsTimer = new Clock();
     private final Clock saveTimer = new Clock();
     private final Clock routeClock = new Clock();
-    
+
     private MessageBox routeMessage;
 
     // State of footsteps for swapping audio.
@@ -126,7 +126,7 @@ public class Game implements State, Serializable {
         String worldName = maps.get(worldNum).getWorldName();
         routeMessage = new MessageBox(Game.screenWidth-(190*(Game.SCALE)),0,worldName,Color.BLACK);
         routeClock.restart();
-        
+
 
     }
 
@@ -167,7 +167,7 @@ public class Game implements State, Serializable {
         }
     }
 
-    //Creates copy of item and makes it an activator and then adds it to the world    
+    //Creates copy of item and makes it an activator and then adds it to the world
     private void addActivator(int m, int x, int y, Consumable c) {
         maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(), c), playerInv));
     }
@@ -249,7 +249,7 @@ public class Game implements State, Serializable {
 
     //Creates portals on each map
     //m1, m2 = maps you want to "link", x1, y1 = location of portal, s = size of portal, o = orientation of portal (width or height)
-    //Only add portals on the world so that if o = "" then add to the world "above" or if o = "y" then add portal to the world to the "left" 
+    //Only add portals on the world so that if o = "" then add to the world "above" or if o = "y" then add portal to the world to the "left"
     private void addExtPort(int m1, int m2, int x1, int y1, int s, String o) {
         if (o.equals("x") || o.equals("X")) {
             for (int i = 0; i < s; i++) {
@@ -277,14 +277,14 @@ public class Game implements State, Serializable {
                 break;
             }
         }
-        
+
         maps.get(0).setWorldName("Initium");
         maps.get(1).setWorldName("Flodowth Landing");
         maps.get(2).setWorldName("Orphanage 1F");
         maps.get(3).setWorldName("Orphanage 2F");
         maps.get(4).setWorldName("Bedroom 1");
         maps.get(5).setWorldName("Bedroom 2");
-        
+
     }
 
     private void initActivators() {
@@ -328,7 +328,7 @@ public class Game implements State, Serializable {
     private void loadPortals() throws IOException {
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
-        addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage 
+        addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
 
         addPort(2, 0, 8, 9, 8, 5, closeDoor); //Orphanage exit
         addPort(2, 3, 0, 2, 35, 18, 2, 4, stairs); //Orphanage left stairs to 1st floor
@@ -336,7 +336,7 @@ public class Game implements State, Serializable {
 
         addPort(3, 2, 0, 5, 36, 18, 2, 3, stairs); //Orphanage left stairs to ground floor
         addPort(3, 2, 17, 5, 37, 18, 15, 3, stairs); //Orphanage right stairs to ground floor
-        addPort(3, 4, 2, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to left bedroom 
+        addPort(3, 4, 2, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to left bedroom
         addPort(3, 5, 12, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to right bedroom
 
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
@@ -364,7 +364,7 @@ public class Game implements State, Serializable {
         initActivators();
         loadSounds();
         referencePlayer();
-        
+
         h = new Helper();
         h.toggleHidden();
 
@@ -438,19 +438,19 @@ public class Game implements State, Serializable {
                     m.draw(window);
                 }
             }
-            
-            //if(routeClock.getElapsedTime().asSeconds() < 1.6 && routeMessage != null){
+
+            if(routeMessage != null){
                 routeMessage.draw(window);
-            //}
-            
+            }
+
             if(h != null){
                 h.Draw(window);
             }
-            
+
             // Update the display with any changes.
             window.display();
-            
-            
+
+
 
             if (saveTimer.getElapsedTime().asSeconds() > 20) {
                 try {
@@ -487,6 +487,7 @@ public class Game implements State, Serializable {
 
             }
         }
+        //int peter = 2;
         return state;
     }
 

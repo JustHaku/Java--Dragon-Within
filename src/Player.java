@@ -19,7 +19,7 @@ public class Player extends Character {
     private Game g;
     private boolean moving = false;
     private final Clock footstepsTimer = new Clock();
-    private int speed = 50;
+    //private int speed = 50;
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
@@ -89,15 +89,15 @@ public class Player extends Character {
         //}
 
     }
-    
+
     public void setTilePosition(int x, int y){
         this.setPosition(x*Game.tileSize, y*Game.tileSize);
     }
-    
+
     public int getX(){
         return x;
     }
-    
+
     public int getY(){
         return y;
     }
@@ -112,8 +112,8 @@ public class Player extends Character {
     boolean isPlayer() {
         return true;
     }
-    
-    
+
+
 
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {

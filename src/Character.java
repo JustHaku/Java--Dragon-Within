@@ -43,7 +43,7 @@ public class Character extends Actor
 
     return statuses;
   }
-  
+
   protected String getName()
   {
       return name;
@@ -84,34 +84,37 @@ public class Character extends Actor
 
 
 /**
+*@param a Is the character which will level up
 *Method will be called when player get +1 level
 *and it will generate random numbers from 3 to 8 and increase
 *the player's stats
 */
-  public void levelUP()
+  public void levelUP(Character a)
   {
     Random rand = new Random();
-    int rand_number = rand.nextInt((8 - 3) + 1) + 3;
-    max_health += rand_number;
-    //System.out.println("\nHealth + "+rand_number);
+    int rand_number;
+
     rand_number = rand.nextInt((8 - 3) + 1) + 3;
-    attack += rand_number;
-    //System.out.println("Attack + "+rand_number);
+    a.max_health += rand_number;
+
     rand_number = rand.nextInt((8 - 3) + 1) + 3;
-    defence += rand_number;
-    //System.out.println("Defence + "+rand_number);
-    rand_number = rand.nextInt((8 - 3) + 1) + 3;
-    max_mana += rand_number;
-    //System.out.println("Mana + "+rand_number);
-    rand_number = rand.nextInt((8 - 3) + 1) + 3;
-    speed += rand_number;
-    //System.out.println("Speed + "+rand_number);
+    a.max_mana += rand_number;
+
+    rand_number = rand.nextInt(4) + 1;
+    a.attack += rand_number;
+
+    rand_number = rand.nextInt(4) + 1;
+    a.defence += rand_number;
+
+    rand_number = rand.nextInt(4) + 1;
+    a.speed += rand_number;
+
   }
 
   void heal(int heal) {
       health = Math.min(health + heal, max_health);
   }
-  
+
   void regen(int regen) {
       mana = Math.min(mana + regen,max_mana);
   }
