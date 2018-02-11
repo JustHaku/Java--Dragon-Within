@@ -44,7 +44,7 @@ public class StateMachine
       ex.printStackTrace();
     }
 
-    State mainMenu = new MainMenu(window, scale, 3);
+    State mainMenu = new MainMenu(window, scale, 4);
 
     team.add(Game.player1);
     team.add(Game.Petros);

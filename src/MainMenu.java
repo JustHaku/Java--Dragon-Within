@@ -53,6 +53,11 @@ public class MainMenu extends Menu implements State
     bounds = text[2].getLocalBounds();
     text[2].setOrigin(bounds.width/2, bounds.height/2);
     text[2].setPosition(screenWidth/2, screenHeight/4 + screenHeight/5);
+    
+    text[3] = new Text("Quit", text_font, screenHeight/10);
+    bounds = text[3].getLocalBounds();
+    text[3].setOrigin(bounds.width/2, bounds.height/2);
+    text[3].setPosition(screenWidth/2, screenHeight/4 + screenHeight/5 + screenHeight/5);
 
     menuSound = new Sound();
     menuSound.setBuffer(soundBuffer);
@@ -92,9 +97,9 @@ public class MainMenu extends Menu implements State
           {
             menuSound.play();
             option++;
-            if (option >=3)
+            if (option >=4)
             {
-              option=3;
+              option=4;
             }
           }
           else if (keyEvent.key == Keyboard.Key.valueOf("W"))
@@ -122,6 +127,10 @@ public class MainMenu extends Menu implements State
             {
               SettingsMenu.returnTo = 0;
               option = 4;
+            }
+            else if (option == 4)
+            {
+              window.close();
             }
           }
           showSelection(text, option);
