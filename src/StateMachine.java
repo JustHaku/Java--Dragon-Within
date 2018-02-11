@@ -16,7 +16,7 @@ import org.jsfml.system.Vector2i;
 public class StateMachine
 {
   public static ArrayList<Character> team = new ArrayList<>();
-  public static State[] states = new State[5];
+  public static State[] states = new State[16];
   private static boolean locked = false;
   
   public static void toggleLock(){
@@ -25,7 +25,6 @@ public class StateMachine
 
   public void run() throws InterruptedException, IOException
   {
-    State[] states = new State[8];
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = 5;
