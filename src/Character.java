@@ -94,7 +94,7 @@ public class Character extends Actor
     Random rand = new Random();
     int rand_number;
 
-    rand_number = rand.nextInt((8 - 3) + 1) + 3;
+    rand_number = rand.nextInt(8) + 3;
     a.max_health += rand_number;
 
     rand_number = rand.nextInt((8 - 3) + 1) + 3;

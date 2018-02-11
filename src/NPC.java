@@ -68,7 +68,7 @@ public class NPC extends Character
     for(int i = 0; i<stats.length; i++){
       stats[i] = 0;
       for(int j = 0; j<lvl; j++){
-        randomInt = rand.nextInt((8 - 3) + 1) + 3;
+        randomInt = rand.nextInt(4) + 1;
         stats[i] += randomInt;
       }
     }

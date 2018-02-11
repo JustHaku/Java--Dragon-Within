@@ -49,6 +49,7 @@ public class Game implements State, Serializable {
 
     //The game title
     private final String Title = "The Dragon Within Pt.1";
+    private Trader trader;
 
     //private Event event;
     // Textures for the game.
@@ -125,9 +126,8 @@ public class Game implements State, Serializable {
         }
         worldNum = w;
         String worldName = maps.get(worldNum).getWorldName();
-        routeMessage = new MessageBox(Game.screenWidth-(190*(Game.SCALE)),0,worldName,Color.BLACK);
+        routeMessage = new MessageBox(Game.screenWidth - (190 * (Game.SCALE)), 0, worldName, Color.BLACK);
         routeClock.restart();
-
 
     }
 
@@ -154,15 +154,19 @@ public class Game implements State, Serializable {
     private void playFootsteps() {
         if (!isMinimized) {
             if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
-                if(maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0)
-                        battleChance = 10;
+                if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0) {
+                    battleChance = 10;
+                }
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
-                    
+                    //battleChance++;
+
                 } else if (footstepsState == 1) {
                     footsteps2.play();
                     footstepsState = 0;
+                    //battleChance++;
+
                 }
                 footstepsTimer.restart();
             }
@@ -286,7 +290,7 @@ public class Game implements State, Serializable {
         maps.get(3).setWorldName("Orphanage 2F");
         maps.get(4).setWorldName("Bedroom 1");
         maps.get(5).setWorldName("Bedroom 2");
-        
+
         maps.get(0).setHostile();
 
     }
@@ -305,6 +309,14 @@ public class Game implements State, Serializable {
         player1.setTilePosition(1, 4);
         worldNum = 5;
         playerInv = new Inventory();
+        trader = new Trader("Trader",
+                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
+                        "Lets trade!",
+                        Color.BLACK),
+                playerSpriteSheet,
+                1, 9,
+                this);
+        maps.get(0).getActor().add(trader);
     }
 
     private void loadSounds() throws IOException {
@@ -388,7 +400,7 @@ public class Game implements State, Serializable {
         int menuSleep = 15;
         mainTheme.play();
         while (window.isOpen() && state == 1) {
-            if (Activator.locked == false) {
+            if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                     player1.moveUp();
                     playFootsteps();
@@ -444,18 +456,20 @@ public class Game implements State, Serializable {
                 }
             }
 
-            if(routeMessage != null){
+            if (!trader.isHidden()) {
+                trader.drawMessage(window);
+            }
+
+            if (routeMessage != null) {
                 routeMessage.draw(window);
             }
 
-            if(h != null){
+            if (h != null) {
                 h.Draw(window);
             }
 
             // Update the display with any changes.
             window.display();
-
-
 
             if (saveTimer.getElapsedTime().asSeconds() > 20) {
                 try {

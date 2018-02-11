@@ -18,6 +18,7 @@ public class Player extends Character {
     ArrayList<WorldMap> m = new ArrayList<>();
     private Game g;
     private boolean moving = false;
+    public boolean movementLock = false;
     private final Clock footstepsTimer = new Clock();
     //private int speed = 50;
 
@@ -33,6 +34,7 @@ public class Player extends Character {
         this.g = g;
         this.m = m;
 
+        name = new String("Johny");
         max_health = 100;
         max_mana = 100;
         health = max_health;
@@ -42,6 +44,8 @@ public class Player extends Character {
         speed = 10;
         exp = 0;
         level = 1;
+        //exp = 367;
+        //level = level_calc(exp_const, exp, 0);
 
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 
@@ -61,30 +65,43 @@ public class Player extends Character {
 
     void moveLeft() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+        if(!movementLock){
             x -= (Game.spd * Game.SCALE);
-            footstepsTimer.restart();
+            footstepsTimer.restart();            
+        }
+            
         //}
     }
 
     void moveRight() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+        if(!movementLock){
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
+        }
+            
         //}
     }
 
     void moveUp() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+        if(!movementLock){
             y -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
+            
+        }
+            
         //}
 
     }
 
     void moveDown() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
+        if(!movementLock){
             y += (Game.spd * Game.SCALE);
-            footstepsTimer.restart();
+            footstepsTimer.restart();            
+        }
+            
         //}
 
     }

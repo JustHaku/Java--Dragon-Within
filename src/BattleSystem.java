@@ -14,9 +14,9 @@ import org.jsfml.audio.*;
 public class BattleSystem extends Menu implements State
 {
 
-    private Character[] team;
+    private Character[] battle_participants;
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
-    private int exp_gain, temp, attack, characters_num, team_size;
+    private int exp_gain, temp, characters_num, team_size;
 
 
   public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException
@@ -37,13 +37,18 @@ public class BattleSystem extends Menu implements State
     text[2].setPosition(35, 840);
 
     team_size = team.size();
-    characters_num = team_size * 2; //the number of enemies you get is the same as the number of characters in your party
-    this.team = new Character[characters_num];
+    characters_num = team_size * 2;   //the number of enemies you get is the same as the number of characters in your party
+    battle_participants = new Character[characters_num];
     turn_state = new int[characters_num];
-    for(int i=0; i<team_size; i++){ //copies the parsed team[] array into this class' team array
-      this.team[i] = team.get(i);
+    for(int i=0; i<team_size; i++){     //copies the parsed battle_participants[] array into this class' battle_participants array
+      battle_participants[i] = team.get(i);
+    }
+    for(int i=team_size; i<characters_num; i++){ //copies the parsed battle_participants[] array into this class' battle_participants array
+      battle_participants[i] = new NPC(battle_participants[0].level);
     }
   }
+
+
 
 /**
 *Initializes an array called turn_state in the order that each character can Attack (fastest goes first)
@@ -52,9 +57,9 @@ public class BattleSystem extends Menu implements State
   {
     int[] speed_array = new int[characters_num];
 
-    for (int i = 0; i<team_size; i++){
+    for (int i = 0; i<speed_array.length; i++){
       turn_state[i] = i;
-      speed_array[i] = team[i].speed;
+      speed_array[i] = battle_participants[i].speed;
     }
 
     turn_state = bubbleSort(turn_state, speed_array);
@@ -105,14 +110,16 @@ public class BattleSystem extends Menu implements State
   public int run()
   {
     getTurns();
-    /*System.out.println("Player who attacks first is player "+turn_state[0]);
-    System.out.println("The speed of player is "+team[0].speed);
-    team[0].levelUP(team[0]);
-    System.out.println("The attack of player is "+team[0].attack);
+    //System.out.println("Player who attacks first is player "+turn_state[0]);
+    //System.out.println("The speed of the player is "+battle_participants[0].speed);
+    //battle_participants[0].levelUP(battle_participants[0]);
+    //System.out.println("The attack of the player is "+battle_participants[0].attack);
+    //System.out.println("The health of the player is "+battle_participants[0].max_health);
+
     for(int i = 0; i<turn_state.length; i++)
     {
       System.out.println(turn_state[i]);
-    }*/
+    }
     boolean end = false;
     option = 1;
     text[0].setColor(Color.BLACK);
