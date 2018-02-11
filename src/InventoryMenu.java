@@ -93,7 +93,30 @@ public class InventoryMenu extends Menu implements State
   public int run()
   {
     paused = false;
-    option = 1;
+    if (SettingsMenu.returnTo == 3)
+    {
+      option = 5;
+      SettingsMenu.returnTo = 0;
+    }
+    else if (ItemsMenu.returnTo == true)
+    {
+      option = 2;
+      ItemsMenu.returnTo = false;
+    }
+    else if (SkillsMenu.returnTo == true)
+    {
+      option = 3;
+      SkillsMenu.returnTo = false;
+    }
+    else if (MagicMenu.returnTo == true)
+    {
+      option = 4;
+      MagicMenu.returnTo = false;
+    }
+    else
+    {
+      option = 1;  
+    }    
     showSelection(text, option);
     boolean closeReq = false;
     while(window.isOpen() && paused == false)
@@ -248,17 +271,31 @@ public class InventoryMenu extends Menu implements State
 
                 }
             }
-
-            else if (option > 4)
+            else 
             {
               paused = true;
-              option = 0;
-            }
-            else
-            {
-              paused = true;
-              option = 1;
-            }
+              if (option == 2)
+              {                
+                option = 5;
+              }
+              else if (option == 3)
+              {                
+                option = 6;
+              }
+              else if (option == 4)
+              {                
+                option = 7;
+              }
+              else if (option == 5)
+              {
+                SettingsMenu.returnTo = 3;
+                option = 4;
+              }
+              else if (option == 6)
+              {
+                option = 0;
+              }
+            }                        
           }
           else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
           {
