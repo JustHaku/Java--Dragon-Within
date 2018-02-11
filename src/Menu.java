@@ -32,7 +32,16 @@ public class Menu
     this.scale = scale;
     this.screenWidth = width*scale;
     this.screenHeight = height*scale;
-    text = new Text[options_num];
+    text = newText(options_num);
+  }
+
+  /**
+  *@param options_num the number of options available
+  *@return a new Text array with a size equal to the number of options
+  */
+  Text[] newText(int options_num)
+  {
+    return new Text[options_num];
   }
 
   /**

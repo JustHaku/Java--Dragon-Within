@@ -31,6 +31,8 @@ public class Game implements State, Serializable {
     public static int gridWidth; //How many tiles wide the game screen is.
     public static int gridHeight; //How may tiles high the game screen is.
     public static Player player1;
+    //String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly -> Constructor for unique npc
+    public static NPC Petros = new NPC("Petros", 103,104,15,16,12,3,true);
     private RenderWindow window;
     private int battleChance = 0;
 

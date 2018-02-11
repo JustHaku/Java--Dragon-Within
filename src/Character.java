@@ -11,11 +11,15 @@ public class Character extends Actor
 {
   protected Sprite img;
   protected String name;
+  protected String[] skill_names = new String[4];
   protected IntRect state; // The Players current character model from the spritesheet.
+  //protected Skills[] skills = new Skills[4]; //The skills each player has
   protected int[] held_items = new int[4];
   //protected int[] stats = new int[9];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
+  protected boolean isFriendly;
 
+  protected boolean isAlive = true;
   protected final int exp_const = 50;
   protected final float ps = (float) 1;
 
