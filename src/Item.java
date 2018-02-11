@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class Item implements Serializable{
     static final long serialVersionUID = 42L;
-    int id;
+    int id, value;
     String name;
     
     public Item(int id, String name){

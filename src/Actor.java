@@ -31,6 +31,10 @@ public abstract class Actor {
     boolean within(int x, int y) {
         return false;
     }
+    
+    boolean withinInteractive(int x, int y) {
+        return false;
+    }
 
     void setValid(int x,int y){
         xv = x;

@@ -16,10 +16,16 @@ import org.jsfml.system.Vector2i;
 public class StateMachine
 {
   public static ArrayList<Character> team = new ArrayList<>();
+  public static State[] states = new State[5];
+  private static boolean locked = false;
+  
+  public static void toggleLock(){
+      locked = locked != true;
+  }
 
   public void run() throws InterruptedException, IOException
   {
-    State[] states = new State[4];
+    
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = 5;
@@ -70,11 +76,16 @@ public class StateMachine
       else if(state == 3){
         states[state] = new InventoryMenu(window, scale, 7, team);
       }
-
-      state = states[state].run();
+      
+      if(!locked){
+          state = states[state].run();              
+      }
+      
       //FileManager.save("src/saves/save000", (Game)gameWorld);
       if (state == 99)
       {
+          
+          
           gameWorld = new Game(window, scale);
           //window.setSize(new Vector2i(100,100));
           //System.out.println(window.getSize());

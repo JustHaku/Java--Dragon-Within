@@ -172,6 +172,22 @@ public class Player extends Character {
                 if (y < a.y) {
                     moveUp();
                 }
+            }else if(a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true){
+                if (x > a.x) {
+                    moveRight();
+                }
+                if (x < a.x) {
+                    moveLeft();
+                }
+
+                if (y > a.y) {
+                    moveDown();
+                }
+                if (y < a.y) {
+                    moveUp();
+                }
+                                
+                
             }
             return a;
         }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {

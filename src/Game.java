@@ -32,7 +32,7 @@ public class Game implements State, Serializable {
     public static int gridHeight; //How may tiles high the game screen is.
     public static Player player1;
     //String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly -> Constructor for unique npc
-    public static NPC Petros = new NPC("Petros", 103,104,15,16,12,3,true);
+    public static NPC Petros = new NPC("Petros", 103, 104, 15, 16, 12, 3, true);
     private RenderWindow window;
     private int battleChance = 0;
 
@@ -46,7 +46,8 @@ public class Game implements State, Serializable {
     private final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
 
     private FileManager f;
-    Inventory playerInv;
+    public Inventory playerInv;
+    public Inventory traderInv = new Inventory();
     Helper h;
 
     //The game title
@@ -69,6 +70,8 @@ public class Game implements State, Serializable {
     private final Music closeDoor = new Music();
     private final Music stairs = new Music();
 
+    public static int state = 1;
+
     // Clocks for the game.
     private final Clock footstepsTimer = new Clock();
     private final Clock saveTimer = new Clock();
@@ -88,8 +91,8 @@ public class Game implements State, Serializable {
     private final ArrayList<WorldMap> maps = new ArrayList<>();
 
     //Definition of item list
-    Consumable potion = new Consumable(1, "Potion", 20, 0);
-    Consumable ether = new Consumable(2, "Ether", 0, 20);
+    Consumable potion = new Consumable(1, "Potion", 20, 0, 100);
+    Consumable ether = new Consumable(2, "Ether", 0, 20, 150);
 
     Weapon dagger = new Weapon(1, "Dagger", 60);
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
@@ -157,7 +160,7 @@ public class Game implements State, Serializable {
         if (!isMinimized) {
             if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
                 if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0) {
-                    battleChance = 10;
+                    //battleChance = 10;
                 }
                 if (footstepsState == 0) {
                     footsteps1.play();
@@ -311,14 +314,10 @@ public class Game implements State, Serializable {
         player1.setTilePosition(1, 4);
         worldNum = 5;
         playerInv = new Inventory();
-        trader = new Trader("Trader",
-                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
-                        "Lets trade!",
-                        Color.BLACK),
-                playerSpriteSheet,
-                1, 9,
-                this);
-        maps.get(0).getActor().add(trader);
+        traderInv.addConsumable(potion);
+        traderInv.addConsumable(ether);
+        
+        
     }
 
     private void loadSounds() throws IOException {
@@ -398,10 +397,30 @@ public class Game implements State, Serializable {
 
     @Override
     public int run() {
-        int state = 1;
+        state = 1;
         int menuSleep = 15;
         mainTheme.play();
+        trader = new Trader("Trader",
+                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
+                        "Lets trade!",
+                        Color.BLACK),
+                playerSpriteSheet,
+                1, 9,
+                this, window, playerInv, traderInv);
+        maps.get(0).getActor().add(trader);
+        
+        
+        mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
+            
+//            if(subState = 2){
+//                
+//            }
+
+            for (Item a : playerInv.getWeapons()) {
+                System.out.println(a.getName());
+            }
+
             if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                     player1.moveUp();
@@ -473,16 +492,16 @@ public class Game implements State, Serializable {
             // Update the display with any changes.
             window.display();
 
-            if (saveTimer.getElapsedTime().asSeconds() > 20) {
-                try {
-                    System.out.println("Saved");
-                    s = new Save(playerInv, player1, this, Activator.activators);
-                    Save.save("src/saves/save000", s);
-                } catch (IOException ex) {
-                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                saveTimer.restart();
-            }
+//            if (saveTimer.getElapsedTime().asSeconds() > 20) {
+//                try {
+//                    System.out.println("Saved");
+//                    s = new Save(playerInv, player1, this, Activator.activators);
+//                    Save.save("src/saves/save000", s);
+//                } catch (IOException ex) {
+//                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                saveTimer.restart();
+//            }
 
             // Handle any events.
             for (Event event : window.pollEvents()) {
@@ -508,6 +527,7 @@ public class Game implements State, Serializable {
 
             }
         }
+        mainTheme.setVolume(mainTheme.getVolume()/2);
         //int peter = 2;
         return state;
     }

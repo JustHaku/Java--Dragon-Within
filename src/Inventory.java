@@ -16,6 +16,8 @@ public class Inventory implements Serializable {
     
     static final long serialVersionUID = 42L;
     
+    private int gold = 2000;
+    
     private ArrayList<Consumable> consumables = new ArrayList<>();
     private ArrayList<Weapon> weapons = new ArrayList<>();   
     private ArrayList<Trinket> trinkets = new ArrayList<>();
@@ -24,6 +26,14 @@ public class Inventory implements Serializable {
     
     public Inventory(){
         
+    }
+    
+    public int getGold(){
+        return gold;
+    }
+    
+    public void setGold(int g){
+        gold += g;        
     }
     
     public ArrayList<Consumable> getConsumables(){
@@ -46,21 +56,25 @@ public class Inventory implements Serializable {
         try{
             keyItems.add((KeyItem)item);            
         }catch(Exception e){
+            System.out.println("Not a keyitem");
                         
         }
          try{
             weapons.add((Weapon)item);            
         }catch(Exception e){
+            System.out.println("Not a weapon");
                         
         }
           try{
             trinkets.add((Trinket)item);            
         }catch(Exception e){
+            System.out.println("Not a trinket");
                         
         }
            try{
             consumables.add((Consumable)item);            
         }catch(Exception e){
+            System.out.println("Not a consumable");
                         
         }
     }

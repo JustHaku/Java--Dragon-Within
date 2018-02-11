@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.jsfml.audio.Music;
 import org.jsfml.graphics.Color;
 import org.jsfml.graphics.Font;
 import org.jsfml.graphics.RenderWindow;
@@ -27,8 +28,11 @@ public class MessageBox {
     int x;
     int y;
     boolean hidden = true;
+    private Music m = new Music();
     
     public MessageBox(int x, int y, String message, Color color) {
+        
+                
         Font endor = new Font();
         try {
             endor.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
