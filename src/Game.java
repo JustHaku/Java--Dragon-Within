@@ -292,9 +292,10 @@ public class Game implements State, Serializable {
     }
 
     private void initActivators() {
-        addActivator(0, 0, 5, potion);
-        addActivator(0, 0, 4, ether);
+        //addActivator(0, 0, 5, potion);
+        //addActivator(0, 0, 4, ether);
         addActivator(1, 5, 6, dagger, openChest, 38, 11);
+        addActivator(4, 8, 3, cleaver, openChest, 38, 11);
         //addActivator();
 
     }
