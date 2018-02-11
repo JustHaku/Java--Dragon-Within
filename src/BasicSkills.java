@@ -11,14 +11,14 @@
 public class BasicSkills {
 
     public static Skills heal = new Skills("Heal",
-            30, 40,//costs: 30; the effected stat is changed by 40  
+            30, 40,//costs: 30; the effected stat is changed by 40
             (character, value) -> {/*character.reduceManaBy(value)*/
             },// a function describing how the character performming the skill is going to pay for the skill
             (character, value) -> {/*character.increaseHealthby(value) */
-            },// a function describing how the skill is going affect the character that the skill is applied on 
+            },// a function describing how the skill is going affect the character that the skill is applied on
             false, false); // skill is not unary; the effects of it cannot be reverted after the battle ends
 
-    public static Skills fireball = new Skills("Fireball",
+    public static Skills punch = new Skills("Punch",
             50, 60,//
             (character, value) -> {/*character.reduceManaBy(value)*/
             },

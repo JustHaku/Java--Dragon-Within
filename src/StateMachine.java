@@ -15,9 +15,10 @@ import org.jsfml.system.Vector2i;
  */
 public class StateMachine
 {
+  public static ArrayList<Character> team = new ArrayList<>();
+
   public void run() throws InterruptedException, IOException
   {
-    ArrayList<Character> team = new ArrayList<>();
     State[] states = new State[4];
     int screenWidth = 288;
     int screenHeight = 160;
@@ -27,42 +28,27 @@ public class StateMachine
     RenderWindow window = new RenderWindow();
     window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
-    
-//      try {
-//          gameWorld = FileManager.read("src/saves/save000");
-//      } catch (FileNotFoundException ex) {
-//          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-//      } catch (ClassNotFoundException ex) {
-//          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-//      } catch (EOFException ex){
-//          System.out.println("Save file does not exist");
-//          gameWorld = new Game(window, scale);          
-//      }
-    
+
     Game gameWorld = new Game(window, scale);
-      try {
-          Save s = Save.load("src/saves/save000");
-          gameWorld.load(s);
-      } catch (FileNotFoundException ex) {
-          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (ClassNotFoundException ex) {
-          Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-      } catch (EOFException ex){
-          
-      }
-
-
+    try {
+      Save s = Save.load("src/saves/save000");
+      gameWorld.load(s);
+    }
+    catch (FileNotFoundException ex) {
+      Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    catch (ClassNotFoundException ex) {
+      Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+    }
+    catch (EOFException ex) {
+      ex.printStackTrace();
+    }
 
     State mainMenu = new MainMenu(window, scale, 3);
-    
-    
 
     team.add(Game.player1);
-    /*team[1] = Game.player2;
-    team[2] = Game.player3;
-    team[3] = Game.player4;
-    team[4] = Game.player5;
-    team[5] = Game.player6;*/
+    team.add(Game.Petros);
+
 
     State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale, 7, team);
@@ -70,13 +56,21 @@ public class StateMachine
     states[1] = gameWorld;
     states[2] = battleSystem;
     states[3] = inventoryMenu;
-    
+
     Vector2i v = new Vector2i(100,100);
     window.setKeyRepeatEnabled(true);
-    
-    
+
+
     while (window.isOpen())
     {
+      if(state == 2){
+        states[state] = new BattleSystem(window, scale, 3, team);
+      }
+
+      else if(state == 3){
+        states[state] = new InventoryMenu(window, scale, 7, team);
+      }
+
       state = states[state].run();
       //FileManager.save("src/saves/save000", (Game)gameWorld);
       if (state == 99)

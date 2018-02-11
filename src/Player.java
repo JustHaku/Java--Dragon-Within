@@ -19,7 +19,6 @@ public class Player extends Character {
     private Game g;
     private boolean moving = false;
     private final Clock footstepsTimer = new Clock();
-    //private int speed = 50;
 
     /**
      * Constructs the player. Gets Spritesheet and forms a rectangle from the
@@ -33,16 +32,25 @@ public class Player extends Character {
         this.g = g;
         this.m = m;
 
-        name = new String("Johny");
+        /***THIS IS TEMPORARY, JUST FOR TESTING***/
+        skill_names[0] = "Punch";
+        skill_names[1] = "Quick Attack";
+        skill_names[2] = "-";
+        skill_names[3] = "-";
+
+
+
+        name = "Main Player";
         max_health = 100;
         max_mana = 100;
         health = max_health;
         mana = max_mana;
         attack = 10;
         defence = 10;
-        speed = 10;
+        speed = 100;
         exp = 0;
         level = 1;
+        isFriendly = true;
         //exp = 367;
         //level = level_calc(exp_const, exp, 0);
 

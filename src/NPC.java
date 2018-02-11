@@ -21,7 +21,7 @@ public class NPC extends Character
   */
   //*@param item The held item(s) by given character
   //*@param imgTexture spritesheet for character
-  public NPC(String name, int health, int mana, int atk, int def, int spd, int lvl/*, Item[] item, Texture imgTexture*/)
+  public NPC(String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly/*, Item[] item, Texture imgTexture*/)
   {
     this.name = name;
     max_health = health;
@@ -33,6 +33,16 @@ public class NPC extends Character
     speed = spd;
     level = lvl;
     exp = exp_calc(exp_const, level);
+    this.isFriendly = isFriendly;
+
+
+    /***THIS IS TEMPORARY, JUST FOR TESTING***/
+    skill_names[0] = "Arxidaki";
+    skill_names[1] = "Poutsos";
+    skill_names[2] = "-";
+    skill_names[3] = "-";
+
+
     /*held_items[0] = item;
     c1 = ?;
     c2 = ?;
@@ -60,11 +70,12 @@ public class NPC extends Character
     int[] stats = new int[5];
     int randomInt;
 
+    name = "Enemy";
     max_health = 80;
     max_mana = 80;
-    attack = 7;
-    defence = 7;
-    speed = 6;
+    attack = 8;
+    defence = 8;
+    speed = 7;
     for(int i = 0; i<stats.length; i++){
       stats[i] = 0;
       for(int j = 0; j<lvl; j++){
@@ -80,6 +91,7 @@ public class NPC extends Character
     health = max_health;
     mana = max_mana;
     level = lvl;
+    isFriendly = false;
   }
 
 }
