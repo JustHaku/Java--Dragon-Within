@@ -252,7 +252,7 @@ public class InventoryMenu extends Menu implements State
             else if (option > 4)
             {
               paused = true;
-              option = 0;
+              option = 2;
             }
             else
             {

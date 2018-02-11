@@ -19,7 +19,7 @@ public class StateMachine
 
   public void run() throws InterruptedException, IOException
   {
-    State[] states = new State[4];
+    State[] states = new State[5];
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = 5;
@@ -52,10 +52,12 @@ public class StateMachine
 
     State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale, 7, team);
+    State settingsMenu = new SettingsMenu(window, scale);
     states[0] = mainMenu;
     states[1] = gameWorld;
     states[2] = battleSystem;
     states[3] = inventoryMenu;
+    states[4] = settingsMenu;
 
     Vector2i v = new Vector2i(100,100);
     window.setKeyRepeatEnabled(true);

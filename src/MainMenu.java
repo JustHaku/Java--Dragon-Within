@@ -108,17 +108,20 @@ public class MainMenu extends Menu implements State
           }
           else if (keyEvent.key == Keyboard.Key.valueOf("E"))
           {
+            menuMusic.stop();
+            paused = true;
             if (option == 1)
-            {
-              menuMusic.stop();
-              paused = true;
+            {              
               option = 99;
             }
             else if (option == 2)
             {
-              menuMusic.stop();
-              paused = true;
               option = 1;
+            }
+            else if (option == 3)
+            {
+              SettingsMenu.returnTo = 0;
+              option = 4;
             }
           }
           showSelection(text, option);
