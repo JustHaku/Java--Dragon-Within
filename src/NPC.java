@@ -37,10 +37,8 @@ public class NPC extends Character
 
 
     /***THIS IS TEMPORARY, JUST FOR TESTING***/
-    skill_names[0] = "Arxidaki";
-    skill_names[1] = "Poutsos";
-    skill_names[2] = "-";
-    skill_names[3] = "-";
+    skill_names[0] = "Dance";
+    skill_names[1] = "Splash";
 
 
     /*held_items[0] = item;
@@ -79,7 +77,7 @@ public class NPC extends Character
     for(int i = 0; i<stats.length; i++){
       stats[i] = 0;
       for(int j = 0; j<lvl; j++){
-        randomInt = rand.nextInt(4) + 1;
+        randomInt = rand.nextInt(5) + 1;
         stats[i] += randomInt;
       }
     }

@@ -36,10 +36,6 @@ public class Player extends Character {
         /***THIS IS TEMPORARY, JUST FOR TESTING***/
         skill_names[0] = "Punch";
         skill_names[1] = "Quick Attack";
-        skill_names[2] = "-";
-        skill_names[3] = "-";
-
-
 
         name = "Main Player";
         max_health = 100;
@@ -48,7 +44,7 @@ public class Player extends Character {
         mana = max_mana;
         attack = 10;
         defence = 10;
-        speed = 100;
+        speed = 10;
         exp = 0;
         level = 1;
         isFriendly = true;
@@ -75,9 +71,9 @@ public class Player extends Character {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
         if(!movementLock){
             x -= (Game.spd * Game.SCALE);
-            footstepsTimer.restart();            
+            footstepsTimer.restart();
         }
-            
+
         //}
     }
 
@@ -87,7 +83,7 @@ public class Player extends Character {
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
-            
+
         //}
     }
 
@@ -96,9 +92,9 @@ public class Player extends Character {
         if(!movementLock){
             y -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
-            
+
         }
-            
+
         //}
 
     }
@@ -107,9 +103,9 @@ public class Player extends Character {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
         if(!movementLock){
             y += (Game.spd * Game.SCALE);
-            footstepsTimer.restart();            
+            footstepsTimer.restart();
         }
-            
+
         //}
 
     }
@@ -186,8 +182,8 @@ public class Player extends Character {
                 if (y < a.y) {
                     moveUp();
                 }
-                                
-                
+
+
             }
             return a;
         }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
