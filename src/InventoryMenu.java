@@ -127,10 +127,10 @@ public class InventoryMenu extends Menu implements State
       drawText(text);
 
       for (int i = 0; i<teamRect.size(); i++)
-    {
-      window.draw(teamRect.get(i));
-      window.draw(teamText.get(i));
-    }
+      {
+        window.draw(teamRect.get(i));
+        window.draw(teamText.get(i));
+      }
 
       window.display();
 

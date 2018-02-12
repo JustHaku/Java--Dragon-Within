@@ -16,10 +16,13 @@ public class MagicMenu extends Menu implements State
   private boolean paused = false;
   private int screenHeight;
   private int screenWidth;
+  private RectangleShape menuRect;
+  private RectangleShape playerRect;
   public static boolean returnTo = false;
   
-  public MagicMenu(RenderWindow window, int scale) throws IOException
+  public MagicMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
+    menuWindow(window, scale, 288, 160, options_num);
     this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
@@ -28,11 +31,13 @@ public class MagicMenu extends Menu implements State
     text_font = new Font();
     text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
     
-    text = new Text("Magic Menu\nPlace Holder", text_font, screenHeight/10);
-    bounds = text.getLocalBounds();
-    text.setOrigin(bounds.width / 2, bounds.height / 2);
-    text.setPosition(screenWidth/2, screenHeight/2);
-    text.setColor(Color.BLACK);
+    menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
+    menuRect.setFillColor(new Color(11,2,138));
+    menuRect.setPosition(5,5);
+
+    playerRect = new RectangleShape(new Vector2f((screenWidth/4) - 15, screenHeight - 10));
+    playerRect.setFillColor(new Color(11,2,138));
+    playerRect.setPosition(((screenWidth/4)*3)+10,5);
   }
   
   @Override
@@ -42,8 +47,9 @@ public class MagicMenu extends Menu implements State
     paused = false;
     while(window.isOpen() && paused == false)
     {
-      window.clear(Color.WHITE);
-      window.draw(text);
+      window.clear(Color.BLACK);
+      window.draw(menuRect);
+      window.draw(playerRect);
       window.display();
       
       for(Event event : window.pollEvents())

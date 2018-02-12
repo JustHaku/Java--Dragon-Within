@@ -417,9 +417,9 @@ public class Game implements State, Serializable {
 //                
 //            }
 
-            for (Item a : playerInv.getWeapons()) {
-                System.out.println(a.getName());
-            }
+            //for (Item a : playerInv.getWeapons()) {
+                //System.out.println(a.getName());
+            //}
 
             if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {

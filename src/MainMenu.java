@@ -97,9 +97,9 @@ public class MainMenu extends Menu implements State
           {
             menuSound.play();
             option++;
-            if (option >=4)
+            if (option >= options_num)
             {
-              option=4;
+              option = options_num;
             }
           }
           else if (keyEvent.key == Keyboard.Key.valueOf("W"))

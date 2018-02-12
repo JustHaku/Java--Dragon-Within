@@ -58,9 +58,9 @@ public class StateMachine
     State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale, 7, team);
     State settingsMenu = new SettingsMenu(window, scale);
-    State itemsMenu = new ItemsMenu(window, scale);
-    State skillsMenu = new SkillsMenu(window, scale);
-    State magicMenu = new MagicMenu(window, scale);
+    State itemsMenu = new ItemsMenu(window, scale, 4);
+    State skillsMenu = new SkillsMenu(window, scale, 1);
+    State magicMenu = new MagicMenu(window, scale, 1);
     states[0] = mainMenu;
     states[1] = gameWorld;
     states[2] = battleSystem;
