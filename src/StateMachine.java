@@ -32,7 +32,7 @@ public class StateMachine
   {
     int screenWidth = 288;
     int screenHeight = 160;
-    int scale = 4;
+    int scale = 3;
     
 
     RenderWindow window = new RenderWindow();
