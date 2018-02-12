@@ -14,20 +14,20 @@ import java.util.ArrayList;
  *
  * @author Kirk Sparnenn
  */
-public class ItemsMenu extends Menu implements State {
-
-    private RenderWindow window;
-    private int scale;
-    private Font text_font;
-    private boolean paused = false;
-    private int screenHeight;
-    private int screenWidth;
-    private RectangleShape menuRect;
-    private RectangleShape playerRect;
-    private ArrayList items;
-    private ArrayList<Text> itemText = new ArrayList<>();
-    private ArrayList<RectangleShape> itemRect = new ArrayList<>();
-    public static boolean returnTo = false;
+public class ItemsMenu extends Menu implements State
+{
+  private RenderWindow window;
+  private int scale;
+  private Font text_font;
+  private boolean paused = false;
+  private int screenHeight;
+  private int screenWidth;
+  private RectangleShape menuRect;
+  private RectangleShape playerRect;
+  private ArrayList items;
+  private ArrayList<Text> itemText = new ArrayList<>();  
+  private ArrayList<RectangleShape> itemRect = new ArrayList<>();
+  public static boolean returnTo = false;
     public Game g;
 
     public ItemsMenu(RenderWindow window, int scale, int options_num, Game g) throws IOException {
@@ -74,9 +74,7 @@ public class ItemsMenu extends Menu implements State {
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
-
     }
-
     /*
   * Main loop draws and controlls moving through menu.
      */
