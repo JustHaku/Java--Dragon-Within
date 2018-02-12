@@ -113,14 +113,12 @@ public class ItemsMenu extends Menu implements State
         }
 
         else if (event.type == Event.Type.KEY_PRESSED)
-        {
-          for (int i = 0; i<items.size(); i++)
-          {
-            itemRect.remove(0);            
-            itemText.remove(0);
-          }
+        {          
           if (keyEvent.key == Keyboard.Key.valueOf("S"))
           {
+              itemRect = new ArrayList<>();            
+              itemText = new ArrayList<>();  
+
             menuSound.play();
             option++;
             if (option >= options_num)
@@ -131,6 +129,9 @@ public class ItemsMenu extends Menu implements State
 
           else if (keyEvent.key == Keyboard.Key.valueOf("W"))
           {
+            itemRect = new ArrayList<>();            
+            itemText = new ArrayList<>();  
+
             menuSound.play();
             option--;
             if (option <=1)
@@ -164,7 +165,7 @@ public class ItemsMenu extends Menu implements State
             (itemRect.get(i)).setFillColor(new Color(50,45,138));
             (itemRect.get(i)).setPosition(10,10+((screenHeight/10-2)*i));
             
-            itemText.add(new Text(((Item)items.get(i)).name, text_font, screenHeight/15));
+            itemText.add(new Text(((Item)items.get(i)).getName(), text_font, screenHeight/15));
             (itemText.get(i)).setPosition(15,5+((screenHeight/10-2)*i));
           }
         }

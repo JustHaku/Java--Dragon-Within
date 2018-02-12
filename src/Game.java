@@ -98,6 +98,7 @@ public class Game implements State, Serializable {
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
 
     public int worldNum = 0;
+    
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
         Activator.activators.clear();
