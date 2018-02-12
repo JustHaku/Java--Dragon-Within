@@ -95,7 +95,7 @@ public class BasicSkills {
                 
                 Skills.myBiConsumer<Character, Integer> wayofpaying = (payment.equals("mana")) ? manapay : actionpay;
                 Skills.myBiConsumer<Character, Integer> wayofapp = (character, value) -> {
-                    character.takeDameage(type, value);
+//                    character.takeDameage(type, value);
                 };
 
                 // get the types of character it affects
