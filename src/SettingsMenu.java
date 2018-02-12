@@ -7,6 +7,11 @@ import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
+/**
+ * The class that provides the settings menu functionality.
+ *
+ * @author Kirk Sparnenn
+ */
 public class SettingsMenu extends Menu implements State
 {
   private RenderWindow window;
@@ -35,6 +40,9 @@ public class SettingsMenu extends Menu implements State
     text.setColor(Color.BLACK);
   }
   
+  /*
+  * Main loop draws and controlls moving through menu.
+  */
   @Override
   public int run()
   {

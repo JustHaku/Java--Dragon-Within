@@ -1,5 +1,4 @@
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 import java.util.*;
 import java.nio.file.*;
 import org.jsfml.system.*;
@@ -102,31 +101,56 @@ public class BattleSystem extends Menu implements State
   {
     Random r = new Random();
     int randInt = r.nextInt(6) + 9;
-      
+
     int total_exp = 0;
     total_exp += enemy.level*randInt;
     return total_exp;
   }
 
   void playerTurn(Character attacker){
-    attack_menu[0] = new Text(attacker.skill_names[0], text_font, screenHeight/20);
-    attack_menu[0].setPosition(35, 535);
+    int length = 5;
+    int width = 35;
+    int height = 535;
+
+    for(int i = 0; i<length; i++)
+    {
+      if(i == 4)
+      {
+        height += 15;
+        attack_menu[i] = new Text("Cancel", text_font, screenHeight/20);
+      }
+      else if(attacker.skill_names[i] != null)
+        attack_menu[i] = new Text(attacker.skill_names[i], text_font, screenHeight/20);
+      else
+        attack_menu[i] = new Text("-", text_font, screenHeight/20);
+      attack_menu[i].setPosition(width, height);
+      height += 50;
+    }
     attack_menu[0].setColor(Color.BLACK);
-
-    attack_menu[1] = new Text(attacker.skill_names[1], text_font, screenHeight/20);
-    attack_menu[1].setPosition(35, 585);
-
-    attack_menu[2] = new Text(attacker.skill_names[2], text_font, screenHeight/20);
-    attack_menu[2].setPosition(35, 635);
-
-    attack_menu[3] = new Text(attacker.skill_names[3], text_font, screenHeight/20);
-    attack_menu[3].setPosition(35, 685);
-
-    attack_menu[4] = new Text("Cancel", text_font, screenHeight/20);
-    attack_menu[4].setPosition(35, 750);
   }
-  void enemyTurn(){
+  void enemyTurn(Character enemy, Character[] player, int range){
+      Random rand = new Random();
+      int randInt = rand.nextInt(range);
 
+      //Check if you're attacking a dead man
+      while(player[randInt].isAlive == false)
+      {
+        randInt = rand.nextInt(range);
+      }
+      //reduce player's health
+      player[randInt].health -= enemy.attack;
+
+      if(player[randInt].health <= 0){
+        player[randInt].health = 0;
+        player[randInt].isAlive = false;
+        System.out.println(player[randInt].name+" has died.");
+      }
+      else{
+        System.out.println(player[randInt].name+" took "+ enemy.attack
+                            +" amount of damage.\n"+player[randInt].name
+                            +" has "+player[randInt].health+" / "
+                            +player[randInt].max_health+" HP");
+      }
   }
 
   @Override
@@ -142,7 +166,7 @@ public class BattleSystem extends Menu implements State
     {
       System.out.println(battle_participants[(turn_state[i])].name+" at position "+turn_state[i]+" is number "+
       (i+1)+" to attack with a "+ battle_participants[(turn_state[i])].speed+
-      " speed stat");
+      " speed stat and is LVL: "+battle_participants[(turn_state[i])].level);
     }
     //(StateMachine.team).add(Game.Petros);
 
@@ -202,13 +226,14 @@ public class BattleSystem extends Menu implements State
             {
               boolean turn_end = false;
               boolean fight_end = false;
+              boolean victory = false;
               int fight_option = 1;
 
               while(fight_end == false)
               {
                 for(int x = 0; x<characters_num; x++)
                 {
-                  if(battle_participants[(turn_state[x])].isFriendly == true)
+                  if(battle_participants[(turn_state[x])].isFriendly && battle_participants[(turn_state[x])].isAlive)
                   {
                     if(fight_end == false){
                       turn_end = false;
@@ -216,6 +241,7 @@ public class BattleSystem extends Menu implements State
 
                     playerTurn(battle_participants[(turn_state[x])]);
                     fight_option = 1;
+                    System.out.println("It's "+battle_participants[(turn_state[x])].name+"'s turn!\n");
 
                     while(window.isOpen() && turn_end == false)
                     {
@@ -298,10 +324,15 @@ public class BattleSystem extends Menu implements State
                         }
                       }
                     }
+                    try{
+                        Thread.sleep(350);}
+                    catch(InterruptedException e)
+                    {
+                      e.printStackTrace();}
                   }
-                  else if(battle_participants[(turn_state[x])].isAlive == true && fight_end == false)
+                  else if(battle_participants[(turn_state[x])].isAlive == true && fight_end == false && battle_participants[(turn_state[x])].isFriendly == false)
                   {
-                      System.out.println("Enemy turn!   (Wait 1.5 seconds..)");
+                      System.out.println("\nEnemy turn!   (Wait 1.5 seconds..)");
                       Text enemyAttack = new Text("Enemy turn!", text_font, screenHeight/20);
                       enemyAttack.setPosition(35, 750);
                       enemyAttack.setColor(Color.RED);
@@ -309,6 +340,7 @@ public class BattleSystem extends Menu implements State
                       window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
                       window.draw(enemyAttack);
                       window.display();
+                      enemyTurn(battle_participants[(turn_state[x])], battle_participants, team_size);
 
                       try{
                           Thread.sleep(1500);}
@@ -326,7 +358,6 @@ public class BattleSystem extends Menu implements State
                   }
                   if(dead_counter == team_size){
                     fight_end = true;
-                    //turn_end = true;
                     end = true;
                     option = 1;
                   }
@@ -338,28 +369,11 @@ public class BattleSystem extends Menu implements State
                       dead_counter++;
                     }
                   }
-                  if(dead_counter == team_size){
+                  if(dead_counter == team_size)
+                  {
                     fight_end = true;
-                    end = true;
+                    victory = true;
                     option = 1;
-                    for(int i=team_size; i<characters_num; i++)
-                    {
-                      exp_gain += exp_gain_calc(battle_participants[i]);
-                    }
-                    exp_gain = exp_gain/team_size;
-                    for(int i=0; i<team_size; i++){
-                      System.out.println(battle_participants[i].name+" gained "+exp_gain+" experience points");
-                      int temp_level = battle_participants[i].level_calc(battle_participants[i].exp_const, battle_participants[i].exp, exp_gain);
-                      if (battle_participants[i].level < temp_level){
-                          int levels = temp_level - battle_participants[i].level;
-                          System.out.println(battle_participants[i].name+" is now level "+temp_level);
-                          for(int j=0; j<levels; j++){
-                              battle_participants[i].levelUP(battle_participants[i]);
-                          }
-                      }
-                      battle_participants[i].exp += exp_gain;
-                    }
-
                   }
                   else{
                     dead_counter = 0;
@@ -367,6 +381,33 @@ public class BattleSystem extends Menu implements State
                 }
               }
 
+              if(victory)
+              {
+                for(int i=team_size; i<characters_num; i++)
+                {
+                  exp_gain += exp_gain_calc(battle_participants[i]);
+                  System.out.println("line 363 exp_gain = "+ exp_gain);
+                }
+                System.out.println("Total experience gained is: "+exp_gain);
+                exp_gain = exp_gain/team_size;
+                System.out.println("Experience divided to characters is: "+exp_gain+"\n");
+                for(int i=0; i<team_size; i++){
+                  System.out.println(battle_participants[i].name+" gained "+exp_gain+" experience points");
+                  int temp_level = battle_participants[i].level_calc(battle_participants[i].exp_const,
+                                                                      battle_participants[i].exp, exp_gain);
+                  if (battle_participants[i].level < temp_level){
+                      int levels_to_grow = temp_level - battle_participants[i].level;
+                      System.out.println(battle_participants[i].name+" has reached level "+temp_level);
+                      for(int j=0; j<levels_to_grow; j++){
+                          battle_participants[i].levelUP(battle_participants[i]);
+                      }
+                  }
+                  battle_participants[i].exp += exp_gain;
+                  System.out.println(battle_participants[i].name+" has "+battle_participants[i].exp
+                                      +" experience points and is LVL: "+battle_participants[i].level);
+                }
+                end=true;
+              }
 
 
             }

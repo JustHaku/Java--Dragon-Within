@@ -7,6 +7,11 @@ import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
+/**
+ * The class that provides the inventory menu functionality.
+ *
+ * @author Kirk Sparnenn
+ */
 public class InventoryMenu extends Menu implements State
 {
   private Font text_font;
@@ -40,6 +45,7 @@ public class InventoryMenu extends Menu implements State
     playerRect.setFillColor(new Color(11,2,138));
     playerRect.setPosition(((screenWidth/4)*3)+10,5);
 
+    // Sets the amount of rectangles and text to go in them.
     for (int i = 0; i<team.size(); i++)
     {
       teamRect.add(new RectangleShape(new Vector2f((screenWidth/4)*3 - 10, screenHeight/6 - 10)));
@@ -89,10 +95,14 @@ public class InventoryMenu extends Menu implements State
     text[6].setPosition((screenWidth/8)*7, screenHeight/20*17);
   }
 
+  /*
+  * Main loop draws and controlls moving through menu.
+  */
   @Override
   public int run()
   {
     paused = false;
+    // sets which item on the menu to be selected on return.
     if (SettingsMenu.returnTo == 3)
     {
       option = 5;
@@ -118,7 +128,7 @@ public class InventoryMenu extends Menu implements State
       option = 1;  
     }    
     showSelection(text, option);
-    boolean closeReq = false;
+    boolean closeReq = false; // used to close window from second while loop.
     while(window.isOpen() && paused == false)
     {
       window.clear(Color.BLACK);
@@ -126,11 +136,12 @@ public class InventoryMenu extends Menu implements State
       window.draw(playerRect);
       drawText(text);
 
+      // draws players.
       for (int i = 0; i<teamRect.size(); i++)
-    {
-      window.draw(teamRect.get(i));
-      window.draw(teamText.get(i));
-    }
+      {
+        window.draw(teamRect.get(i));
+        window.draw(teamText.get(i));
+      }
 
       window.display();
 
@@ -169,12 +180,14 @@ public class InventoryMenu extends Menu implements State
           {
             if (option == 7)
               window.close();
+            // Loadout menu.
             else if (option == 1)
             {
                 int hover = 0;
                 int select = -1;
                 boolean selected = false;
-                boolean breakOut = false;
+                boolean breakOut = false; // used to escape second loop.
+                
                 while(breakOut == false)
                 {
                     for(Event events : window.pollEvents())
@@ -222,9 +235,10 @@ public class InventoryMenu extends Menu implements State
                                   select = -1;
                                   selected = false;
                                   (teamRect.get(hover)).setFillColor(new Color(50,45,138));
-                                }
+                                }                              
                                 else
                                 {
+                                  //swaps the charecters.
                                   Character tempChar = team.get(select);
                                   team.set(select, team.get(hover));
                                   team.set(hover, tempChar);
@@ -254,6 +268,7 @@ public class InventoryMenu extends Menu implements State
                     window.draw(playerRect);
                     drawText(text);
 
+                    // resets loadout menu.
                     for (int i = 0; i<teamRect.size(); i++)
                     {
                       if (select != i)

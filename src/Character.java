@@ -11,11 +11,10 @@ public class Character extends Actor
 {
   protected Sprite img;
   protected String name;
-  protected String[] skill_names = new String[4];
-  protected IntRect state; // The Players current character model from the spritesheet.
+  protected String[] skill_names = new String[4]; //dummy of the skills that each player has
   //protected Skills[] skills = new Skills[4]; //The skills each player has
+  protected IntRect state; // The Players current character model from the spritesheet.
   protected int[] held_items = new int[4];
-  //protected int[] stats = new int[9];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
   protected boolean isFriendly;
 
@@ -26,32 +25,6 @@ public class Character extends Actor
   @Override
   void calcMove(int minX, int minY, int maxX, int maxY){
   }
-
-  /*
-  *@return An array containing all the stats of the player.
-  *The stats are in this order: maxHealth, maxMana, health, mana, attack, defence, speed, experience, level.
-
-  protected int[] getStats()
-  {
-    int[] statuses = new int[9];
-
-    statuses[0] = this.max_health;
-    statuses[1] = this.max_mana;
-    statuses[2] = this.health;
-    statuses[3] = this.mana;
-    statuses[4] = this.attack;
-    statuses[5] = this.defence;
-    statuses[6] = this.speed;
-    statuses[7] = this.exp;
-    statuses[8] = this.level;
-
-    return statuses;
-  }
-
-  protected String getName()
-  {
-      return name;
-  }*/
 
   /**
   *@param constant will be the value needed (quadratically) for each level-up.
@@ -98,19 +71,21 @@ public class Character extends Actor
     Random rand = new Random();
     int rand_number;
 
-    rand_number = rand.nextInt(8) + 3;
+    a.level += 1;
+
+    rand_number = rand.nextInt(6) + 3;
     a.max_health += rand_number;
 
-    rand_number = rand.nextInt((8 - 3) + 1) + 3;
+    rand_number = rand.nextInt(6) + 3;
     a.max_mana += rand_number;
 
-    rand_number = rand.nextInt(4) + 1;
+    rand_number = rand.nextInt(6) + 3;
     a.attack += rand_number;
 
-    rand_number = rand.nextInt(4) + 1;
+    rand_number = rand.nextInt(6) + 3;
     a.defence += rand_number;
 
-    rand_number = rand.nextInt(4) + 1;
+    rand_number = rand.nextInt(6) + 3;
     a.speed += rand_number;
   }
 

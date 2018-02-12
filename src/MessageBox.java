@@ -59,7 +59,7 @@ public class MessageBox {
         
         
         
-        text.setPosition(x + 8*(Game.SCALE) , y + 6*(Game.SCALE/2));
+        text.setPosition(x + 8*(Game.SCALE) , y + (Game.SCALE));
         background.setPosition(x, y);
         background.setScale(Game.SCALE/1, Game.SCALE/2);
         this.background = background;

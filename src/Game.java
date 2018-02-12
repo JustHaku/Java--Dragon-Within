@@ -23,7 +23,7 @@ import org.jsfml.system.Clock;
  */
 public class Game implements State, Serializable {
 
-    public static final int spd = 1; //The speed in which the player moves at.
+    public static final int spd = 4; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
     public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
     public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
@@ -98,6 +98,7 @@ public class Game implements State, Serializable {
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
 
     public int worldNum = 0;
+    
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
         Activator.activators.clear();
@@ -417,9 +418,9 @@ public class Game implements State, Serializable {
 //                
 //            }
 
-            for (Item a : playerInv.getWeapons()) {
-                System.out.println(a.getName());
-            }
+            //for (Item a : playerInv.getWeapons()) {
+                //System.out.println(a.getName());
+            //}
 
             if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
