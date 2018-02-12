@@ -18,6 +18,8 @@ public class StateMachine
   public static ArrayList<Character> team = new ArrayList<>();
   public static State[] states = new State[16];
   private static boolean locked = false;
+  public static int state = 0;
+  public static Game gameWorld;
   
   public static void toggleLock(){
       locked = locked != true;
@@ -31,26 +33,13 @@ public class StateMachine
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = 6;
-    int state = 0;
+    
 
     RenderWindow window = new RenderWindow();
     window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
 
-    Game gameWorld = new Game(window, scale);
-    try {
-      Save s = Save.load("src/saves/save000");
-      gameWorld.load(s);
-    }
-    catch (FileNotFoundException ex) {
-      Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    catch (ClassNotFoundException ex) {
-      Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-    }
-    catch (EOFException ex) {
-      ex.printStackTrace();
-    }
+    gameWorld = new Game(window, scale);
 
     State mainMenu = new MainMenu(window, scale, 4);
 
@@ -61,7 +50,7 @@ public class StateMachine
     State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale, 7, team);
     State settingsMenu = new SettingsMenu(window, scale);
-    State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld);
+    State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv);
     State skillsMenu = new SkillsMenu(window, scale, 1);
     State magicMenu = new MagicMenu(window, scale, 1);
     states[0] = mainMenu;
@@ -98,9 +87,10 @@ public class StateMachine
           
           
           gameWorld = new Game(window, scale);
+          states[1] = gameWorld;
+          
           //window.setSize(new Vector2i(100,100));
           //System.out.println(window.getSize());
-          states[1] = gameWorld;
           state = 1;
       }
     }

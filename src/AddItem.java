@@ -82,7 +82,7 @@ public class AddItem extends Activator {
             //activatedList.add(id);
             System.out.print("You received: ");
             System.out.println(item.getName());
-            inventory.addItem(item);
+            StateMachine.gameWorld.playerInv.addItem(item);
             messages.add(p);
             boolean done = true;
             while (true) {

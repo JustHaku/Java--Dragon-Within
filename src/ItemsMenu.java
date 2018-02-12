@@ -14,29 +14,31 @@ import java.util.ArrayList;
  *
  * @author Kirk Sparnenn
  */
-public class ItemsMenu extends Menu implements State
-{
-  private RenderWindow window;
-  private int scale;
-  private Font text_font;
-  private boolean paused = false;
-  private int screenHeight;
-  private int screenWidth;
-  private RectangleShape menuRect;
-  private RectangleShape playerRect;
-  private ArrayList items;
-  private ArrayList<Text> itemText = new ArrayList<>();  
-  private ArrayList<RectangleShape> itemRect = new ArrayList<>();
-  public static boolean returnTo = false;
-    public Game g;
+public class ItemsMenu extends Menu implements State {
 
-    public ItemsMenu(RenderWindow window, int scale, int options_num, Game g) throws IOException {
+    private RenderWindow window;
+    private int scale;
+    private Font text_font;
+    private boolean paused = false;
+    private int screenHeight;
+    private int screenWidth;
+    private RectangleShape menuRect;
+    private RectangleShape playerRect;
+    private ArrayList items;
+    private ArrayList<Text> itemText = new ArrayList<>();
+    private ArrayList<RectangleShape> itemRect = new ArrayList<>();
+    public static boolean returnTo = false;
+    public Game g;
+    private Inventory playInv;
+
+    public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv) throws IOException {
         menuWindow(window, scale, 288, 160, options_num);
         this.window = window;
         this.scale = scale;
         screenHeight = 160 * scale;
         screenWidth = 288 * scale;
-        this.g = g;
+        this.playInv = playInv;
+        //this.g = g;
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
@@ -75,6 +77,7 @@ public class ItemsMenu extends Menu implements State
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
     }
+
     /*
   * Main loop draws and controlls moving through menu.
      */
@@ -84,7 +87,7 @@ public class ItemsMenu extends Menu implements State
         paused = false;
         option = 1;
         showSelection(text, option);
-        items = g.playerInv.getConsumables(); // gets first inventory.
+        items = playInv.getConsumables(); // gets first inventory.
 
         // sets up rectangles and text for items.
         for (int i = 0; i < items.size(); i++) {
@@ -138,13 +141,13 @@ public class ItemsMenu extends Menu implements State
                     }
                     // Different inventorys selected.
                     if (option == 1) {
-                        items = g.playerInv.getConsumables();
+                        items = StateMachine.gameWorld.playerInv.getConsumables();
                     } else if (option == 2) {
-                        items = g.playerInv.getWeapons();
+                        items = StateMachine.gameWorld.playerInv.getWeapons();
                     } else if (option == 3) {
-                        items = g.playerInv.getTrinkets();
+                        items = StateMachine.gameWorld.playerInv.getTrinkets();
                     } else if (option == 4) {
-                        items = g.playerInv.getKeyItems();
+                        items = StateMachine.gameWorld.playerInv.getKeyItems();
                     }
                     // Redraws the items.
                     for (int i = 0; i < items.size(); i++) {

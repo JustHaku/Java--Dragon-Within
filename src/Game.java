@@ -46,7 +46,7 @@ public class Game implements State, Serializable {
     private final String JreFontPath = "C:\\Program Files\\Java\\jre" + JavaVersion + "\\lib\\fonts\\";
 
     private FileManager f;
-    public Inventory playerInv;
+    public Inventory playerInv = new Inventory();
     public Inventory traderInv = new Inventory();
     Helper h;
 
@@ -98,7 +98,6 @@ public class Game implements State, Serializable {
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
 
     public int worldNum = 0;
-    
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
         Activator.activators.clear();
@@ -314,11 +313,9 @@ public class Game implements State, Serializable {
         player1 = new Player(playerSpriteSheet, maps, this);
         player1.setTilePosition(1, 4);
         worldNum = 5;
-        playerInv = new Inventory();
         traderInv.addConsumable(potion);
         traderInv.addConsumable(ether);
-        
-        
+
     }
 
     private void loadSounds() throws IOException {
@@ -378,9 +375,10 @@ public class Game implements State, Serializable {
     public void init() throws InterruptedException, FileNotFoundException, IOException {
         loadTextures();
         initMaps();
+        initActivators();
         initPlayer();
         loadPortals();
-        initActivators();
+
         loadSounds();
         referencePlayer();
 
@@ -409,18 +407,16 @@ public class Game implements State, Serializable {
                 1, 9,
                 this, window, playerInv, traderInv);
         maps.get(0).getActor().add(trader);
-        
-        
+
         mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
-            
+
 //            if(subState = 2){
 //                
 //            }
-
-            //for (Item a : playerInv.getWeapons()) {
-                //System.out.println(a.getName());
-            //}
+            for (Item a : playerInv.getWeapons()) {
+                System.out.println(a.getName());
+            }
 
             if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
@@ -503,7 +499,6 @@ public class Game implements State, Serializable {
 //                }
 //                saveTimer.restart();
 //            }
-
             // Handle any events.
             for (Event event : window.pollEvents()) {
                 if (event.type == Event.Type.CLOSED) {
@@ -528,7 +523,7 @@ public class Game implements State, Serializable {
 
             }
         }
-        mainTheme.setVolume(mainTheme.getVolume()/2);
+        mainTheme.setVolume(mainTheme.getVolume() / 2);
         //int peter = 2;
         return state;
     }
