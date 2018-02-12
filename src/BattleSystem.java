@@ -276,51 +276,63 @@ public class BattleSystem extends Menu implements State
                               fight_option--;
                             }
                           }
-                          else if (keyEvent.key == Keyboard.Key.valueOf("E"))
+                          else if (battleEvent.key == Keyboard.Key.valueOf("E"))
                           {
-                              switch (fight_option) {
-                                  case 1:
-                                      if(attack_menu[fight_option-1].equals("-")){
-                                          System.out.println("No skill assigned to this slot!");
-                                      }
-                                      else
-                                      {
-                                          battle_participants[2].health-=20;
-                                          if(battle_participants[2].health <= 0)
-                                              battle_participants[2].isAlive = false;
-                                          turn_end = true;
-                                          System.out.println(battle_participants[(turn_state[x])].name+" inflicted 20 damage to "+battle_participants[2].name+"1");
-                                          System.out.println(battle_participants[2].name+"1 has "+battle_participants[2].health+"/"+battle_participants[2].max_health);
-                                      }       break;
-                                  case 2:
-                                      if(attack_menu[fight_option-1].equals("-")){
-                                          System.out.println("No skill assigned to this slot!");
-                                      }
-                                      else
-                                      {
-                                          battle_participants[3].health-=50;
-                                          if(battle_participants[3].health <= 0)
-                                              battle_participants[3].isAlive = false;
-                                          turn_end = true;
-                                          System.out.println(battle_participants[(turn_state[x])].name+" inflicted 50 damage to "+battle_participants[3].name+"2");
-                                          System.out.println(battle_participants[3].name+"2 has "+battle_participants[3].health+"/"+battle_participants[3].max_health);
-                                      }       break;
-                                  case 3:
+                            if(fight_option == 1) {
+                                if(attack_menu[fight_option-1].getString().equals("-")) {
+                                   System.out.println("No skill assigned to this slot!");
+                                 }
+                                 else
+                                 {
+                                  battle_participants[2].health-=27;
+                                  if(battle_participants[2].health <= 0)
+                                  {
+                                    battle_participants[2].isAlive = false;
+                                    battle_participants[2].health = 0;
+                                  }
+                                  turn_end = true;
+                                  System.out.println(battle_participants[(turn_state[x])].name+
+                                                     " inflicted 20 damage to "+battle_participants[2].name+"1");
+                                  System.out.println(battle_participants[2].name+"1 has "+
+                                                     battle_participants[2].health+"/"+battle_participants[2].max_health);
+                                  }
+                                }
+                                else if(fight_option == 2)
+                                {
+                                  if(attack_menu[fight_option-1].getString().equals("-")) {
                                       System.out.println("No skill assigned to this slot!");
-                                      break;
-                                  case 4:
+                                  }
+                                  else
+                                  {
+                                    battle_participants[3].health-=50;
+                                    if(battle_participants[3].health <= 0)
+                                    {
+                                      battle_participants[3].isAlive = false;
+                                      battle_participants[3].health = 0;
+                                    }
+                                    turn_end = true;
+                                    System.out.println(battle_participants[(turn_state[x])].name+
+                                                      " inflicted 50 damage to "+battle_participants[3].name+"2");
+                                    System.out.println(battle_participants[3].name+"2 has "+
+                                                      battle_participants[3].health+"/"+battle_participants[3].max_health);
+                                  }
+                                }
+                                else if(fight_option == 3){
+                                    if(attack_menu[fight_option-1].getString().equals("-"))
                                       System.out.println("No skill assigned to this slot!");
-                                      break;
-
-                                  case 5:
-                                      turn_end = true;
-                                      fight_end = true;
-                                      break;
-                                  default:
-                                      break;
-                              }
-                          }
-                          showSelection(attack_menu, fight_option);
+                                    }
+                                else if(fight_option == 4)
+                                {
+                                  if(attack_menu[fight_option-1].getString().equals("-"))
+                                      System.out.println("No skill assigned to this slot!");
+                                }
+                                else if(fight_option == 5)
+                                {
+                                  turn_end = true;
+                                  fight_end = true;
+                                }
+                           }
+                           showSelection(attack_menu, fight_option);
                         }
                       }
                     }
@@ -350,33 +362,32 @@ public class BattleSystem extends Menu implements State
 
 
                   /***TESTING THAT A TEAM IS DEAD - END BATTLE***/
-                  int dead_counter = 0;
-                  for(int i=0; i<team_size; i++){
+                  int dead_counter_team = 0;
+                  int dead_counter_enemy = 0;
+                  for(int i=0; i<characters_num; i++){
                     if(battle_participants[i].isAlive == false){
-                      dead_counter++;
+                      if(i<team_size)
+                        dead_counter_team++;
+                      else if(i >= team_size && i < characters_num)
+                        dead_counter_enemy++;
                     }
                   }
-                  if(dead_counter == team_size){
+                  if(dead_counter_team == 2){
                     fight_end = true;
                     end = true;
                     option = 1;
                   }
                   else{
-                    dead_counter = 0;
+                    dead_counter_team = 0;
                   }
-                  for(int i=team_size; i<characters_num; i++){
-                    if(battle_participants[i].isAlive == false){
-                      dead_counter++;
-                    }
-                  }
-                  if(dead_counter == team_size)
+                  if(dead_counter_enemy == 2)
                   {
                     fight_end = true;
                     victory = true;
                     option = 1;
                   }
                   else{
-                    dead_counter = 0;
+                    dead_counter_enemy = 0;
                   }
                 }
               }

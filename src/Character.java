@@ -12,7 +12,7 @@ public class Character extends Actor
   protected Sprite img;
   protected String name;
   protected String[] skill_names = new String[4]; //dummy of the skills that each player has
-  //protected Skills[] skills = new Skills[4]; //The skills each player has
+  protected Skills[] skills = new Skills[4]; //The skills each player has
   protected IntRect state; // The Players current character model from the spritesheet.
   protected int[] held_items = new int[4];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
@@ -108,5 +108,18 @@ public class Character extends Actor
     public int getLevel(){  //might not be needed if stats[x][8] is used instead
       return level;
     }
+
+  void addSkill(Skills s)
+  {
+    for(int i=0; i<skills.length; i++)
+    {
+      if(skills[i]==null){
+        skills[i] = s;
+      }
+      else{
+        System.out.println("Skill slot already assigned");
+      }
+    }
+  }
 
 }
