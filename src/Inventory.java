@@ -18,10 +18,10 @@ public class Inventory implements Serializable {
     
     private int gold = 2000;
     
-    private static ArrayList<Consumable> consumables = new ArrayList<>();
-    private static ArrayList<Weapon> weapons = new ArrayList<>();   
-    private static ArrayList<Trinket> trinkets = new ArrayList<>();
-    private static ArrayList<KeyItem> keyItems = new ArrayList<>();
+    private ArrayList<Consumable> consumables = new ArrayList<>();
+    private ArrayList<Weapon> weapons = new ArrayList<>();   
+    private ArrayList<Trinket> trinkets = new ArrayList<>();
+    private ArrayList<KeyItem> keyItems = new ArrayList<>();
     
     
     public Inventory(){
@@ -36,19 +36,19 @@ public class Inventory implements Serializable {
         gold += g;        
     }
     
-    public static ArrayList<Consumable> getConsumables(){
+    public ArrayList<Consumable> getConsumables(){
         return consumables;
     }
     
-    public static ArrayList<Weapon> getWeapons(){
+    public ArrayList<Weapon> getWeapons(){
         return weapons;
     }
     
-    public static ArrayList<Trinket> getTrinkets(){
+    public ArrayList<Trinket> getTrinkets(){
         return trinkets;
     }
     
-    public static ArrayList<KeyItem> getKeyItems(){
+    public ArrayList<KeyItem> getKeyItems(){
         return keyItems;
     }
     
