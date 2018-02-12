@@ -100,7 +100,7 @@ public class Trade extends Menu implements State {
     }
 
     void updateInventory() {
-        int count = playInv.getWeapons().size();
+        int count; //= playInv.getWeapons().size();
         playerText.clear();
         traderText.clear();
 
