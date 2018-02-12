@@ -177,6 +177,7 @@ public class Game implements State, Serializable {
             }
         }
     }
+    
 
     //Creates copy of item and makes it an activator and then adds it to the world
     private void addActivator(int m, int x, int y, Consumable c) {
@@ -410,7 +411,7 @@ public class Game implements State, Serializable {
 
         mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
-
+            
 //            if(subState = 2){
 //                
 //            }
