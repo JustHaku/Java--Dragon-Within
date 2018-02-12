@@ -7,6 +7,11 @@ import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 
+/**
+ * The class that provides the magic menu functionality.
+ *
+ * @author Kirk Sparnenn
+ */
 public class MagicMenu extends Menu implements State
 {
   private RenderWindow window;
@@ -40,6 +45,9 @@ public class MagicMenu extends Menu implements State
     playerRect.setPosition(((screenWidth/4)*3)+10,5);
   }
   
+  /*
+  * Main loop draws and controlls moving through menu.
+  */
   @Override
   public int run()
   {

@@ -62,10 +62,14 @@ public class MainMenu extends Menu implements State
     menuSound = new Sound();
     menuSound.setBuffer(soundBuffer);
   }
+  
+  /*
+  * Main loop draws and controlls moving through menu.
+  */
   @Override
   public int run()
   {
-    boolean paused = false;
+    boolean paused = false; // Used to escape the main while loop
     menuMusic.play();
     option = 1;
     showSelection(text, option);
@@ -117,16 +121,16 @@ public class MainMenu extends Menu implements State
             paused = true;
             if (option == 1)
             {              
-              option = 99;
+              option = 99; // new game.
             }
             else if (option == 2)
             {
-              option = 1;
+              option = 1; // game world.
             }
             else if (option == 3)
             {
-              SettingsMenu.returnTo = 0;
-              option = 4;
+              SettingsMenu.returnTo = 0; // tells the inv menu where you returned from.
+              option = 4; // settings menu.
             }
             else if (option == 4)
             {

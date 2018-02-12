@@ -11,7 +11,7 @@ import org.jsfml.system.Vector2i;
 /**
  * The class that changes the scenes of the game controlling what the player sees.
  *
- * @author KSparnenn
+ * @author Kirk Sparnenn
  */
 public class StateMachine
 {
@@ -23,6 +23,9 @@ public class StateMachine
       locked = locked != true;
   }
 
+  /**
+  * Changes states/ screens when given the relevent number.
+  */
   public void run() throws InterruptedException, IOException
   {
     int screenWidth = 288;
@@ -84,6 +87,7 @@ public class StateMachine
         states[state] = new InventoryMenu(window, scale, 7, team);
       }
       
+      // Change state if no new class is required.
       if(!locked){
           state = states[state].run();              
       }

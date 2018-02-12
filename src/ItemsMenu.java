@@ -8,6 +8,11 @@ import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
 import java.util.ArrayList;
 
+/**
+ * The class that provides the items menu functionality.
+ *
+ * @author Kirk Sparnenn
+ */
 public class ItemsMenu extends Menu implements State
 {
   private RenderWindow window;
@@ -70,6 +75,9 @@ public class ItemsMenu extends Menu implements State
     
   }
   
+  /*
+  * Main loop draws and controlls moving through menu.
+  */
   @Override
   public int run()
   {
@@ -77,8 +85,9 @@ public class ItemsMenu extends Menu implements State
     paused = false;
     option = 1;
     showSelection(text, option);
-    items = Inventory.getConsumables();
+    items = Inventory.getConsumables(); // gets first inventory.
 
+    // sets up rectangles and text for items.
     for (int i = 0; i<items.size(); i++)
     {
       itemRect.add(new RectangleShape(new Vector2f((screenWidth/4)*3 - 10, screenHeight/10 - 10)));
@@ -116,8 +125,9 @@ public class ItemsMenu extends Menu implements State
         {          
           if (keyEvent.key == Keyboard.Key.valueOf("S"))
           {
-              itemRect = new ArrayList<>();            
-              itemText = new ArrayList<>();  
+            // resets the array lists.
+            itemRect = new ArrayList<>();            
+            itemText = new ArrayList<>();  
 
             menuSound.play();
             option++;
@@ -143,6 +153,7 @@ public class ItemsMenu extends Menu implements State
           {
             paused = true;
           }
+          // Different inventorys selected.
           if (option == 1)
           {
             items = Inventory.getConsumables();
@@ -159,6 +170,7 @@ public class ItemsMenu extends Menu implements State
           {
             items = Inventory.getKeyItems();
           }
+          // Redraws the items.
           for (int i = 0; i<items.size(); i++)
           {
             itemRect.add(new RectangleShape(new Vector2f((screenWidth/4)*3 - 10, screenHeight/10 - 10)));
