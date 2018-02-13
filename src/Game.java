@@ -50,6 +50,7 @@ public class Game implements State, Serializable {
     private FileManager f;
     public Inventory playerInv = new Inventory();
     public Inventory traderInv = new Inventory();
+    public Inventory trader2Inv = new Inventory();
     Helper h;
 
     //The game title
@@ -96,6 +97,8 @@ public class Game implements State, Serializable {
     //Definition of item list
     Consumable potion = new Consumable(1, "Potion", 20, 0, 100);
     Consumable ether = new Consumable(2, "Ether", 0, 20, 150);
+    
+    Consumable freshFish = new Consumable(2, "\"Fresh Fish\"", -20, 0, 5);
     
     TalkNPC pete;
 
@@ -360,10 +363,20 @@ public class Game implements State, Serializable {
                         Color.BLACK),
                 playerSpriteSheet,
                 1, 9,
-                this, window, playerInv, traderInv);
+                this, window, playerInv, traderInv,0,0);
         maps.get(0).getActor().add(trader);
         traderInv.addConsumable(potion);
         traderInv.addConsumable(ether);
+        
+        trader = new Trader("Trader",
+                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
+                        "Freeeeesh fish!",
+                        Color.BLACK),
+                playerSpriteSheet,
+                1, 8,
+                this, window, playerInv, trader2Inv,16,4);
+        maps.get(15).getActor().add(trader);
+        trader2Inv.addConsumable(freshFish);
         
         String[] s1 = {
             "Welcome to the world of Galkevar",
@@ -395,6 +408,12 @@ public class Game implements State, Serializable {
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s4) ,playerSpriteSheet, 1,8,10,3));
         maps.get(1).getActor().add(npcs.get(3));
+        
+        String[] s5 = { 
+            "*Cough* *Cough*. That fish i ate was disgusting."   
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s5) ,playerSpriteSheet, 1,8,7,5));
+        maps.get(6).getActor().add(npcs.get(4));
 
     }
 
@@ -519,7 +538,7 @@ public class Game implements State, Serializable {
         referencePlayer();
 
         h = new Helper();
-        //h.toggleHidden();
+        h.toggleHidden();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
@@ -608,13 +627,13 @@ public class Game implements State, Serializable {
             
             
 
-            if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
+            //if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
             if(routeMessage != null){
                 routeMessage.draw(window);
                 
             }
                 
-            }
+            //}
 
             if (h != null) {
                 h.Draw(window);

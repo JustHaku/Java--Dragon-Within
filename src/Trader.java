@@ -35,11 +35,13 @@ public class Trader extends Actor {
     private Inventory playerInv;
     private Inventory traderInv;
 
-    public Trader(String name, MessageBox dialogue, Texture imgTexture, int c1, int c2, Game g, RenderWindow w, Inventory playerInv, Inventory traderInv) {
+    public Trader(String name, MessageBox dialogue, Texture imgTexture, int c1, int c2, Game g, RenderWindow w, Inventory playerInv, Inventory traderInv,int x, int y) {
         this.w = w;
         this.g = g;
         this.playerInv = playerInv;
         this.traderInv = traderInv;
+        this.x = x*Game.tileSize;
+        this.y = y*Game.tileSize;
         
         trade = new Trade(w, Game.SCALE, this.playerInv, this.traderInv);
         
@@ -61,8 +63,6 @@ public class Trader extends Actor {
         img = new Sprite(imgTexture, state);
         img.setScale(Game.SCALE / ps, Game.SCALE / ps);
 
-        y = 0;
-        y = 0;
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
