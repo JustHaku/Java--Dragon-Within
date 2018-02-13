@@ -17,7 +17,7 @@ public class BattleSystem extends Menu implements State {
 
     private Character[] battle_participants;
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
-    private int exp_gain, temp, characters_num, team_size;
+    private int exp_gain, temp, characters_num, team_size, textWidth, textHeight, textSpace;
     private Text[] attack_menu, items_menu;
 
     public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException {
@@ -29,14 +29,20 @@ public class BattleSystem extends Menu implements State {
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
-        text[0] = new Text("Attack", text_font, screenHeight / 20);
-        text[0].setPosition(35, 635);
+        text[0] = new Text("Attack", text_font, screenHeight / 22);
 
-        text[1] = new Text("Items", text_font, screenHeight / 20);
-        text[1].setPosition(35, 685);
+        text[1] = new Text("Items", text_font, screenHeight / 22);
 
-        text[2] = new Text("Escape", text_font, screenHeight / 20);
-        text[2].setPosition(35, 735);
+        text[2] = new Text("Escape", text_font, screenHeight / 22);
+
+        textWidth = screenWidth/36 - screenWidth/42;
+        textHeight = screenHeight/12*10;
+        textSpace = screenHeight/18;
+        for(int i=0; i<options_num; i++)
+        {
+          text[i].setPosition(textWidth, textHeight);
+          textHeight += textSpace;
+        }
 
         team_size = team.size();
         characters_num = team_size * 2;   //the number of enemies you get is the same as the number of characters in your party
@@ -105,20 +111,20 @@ public class BattleSystem extends Menu implements State {
 
     void playerTurn(Character attacker) {
         int length = 5;
-        int width = 35;
-        int height = 535;
+        int width = textWidth;
+        int height = textHeight - (textHeight/10 * 3);
 
         for (int i = 0; i < length; i++) {
             if (i == 4) {
-                height += 15;
-                attack_menu[i] = new Text("Cancel", text_font, screenHeight / 20);
+                height += textSpace/3;
+                attack_menu[i] = new Text("Cancel", text_font, screenHeight / 29);
             } else if (attacker.skills[i] != null) {
-                attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 20);
+                attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 29);
             } else {
-                attack_menu[i] = new Text("-", text_font, screenHeight / 20);
+                attack_menu[i] = new Text("-", text_font, screenHeight / 29);
             }
             attack_menu[i].setPosition(width, height);
-            height += 50;
+            height += textSpace;
         }
         attack_menu[0].setColor(Color.BLACK);
     }
@@ -220,11 +226,11 @@ public class BattleSystem extends Menu implements State {
 
                                             for (Event battle : window.pollEvents()) {
                                                 KeyEvent battleEvent = battle.asKeyEvent();
-                                                try {
+                                                /*try {
                                                     Thread.sleep(300);
                                                 } catch (InterruptedException e) {
                                                     e.printStackTrace();
-                                                }
+                                                }*/
 
                                                 if (battle.type == Event.Type.CLOSED) {
                                                     window.close(); //User closes window.

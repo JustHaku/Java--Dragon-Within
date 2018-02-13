@@ -438,6 +438,61 @@ public class Game implements State, Serializable {
 
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
+        
+         addPort(6,7,8,0,7,8); //Path to first dungeon
+        addPort(6,11,17,5,1,5); //Road to second forest map path
+        addPort(6,11,17,6,1,6); //Road to second forest map path
+        
+        addPort(7,6,7,9,8,1); //First dungeon back to path
+        addPort(7,6,8,9,9,1); //First dungeon back to path
+        
+        addPort(7,8,7,4,7,1); //First dungeon drop
+        
+        addPort(8,9,1,3,8,3); //First dungeon escape room
+        
+        addPort(8,10,16,3,2,4); //First dungeon treasury/boss room
+        
+        addPort(9,7,8,1,7,6); //First dungeon escape ladder
+        addPort(9,8,10,3,3,3); //Escape to main dungeon teleport
+        
+        addPort(10,8,1,3,14,3); //First dungeon escape ladder
+        
+        addPort(11,12,17,5,1,5); //Road to third forest map path
+        addPort(11,12,17,6,1,6); //Road to third forest map path
+        
+        addPort(11,6,0,5,16,5); //Road to third forest map path
+        addPort(11,6,0,6,16,6); //Road to third forest map path
+        
+        addPort(12,11,0,5,16,5); //Road to first sand map path
+        addPort(12,11,0,6,16,6); //Road to first sand map path
+        
+        addPort(12,13,8,9,8,1); //Path from crossroads to fishing area
+        addPort(12,13,9,9,9,1); //Path from crossroads to fishing area
+        addPort(12,13,10,9,10,1); //Path from crossroads to fishing area
+        
+        addPort(13,12,8,0,8,8); //Return to crossroads from fishing area
+        addPort(13,12,9,0,9,8); //Return to crossroads from fishing area
+        addPort(13,12,10,0,10,8); //Return to crossroads from fishing area
+        
+        addPort(13,14,8,9,8,1); //Path from crossroads to fishing area
+        addPort(13,14,9,9,9,1); //Path from crossroads to fishing area
+        addPort(13,14,10,9,10,1); //Path from crossroads to fishing area
+        
+        addPort(14,13,8,0,8,8); //Return to path from fishing area
+        addPort(14,13,9,0,9,8); //Return to path from fishing area
+        addPort(14,13,10,0,10,8); //Return to path from fishing area
+        
+        addPort(14,15,0,1,16,1); //Bridge to fishing area start
+        addPort(14,15,0,2,16,2); //Bridge to fishing area start
+        addPort(14,15,0,3,16,3); //Bridge to fishing area start
+        addPort(14,15,0,4,16,4); //Bridge to fishing area start
+        addPort(14,15,0,5,16,5); //Bridge to fishing area start
+        
+        addPort(15,14,17,1,1,1); //Return from main fishing area to path (left)
+        addPort(15,14,17,2,1,1); //Return from main fishing area to path (left)
+        addPort(15,14,17,3,1,1); //Return from main fishing area to path (left)
+        addPort(15,14,17,4,1,1); //Return from main fishing area to path (left)
+        addPort(15,14,17,5,1,1); //Return from main fishing area to path (left)
     }
 
     private void referencePlayer() {
