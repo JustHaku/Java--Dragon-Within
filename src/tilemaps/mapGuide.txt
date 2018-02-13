@@ -1,0 +1,16 @@
+Map 0 - starting map
+Map 1 - fishing area
+Map 2 - inside orphanage
+Map 3 - upper orphanage
+Map 4 - orphanage left bedroom
+Map 5 - orphanage right bedroom
+Map 6 - first connector from starting map to city
+Map 7 - first dungeon map (next to starting area)
+Map 8 - first dungeon drop map
+Map 9 - first dungeon escape path
+Map 10 - first dungeon boss/treasure area
+Map 11 - start of forest area
+Map 12 - crossroads to main town and fishing area
+Map 13 - path down to fishing area
+Map 14 - crossover bridge to fishing area
+Map 15 - main fishing area
