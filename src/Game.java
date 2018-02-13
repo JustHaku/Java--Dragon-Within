@@ -387,10 +387,11 @@ public class Game implements State, Serializable {
         npcs.add(new TalkNPC("Pete", constructMessage(s3) ,playerSpriteSheet, 1,7,1,6));
         maps.get(5).getActor().add(npcs.get(2));
         
-        String[] s4 = {
+        String[] s4 = { 
             "50 Years i have been a fisherman. My time is nearly over.",
             "In that chest, over there, is a dagger...",
             "Take it. You'll need it more than I, in these dark times."
+           
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s4) ,playerSpriteSheet, 1,8,10,3));
         maps.get(1).getActor().add(npcs.get(3));
