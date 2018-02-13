@@ -128,6 +128,11 @@ public class Character extends Actor
       return level;
     }
 
+  void takeDamage(String type, int value)
+  {
+    health = Math.max(health-value, 0);
+  }
+
   void addSkill(Skills s)
   {
     boolean duplicate = false;

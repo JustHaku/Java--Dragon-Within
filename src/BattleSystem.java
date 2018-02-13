@@ -30,9 +30,7 @@ public class BattleSystem extends Menu implements State {
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
         text[0] = new Text("Attack", text_font, screenHeight / 22);
-
         text[1] = new Text("Items", text_font, screenHeight / 22);
-
         text[2] = new Text("Escape", text_font, screenHeight / 22);
 
         textWidth = screenWidth/36 - screenWidth/42;
@@ -206,7 +204,6 @@ public class BattleSystem extends Menu implements State {
                             boolean turn_end = false;
                             boolean fight_end = false;
                             boolean victory = false;
-                            int fight_option = 1;
 
                             while (fight_end == false) {
                                 for (int x = 0; x < characters_num; x++) {
@@ -216,7 +213,9 @@ public class BattleSystem extends Menu implements State {
                                         }
 
                                         playerTurn(battle_participants[(turn_state[x])]);
-                                        fight_option = 1;
+                                        int fight_option = 1;
+                                        int char_select;
+                                        boolean pressed = false;
                                         System.out.println("It's " + battle_participants[(turn_state[x])].name + "'s turn!\n");
 
                                         while (window.isOpen() && turn_end == false) {
@@ -226,31 +225,126 @@ public class BattleSystem extends Menu implements State {
 
                                             for (Event battle : window.pollEvents()) {
                                                 KeyEvent battleEvent = battle.asKeyEvent();
-                                                /*try {
-                                                    Thread.sleep(300);
-                                                } catch (InterruptedException e) {
-                                                    e.printStackTrace();
-                                                }*/
 
                                                 if (battle.type == Event.Type.CLOSED) {
                                                     window.close(); //User closes window.
-                                                    break OuterLoop ;
-                                                } else if (battle.type == Event.Type.KEY_PRESSED) {
-                                                    if (battleEvent.key == Keyboard.Key.valueOf("S")) {
-                                                        menuSound.play();
-                                                        if (fight_option != 5) {
-                                                            fight_option++;
+                                                    break OuterLoop;
+                                                }
+                                                else if (battle.type == Event.Type.KEY_PRESSED) {
+                                                    if (battleEvent.key == Keyboard.Key.valueOf("S") && !pressed) {
+                                                      pressed = true;
+                                                      menuSound.play();
+                                                      if (fight_option != 5) {
+                                                          fight_option++;
+                                                      }
+                                                    }
+                                                    else if (battleEvent.key == Keyboard.Key.valueOf("W") && !pressed) {
+                                                      pressed = true;
+                                                      menuSound.play();
+                                                      if (fight_option != 1) {
+                                                          fight_option--;
+                                                      }
+                                                    }
+                                                    else if (battleEvent.key == Keyboard.Key.valueOf("E") && !pressed)
+                                                    {
+                                                      pressed = true;
+                                                      int range_low = 0;
+                                                      int range_high = characters_num;
+
+                                                      if (fight_option != 5 && !attack_menu[fight_option - 1].getString().equals("-"))
+                                                      {
+                                                        if(battle_participants[(turn_state[x])].isFriendly && battle_participants[(turn_state[x])].isAlive)
+                                                        {
+                                                          Skills skill = battle_participants[(turn_state[x])].skills[fight_option-1];
+                                                          if(skill != null)
+                                                          {
+                                                            if(!skill.doesitAffect(Skills.ENEMY))
+                                                            {
+                                                              range_high = team_size;
+                                                            }
+                                                            else if(!skill.doesitAffect(Skills.FRIENDLY))
+                                                            {
+                                                              range_low = team_size;
+                                                            }
+                                                          }
+                                                          char_select = range_low;
+                                                          //ContinueAttack:
+
+                                                          /***HERE IS APPLYEE SELECTION, EXIT LOOP ONCE SELECTED***/
+                                                          for (Event selectSomeone : window.pollEvents())
+                                                          {
+                                                            KeyEvent select = selectSomeone.asKeyEvent();
+
+                                                            if (selectSomeone.type == Event.Type.CLOSED)
+                                                            {
+                                                                window.close(); //User closes window.
+                                                                break OuterLoop;
+                                                            }
+                                                            else if (selectSomeone.type == Event.Type.KEY_PRESSED)
+                                                            {
+                                                              if (select.key == Keyboard.Key.valueOf("A"))
+                                                              {
+                                                                if(char_select != range_low)
+                                                                  char_select--;
+                                                              }
+                                                              else if(select.key == Keyboard.Key.valueOf("D"))
+                                                              {
+                                                                if(char_select != range_high)
+                                                                  char_select++;
+                                                              }
+                                                              else if(select.key == Keyboard.Key.valueOf("E"))
+                                                              {
+                                                                //break ContinueAttack;
+                                                                break;    //BREAK SELECT
+                                                              }
+                                                            }
+                                                          }
+
+                                                          //Program resumes from here after break 'select'
+                                                          skill.applyTo(battle_participants[char_select]);
+                                                          try
+                                                          {
+                                                            skill.executeSkill();
+                                                          }
+                                                          catch(Exception e)
+                                                          {
+                                                            e.printStackTrace();
+                                                          }
+                                                          skill.unBindAll();
+                                                          turn_end = true;
+
                                                         }
-                                                    } else if (battleEvent.key == Keyboard.Key.valueOf("W")) {
-                                                        menuSound.play();
-                                                        if (fight_option != 1) {
-                                                            fight_option--;
-                                                        }
-                                                    } else if (battleEvent.key == Keyboard.Key.valueOf("E")) {
-                                                        if (fight_option == 1) {
+                                                      }
+                                                      else if(attack_menu[fight_option - 1].getString().equals("-"))
+                                                      {
+                                                        System.out.println("No skill assigned!");
+                                                      }
+                                                      else
+                                                      {
+                                                        turn_end = true;
+                                                        fight_end = true;
+                                                      }
+                                                      /*for (Event battle : window.pollEvents())
+                                                          KeyEvent battleEvent = battle.asKeyEvent();*/
+                                                      /*while (skill.needsMoreCharacters()){
+
+
+
+                                                      }*/
+
+
+
+
+
+
+
+
+
+                                                        /*if (fight_option == 1) {
                                                             if (attack_menu[fight_option - 1].getString().equals("-")) {
                                                                 System.out.println("No skill assigned to this slot!");
-                                                            } else {
+                                                            }
+                                                            else {
                                                                 battle_participants[2].health -= 27;
                                                                 if (battle_participants[2].health <= 0) {
                                                                     battle_participants[2].isAlive = false;
@@ -262,12 +356,18 @@ public class BattleSystem extends Menu implements State {
                                                                 System.out.println(battle_participants[2].name + "1 has "
                                                                         + battle_participants[2].health + "/" + battle_participants[2].max_health);
                                                             }
-                                                        } else if (fight_option == 2) {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-")) {
+                                                        }
+                                                        else if (fight_option == 2)
+                                                        {
+                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
+                                                            {
                                                                 System.out.println("No skill assigned to this slot!");
-                                                            } else {
+                                                            }
+                                                            else
+                                                            {
                                                                 battle_participants[3].health -= 50;
-                                                                if (battle_participants[3].health <= 0) {
+                                                                if (battle_participants[3].health <= 0)
+                                                                {
                                                                     battle_participants[3].isAlive = false;
                                                                     battle_participants[3].health = 0;
                                                                 }
@@ -277,28 +377,37 @@ public class BattleSystem extends Menu implements State {
                                                                 System.out.println(battle_participants[3].name + "2 has "
                                                                         + battle_participants[3].health + "/" + battle_participants[3].max_health);
                                                             }
-                                                        } else if (fight_option == 3) {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-")) {
+                                                        }
+                                                        else if (fight_option == 3)
+                                                        {
+                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
+                                                            {
                                                                 System.out.println("No skill assigned to this slot!");
                                                             }
-                                                        } else if (fight_option == 4) {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-")) {
+                                                        }
+                                                        else if (fight_option == 4)
+                                                        {
+                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
+                                                            {
                                                                 System.out.println("No skill assigned to this slot!");
                                                             }
-                                                        } else if (fight_option == 5) {
+                                                        }
+                                                        else if (fight_option == 5)
+                                                        {
                                                             turn_end = true;
                                                             fight_end = true;
-                                                        }
+                                                        }*/
                                                     }
                                                     showSelection(attack_menu, fight_option);
+                                                    pressed = false;
                                                 }
                                             }
                                         }
 
                                     } else if (battle_participants[(turn_state[x])].isAlive == true && fight_end == false && battle_participants[(turn_state[x])].isFriendly == false) {
                                         System.out.println("\nEnemy turn!   (Wait 1.5 seconds..)");
-                                        Text enemyAttack = new Text("Enemy turn!", text_font, screenHeight / 20);
-                                        enemyAttack.setPosition(35, 750);
+                                        Text enemyAttack = new Text("Enemy turn!", text_font, screenHeight/25);
+                                        enemyAttack.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/16));
                                         enemyAttack.setColor(Color.RED);
 
                                         window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
