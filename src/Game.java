@@ -160,7 +160,7 @@ public class Game implements State, Serializable {
         if (!isMinimized) {
             if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
                 if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0) {
-                    //battleChance = 10;
+                    battleChance = 10;
                 }
                 if (footstepsState == 0) {
                     footsteps1.play();
@@ -464,7 +464,7 @@ public class Game implements State, Serializable {
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
             for (Actor actor : maps.get(worldNum).getActor()) {
-                actor.calcMove(0, 0, screenWidth, screenHeight);
+                actor.calcMove(0, 0, screenWidth - Game.tileSize, screenHeight - Game.tileSize);
                 actor.performMove();
                 actor.draw(window);
             }

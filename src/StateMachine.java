@@ -32,12 +32,13 @@ public class StateMachine
   {
     int screenWidth = 288;
     int screenHeight = 160;
-    int scale = 3;
+    int scale = VideoMode.getDesktopMode().height/160;
     
-
+    
     RenderWindow window = new RenderWindow();
     window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
+    window.setPosition(Vector2i.ZERO);
 
     gameWorld = new Game(window, scale);
 
