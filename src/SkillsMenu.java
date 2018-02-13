@@ -22,6 +22,8 @@ public class SkillsMenu extends Menu implements State
   private int screenWidth;
   private RectangleShape menuRect;
   private RectangleShape playerRect;
+  private ArrayList<Text> skillsText = new ArrayList<>();
+  private ArrayList<RectangleShape> skillsRect = new ArrayList<>();
   public static boolean returnTo = false;
   
   public SkillsMenu(RenderWindow window, int scale, int options_num) throws IOException
@@ -58,6 +60,15 @@ public class SkillsMenu extends Menu implements State
   {
     returnTo = true;
     paused = false;
+    
+    for (int i = 0; i < 10; i++) {
+            skillsRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+            (skillsRect.get(i)).setFillColor(new Color(50, 45, 138));
+            (skillsRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+
+            skillsText.add(new Text("" + i, text_font, screenHeight / 15));
+            (skillsText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+        }
     while(window.isOpen() && paused == false)
     {
       window.clear(Color.BLACK);
@@ -65,6 +76,11 @@ public class SkillsMenu extends Menu implements State
       window.draw(playerRect);
       showSelection(text, option);
       drawText(text);
+      
+      for (int i = 0; i < 10; i++) {
+                window.draw(skillsRect.get(i));
+                window.draw(skillsText.get(i));
+            }
       window.display();
       
       for(Event event : window.pollEvents())
