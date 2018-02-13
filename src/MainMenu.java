@@ -76,6 +76,7 @@ public class MainMenu extends Menu implements State {
         menuMusic.play();
         option = 1;
         showSelection(text, option);
+        Game.mainTheme.pause();
 
         while (window.isOpen() && paused == false) {
             window.clear(Color.WHITE);
@@ -110,6 +111,7 @@ public class MainMenu extends Menu implements State {
                         menuMusic.stop();
                         paused = true;
                         if (option == 1) {
+                            Game.mainTheme.stop();
                             option = 99; // new game.
                         } else if (option == 2) {
                             try {

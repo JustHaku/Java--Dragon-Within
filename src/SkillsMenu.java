@@ -14,12 +14,12 @@ import org.jsfml.audio.*;
  */
 public class SkillsMenu extends Menu implements State
 {
-  /*private RenderWindow window;
+  private RenderWindow window;
   private int scale;
-  private Font text_font;*/
+  private Font text_font;
   private boolean paused = false;
-  /*private int screenHeight;
-  private int screenWidth;*/
+  private int screenHeight;
+  private int screenWidth;
   private RectangleShape menuRect;
   private RectangleShape playerRect;
   private ArrayList<Text> skillsText = new ArrayList<>();
@@ -29,7 +29,7 @@ public class SkillsMenu extends Menu implements State
   public SkillsMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
     menuWindow(window, scale, options_num);
-    /*this.window = window;
+    this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
     screenWidth = 288*scale;
@@ -49,7 +49,7 @@ public class SkillsMenu extends Menu implements State
     text[0] = new Text("Skills", text_font, screenHeight / 15);
     bounds = text[0].getLocalBounds();
     text[0].setOrigin(bounds.width / 2, bounds.height / 2);
-    text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);*/
+    text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
   }
 
   /*

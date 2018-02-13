@@ -64,7 +64,7 @@ public class Game implements State, Serializable {
     public final Texture uiTexture = new Texture();
 
     // Audio for the game.
-    private final Music mainTheme = new Music();
+    public static final Music mainTheme = new Music();
     private final Music footsteps1 = new Music();
     private final Music footsteps2 = new Music();
     private final Music openChest = new Music();
@@ -653,7 +653,7 @@ public class Game implements State, Serializable {
                 }
                 if (event.type == Event.Type.KEY_PRESSED && player1.isMoving() == false) {
                     if (Keyboard.isKeyPressed(Keyboard.Key.ESCAPE) && menuSleep <= 0) {
-                        mainTheme.pause();
+                        //mainTheme.pause();
                         state = 3;
                     }
 

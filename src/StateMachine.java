@@ -1,6 +1,7 @@
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import org.jsfml.window.*;
 import org.jsfml.graphics.*;
 import java.util.*;
@@ -41,9 +42,12 @@ public class StateMachine
 
 
     RenderWindow window = new RenderWindow();
-    window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
+    window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
     window.setPosition(Vector2i.ZERO);
+    Image icon = new Image();
+    icon.loadFromFile(Paths.get("src/graphics/dragon_icon.png"));
+    window.setIcon(icon);
 
     gameWorld = new Game(window, scale);
 
