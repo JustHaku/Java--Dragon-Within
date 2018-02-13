@@ -139,14 +139,14 @@ public class Player extends Character {
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
         // Do this if object hits window (stops out of bounds).
-        if (x <= minx || x >= maxx) {
+        if (x <= minx || x >= (maxx - 16 * Game.SCALE)) {
             if (x <= minx) {
                 x += Game.spd * Game.SCALE;
             } else {
                 x -= Game.spd * Game.SCALE;
             }
         }
-        if (y <= miny || y >= maxy) {
+        if (y <= miny || y >= (maxy - 16 * Game.SCALE)) {
             if (y <= minx) {
                 y += Game.spd * Game.SCALE;
             } else {
