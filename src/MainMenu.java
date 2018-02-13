@@ -23,7 +23,7 @@ public class MainMenu extends Menu implements State {
     private Music menuMusic;
 
     public MainMenu(RenderWindow window, int scale, int options_num) throws IOException {
-        menuWindow(window, scale, 288, 160, options_num);
+        menuWindow(window, scale, options_num);
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
@@ -127,7 +127,7 @@ public class MainMenu extends Menu implements State {
                             option = 1; // game world.
                         } else if (option == 3) {
                             SettingsMenu.returnTo = 0; // tells the inv menu where you returned from.
-                            option = 4; // settings menu.
+                            option = 106; // settings menu.
                         } else if (option == 4) {
                             window.close();
                         }

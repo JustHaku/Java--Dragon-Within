@@ -15,7 +15,7 @@ import org.jsfml.audio.*;
  */
 public class InventoryMenu extends Menu implements State {
 
-    private Font text_font;
+    //private Font text_font;
     private boolean paused = false;
     private RectangleShape menuRect;
     private RectangleShape playerRect;
@@ -24,7 +24,7 @@ public class InventoryMenu extends Menu implements State {
     private ArrayList<Text> teamText = new ArrayList<>();
 
     public InventoryMenu(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException {
-        menuWindow(window, scale, 288, 160, options_num);
+        menuWindow(window, scale, options_num);
         this.team = team;
 
         text_font = new Font();

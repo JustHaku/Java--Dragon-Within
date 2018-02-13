@@ -14,22 +14,24 @@ import org.jsfml.audio.*;
  */
 public class SettingsMenu extends Menu implements State
 {
-  private RenderWindow window;
+  /*private RenderWindow window;
   private int scale;
-  private Font text_font;
+  private Font text_font;*/
   private Text text;
   private boolean paused = false;
-  private int screenHeight;
-  private int screenWidth;
+  /*private int screenHeight;
+  private int screenWidth;*/
   public static int returnTo = 0;
-  
-  public SettingsMenu(RenderWindow window, int scale) throws IOException
+
+  public SettingsMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
-    this.window = window;
+    /*this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
-    screenWidth = 288*scale;
-    
+    screenWidth = 288*scale;*/
+
+    menuWindow(window, scale,options_num);
+
     text_font = new Font();
     text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
     
@@ -39,7 +41,7 @@ public class SettingsMenu extends Menu implements State
     text.setPosition(screenWidth/2, screenHeight/2);
     text.setColor(Color.BLACK);
   }
-  
+
   /*
   * Main loop draws and controlls moving through menu.
   */
@@ -52,7 +54,7 @@ public class SettingsMenu extends Menu implements State
       window.clear(Color.WHITE);
       window.draw(text);
       window.display();
-      
+
       for(Event event : window.pollEvents())
       {
         KeyEvent keyEvent = event.asKeyEvent();
@@ -66,7 +68,7 @@ public class SettingsMenu extends Menu implements State
         {
           if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
           {
-            paused = true;            
+            paused = true;
           }
         }
       }

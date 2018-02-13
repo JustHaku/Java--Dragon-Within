@@ -16,12 +16,12 @@ import java.util.ArrayList;
  */
 public class ItemsMenu extends Menu implements State {
 
-    private RenderWindow window;
-    private int scale;
-    private Font text_font;
+    //private RenderWindow window;
+    //private int scale;
+    //private Font text_font;
     private boolean paused = false;
-    private int screenHeight;
-    private int screenWidth;
+    //private int screenHeight;
+    //private int screenWidth;
     private RectangleShape menuRect;
     private RectangleShape playerRect;
     private ArrayList items;
@@ -32,11 +32,11 @@ public class ItemsMenu extends Menu implements State {
     private Inventory playInv;
 
     public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv) throws IOException {
-        menuWindow(window, scale, 288, 160, options_num);
-        this.window = window;
+        menuWindow(window, scale, options_num);
+        /*this.window = window;
         this.scale = scale;
         screenHeight = 160 * scale;
-        screenWidth = 288 * scale;
+        screenWidth = 288 * scale;*/
         this.playInv = playInv;
         //this.g = g;
 
@@ -65,7 +65,7 @@ public class ItemsMenu extends Menu implements State {
         text[1] = new Text("weapons", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 2 + ((screenHeight / 20) / 2));
+        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 3);
 
         text[2] = new Text("trinkets", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();

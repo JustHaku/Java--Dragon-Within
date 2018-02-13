@@ -44,7 +44,7 @@ public class Trade extends Menu implements State {
     private Text goldTrader;
     private RectangleShape traderBackground;
     private RectangleShape playerBackground;
-    
+
 
     public Trade(RenderWindow window, int scale, Inventory playInv, Inventory traderInventory) {
         this.playInv = playInv;
@@ -70,8 +70,8 @@ public class Trade extends Menu implements State {
         }
 
         System.out.println("sfd");
-        
-        
+
+
 
     }
 
@@ -89,12 +89,12 @@ public class Trade extends Menu implements State {
     }
 
     @Override
-    void menuWindow(RenderWindow window, int scale, int width, int height, int options_num) {
+    void menuWindow(RenderWindow window, int scale, int options_num) {
         this.options_num = options_num;
         this.window = window;
         this.scale = scale;
-        this.screenWidth = width * scale;
-        this.screenHeight = height * scale;
+        this.screenWidth = 288 * scale;
+        this.screenHeight = 160 * scale;
         //text = newText(options_num);
     }
 
@@ -136,7 +136,7 @@ public class Trade extends Menu implements State {
         gold = new Text("Gold: " + Integer.toString(playInv.getGold()), text_font, screenHeight / 20);
         gold.setColor(Color.YELLOW);
         gold.setPosition(2 * scale, (scale * 3) + (13 * scale * 1));
-        
+
         goldTrader = new Text("Gold: ∞", text_font, screenHeight / 20);
         goldTrader.setColor(Color.YELLOW);
         goldTrader.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 1));
@@ -148,11 +148,11 @@ public class Trade extends Menu implements State {
         ti = new Text("Trader Inventory: ", text_font, screenHeight / 20);
         ti.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 0));
         ti.setColor(Color.BLACK);
-        
+
         traderBackground = new RectangleShape(new Vector2f((screenWidth / 2), screenHeight));
         traderBackground.setFillColor(new Color(204, 204, 255));
         traderBackground.setPosition((screenWidth / 2), 0);
-        
+
         playerBackground = new RectangleShape(new Vector2f((screenWidth / 2), screenHeight));
         playerBackground.setFillColor(new Color(204, 204, 255));
         playerBackground.setPosition(0, 0);
@@ -187,9 +187,9 @@ public class Trade extends Menu implements State {
             valueTrader = new Text("Value: ", text_font, screenHeight / 20);
             valueTrader.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 2));
             valueTrader.setColor(Color.BLACK);
-            
+
         }
-        
+
         buy = new Text("Buy", text_font, screenHeight / 20);
         buy.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 3));
         buy.setColor(Color.BLACK);
@@ -202,7 +202,7 @@ public class Trade extends Menu implements State {
 
     @Override
     public int run() {
-        menuWindow(window, scale, 288, 160, 0);
+        menuWindow(window, scale, 0);
         updateInventory();
         int count = 0;
 
@@ -220,9 +220,9 @@ public class Trade extends Menu implements State {
             }
             if(subState == 1){
                 traderBackground.setFillColor(new Color(153,153,255));
-                playerBackground.setFillColor(new Color(204,204,255));                
+                playerBackground.setFillColor(new Color(204,204,255));
             }
-            
+
             window.clear(Color.BLUE);
             window.draw(traderBackground);
             window.draw(playerBackground);
@@ -242,7 +242,7 @@ public class Trade extends Menu implements State {
             window.draw(valueTrader);
             window.draw(buy);
             window.draw(goldTrader);
-            
+
 
             if (subState == 0) {
                 showSelection(playerText, option);

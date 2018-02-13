@@ -11,82 +11,101 @@ public class Character extends Actor
 {
   protected Sprite img;
   protected String name;
+  protected IntRect state; // The Players current character model from the spritesheet.
   protected String[] skill_names = new String[4]; //dummy of the skills that each player has
   protected Skills[] skills = new Skills[4]; //The skills each player has
-  protected IntRect state; // The Players current character model from the spritesheet.
   protected int[] held_items = new int[4];
   protected int c1, c2, level, exp, health, mana, speed, attack, defence, max_health, max_mana;
-  protected boolean isFriendly;
 
+  protected boolean isFriendly;
   protected boolean isAlive = true;
+
   protected final int exp_const = 50;
   protected final float ps = (float) 1;
+
+  public ArrayList<Object> collectStats()
+  {
+    ArrayList<Object> stats = new ArrayList<>();
+
+    stats.add(name);
+    stats.add(skills);
+    stats.add(held_items);
+    stats.add(c1);
+    stats.add(c2);
+    stats.add(level);
+    stats.add(exp);
+    stats.add(health);
+    stats.add(mana);
+    stats.add(speed);
+    stats.add(attack);
+    stats.add(defence);
+    stats.add(max_health);
+    stats.add(max_mana);
+    stats.add(isAlive);
+    stats.add(isFriendly);
+
+    return stats;
+  }
 
   @Override
   void calcMove(int minX, int minY, int maxX, int maxY){
   }
 
   /**
-  *@param constant will be the value needed (quadratically) for each level-up.
+  *exp_const will be the value needed (quadratically) for each level-up.
   *e.g: if constant is 50, then lvl2 -> 50xp, lvl3 -> 150xp, lvl4 -> 300xp
   *lvl(4+1) = lvl4_exp + (lvl)4*constant
   *lvl5 = 300 + 200 -> lvl5 = 500xp
-  *@param current_exp -> the current experience points that the character has
+  *exp is the current experience points that the character has
   *@param exp_gain -> the experience points that the character gained (probably after battle)
   *@return the character's current level
   */
-  public int level_calc(int constant, int current_exp, int exp_gain)
+  public int level_calc(int exp_gain)
   {
     int current_level = 0;
-    int experience = current_exp + exp_gain;
+    int experience = exp + exp_gain;
     //multiplying exp gain by 8, so that with each level increment, the character will need 50 more xp to gain a level
-    double value = 1 + (8*experience/constant);
+    double value = 1 + (8*experience/exp_const);
     return current_level = (1 + (int)Math.sqrt(value))/2;
   }
 
   /**
-  *@param constant will be the value needed (quadratically) for each level-up.
-  *e.g: if constant is 50, then lvl2 -> 50xp, lvl3 -> 150xp, lvl4 -> 300xp
-  *lvl(4+1) = lvl4_exp + (lvl)4*constant
-  *lvl5 = 300 + 200 -> lvl5 = 500xp
-  *@param lvl -> the current level of the character
   *@return the current experience points that the character has, according to its level
   */
-  public int exp_calc(int constant, int lvl)
+  public int exp_calc()
   {
-    double level = lvl;
-    double current_exp = ((Math.pow(level, 2) - level) * constant)/2;
+    double level = this.level;
+    double current_exp = ((Math.pow(level, 2) - level) * exp_const)/2;
     return (int)current_exp;
   }
 
 
 /**
-*@param a Is the character which will level up
 *Method will be called when player get +1 level
 *and it will generate random numbers from 3 to 8 and increase
 *the player's stats
 */
-  public void levelUP(Character a)
+  public void levelUP()
   {
     Random rand = new Random();
     int rand_number;
 
-    a.level += 1;
+    level += 1;
 
     rand_number = rand.nextInt(6) + 3;
-    a.max_health += rand_number;
+    max_health += rand_number;
 
     rand_number = rand.nextInt(6) + 3;
-    a.max_mana += rand_number;
+    max_mana += rand_number;
 
     rand_number = rand.nextInt(6) + 3;
-    a.attack += rand_number;
+    attack += rand_number;
 
     rand_number = rand.nextInt(6) + 3;
-    a.defence += rand_number;
+    defence += rand_number;
 
     rand_number = rand.nextInt(6) + 3;
-    a.speed += rand_number;
+    speed += rand_number;
   }
 
   void heal(int heal) {
@@ -111,15 +130,34 @@ public class Character extends Actor
 
   void addSkill(Skills s)
   {
+    boolean duplicate = false;
+
     for(int i=0; i<skills.length; i++)
     {
-      if(skills[i]==null){
-        skills[i] = s;
+      for(int j=0; j<skills.length; j++)
+      {
+        if(skills[j] != null)
+        {
+          if(skills[j].getName().equals(s.getName()))
+            duplicate = true;
+        }
       }
-      else{
-        System.out.println("Skill slot already assigned");
+      if(skills[i] == null && !duplicate){
+        skills[i] = s;
+        break;
+      }
+      else if(skills[i] == null && duplicate){
+        System.out.println("Skill already learned!");
+      }
+      else if(skills[i] != null){
+        System.out.println("All skills full");
       }
     }
+  }
+
+  void replaceSkill(Skills s, int index)
+  {
+    skills[index] = s;
   }
 
 }

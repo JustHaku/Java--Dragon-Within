@@ -60,8 +60,8 @@ public class BasicSkills {
 //            (character, value) -> {/*character.increaseSpeedBy(value)*/
 //            },//
 //            true, true);// skill is performed on the character casting it; the buff is removed after battle
-    public static List<Skills> readSkills(String path) throws Exception {
-        List<Skills> skillslist = new ArrayList<>();
+    public static ArrayList<Skills> readSkills(String path) throws Exception {
+        ArrayList<Skills> skillslist = new ArrayList<>();
         
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         try {

@@ -32,13 +32,13 @@ public class NPC extends Character
     defence = def;
     speed = spd;
     level = lvl;
-    exp = exp_calc(exp_const, level);
+    exp = exp_calc();
     this.isFriendly = isFriendly;
 
 
     /***THIS IS TEMPORARY, JUST FOR TESTING***/
-    skill_names[0] = "Dance";
-    skill_names[1] = "Splash";
+    //skill_names[0] = "Dance";
+    //skill_names[1] = "Splash";
 
 
     /*held_items[0] = item;
