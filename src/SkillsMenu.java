@@ -17,12 +17,13 @@ public class SkillsMenu extends Menu implements State
   /*private RenderWindow window;
   private int scale;
   private Font text_font;*/
-  private Text text;
   private boolean paused = false;
   /*private int screenHeight;
   private int screenWidth;*/
   private RectangleShape menuRect;
   private RectangleShape playerRect;
+  private ArrayList<Text> skillsText = new ArrayList<>();
+  private ArrayList<RectangleShape> skillsRect = new ArrayList<>();
   public static boolean returnTo = false;
 
   public SkillsMenu(RenderWindow window, int scale, int options_num) throws IOException
@@ -31,11 +32,12 @@ public class SkillsMenu extends Menu implements State
     /*this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
-    screenWidth = 288*scale;*/
-
+    screenWidth = 288*scale;
+    option = 1;
+    
     text_font = new Font();
-    text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
-
+    text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
+    
     menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
     menuRect.setFillColor(new Color(11,2,138));
     menuRect.setPosition(5,5);
@@ -43,6 +45,11 @@ public class SkillsMenu extends Menu implements State
     playerRect = new RectangleShape(new Vector2f((screenWidth/4) - 15, screenHeight - 10));
     playerRect.setFillColor(new Color(11,2,138));
     playerRect.setPosition(((screenWidth/4)*3)+10,5);
+    
+    text[0] = new Text("Skills", text_font, screenHeight / 15);
+    bounds = text[0].getLocalBounds();
+    text[0].setOrigin(bounds.width / 2, bounds.height / 2);
+    text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);*/
   }
 
   /*
@@ -53,11 +60,27 @@ public class SkillsMenu extends Menu implements State
   {
     returnTo = true;
     paused = false;
+    
+    for (int i = 0; i < 10; i++) {
+            skillsRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+            (skillsRect.get(i)).setFillColor(new Color(50, 45, 138));
+            (skillsRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+
+            skillsText.add(new Text("" + i, text_font, screenHeight / 15));
+            (skillsText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+        }
     while(window.isOpen() && paused == false)
     {
       window.clear(Color.BLACK);
       window.draw(menuRect);
       window.draw(playerRect);
+      showSelection(text, option);
+      drawText(text);
+      
+      for (int i = 0; i < 10; i++) {
+                window.draw(skillsRect.get(i));
+                window.draw(skillsText.get(i));
+            }
       window.display();
 
       for(Event event : window.pollEvents())
