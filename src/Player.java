@@ -34,8 +34,8 @@ public class Player extends Character {
         this.m = m;
 
         /***THIS IS TEMPORARY, JUST FOR TESTING***/
-        skill_names[0] = "Punch";
-        skill_names[1] = "Quick Attack";
+        //skill_names[0] = "Punch";
+        //skill_names[1] = "Quick Attack";
 
         name = "Main Player";
         max_health = 100;
@@ -113,7 +113,7 @@ public class Player extends Character {
     public void setTilePosition(int x, int y){
         this.setPosition(x*Game.tileSize, y*Game.tileSize);
     }
-   
+
 
     public int getX(){
         return x;

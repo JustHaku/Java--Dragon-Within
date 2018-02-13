@@ -37,8 +37,8 @@ public class NPC extends Character
 
 
     /***THIS IS TEMPORARY, JUST FOR TESTING***/
-    skill_names[0] = "Dance";
-    skill_names[1] = "Splash";
+    //skill_names[0] = "Dance";
+    //skill_names[1] = "Splash";
 
 
     /*held_items[0] = item;

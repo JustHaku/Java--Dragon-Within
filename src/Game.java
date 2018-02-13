@@ -31,6 +31,8 @@ public class Game implements State, Serializable {
     public static int gridWidth; //How many tiles wide the game screen is.
     public static int gridHeight; //How may tiles high the game screen is.
     public static Player player1;
+    public static ArrayList<Skills> skill;
+
     //String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly -> Constructor for unique npc
     public static NPC Petros = new NPC("Petros", 103, 104, 15, 16, 12, 3, true);
     private RenderWindow window;
@@ -110,6 +112,14 @@ public class Game implements State, Serializable {
         this.gridHeight = screenHeight / tileSize;
         window.setKeyRepeatEnabled(true);
         init();
+        try{
+        skill = BasicSkills.readSkills("./skills.xml");
+        skill.get(0).teachTo(player1);
+        skill.get(0).teachTo(Petros);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -177,7 +187,6 @@ public class Game implements State, Serializable {
             }
         }
     }
-    
 
     //Creates copy of item and makes it an activator and then adds it to the world
     private void addActivator(int m, int x, int y, Consumable c) {
@@ -411,9 +420,9 @@ public class Game implements State, Serializable {
 
         mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
-            
+
 //            if(subState = 2){
-//                
+//
 //            }
             for (Item a : playerInv.getWeapons()) {
                 System.out.println(a.getName());
@@ -464,7 +473,7 @@ public class Game implements State, Serializable {
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
             for (Actor actor : maps.get(worldNum).getActor()) {
-                actor.calcMove(0, 0, screenWidth - Game.tileSize, screenHeight - Game.tileSize);
+                actor.calcMove(0, 0, screenWidth, screenHeight);
                 actor.performMove();
                 actor.draw(window);
             }

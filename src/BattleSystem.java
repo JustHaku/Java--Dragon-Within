@@ -119,8 +119,8 @@ public class BattleSystem extends Menu implements State
         height += 15;
         attack_menu[i] = new Text("Cancel", text_font, screenHeight/20);
       }
-      else if(attacker.skill_names[i] != null)
-        attack_menu[i] = new Text(attacker.skill_names[i], text_font, screenHeight/20);
+      else if(attacker.skills[i] != null)
+        attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight/20);
       else
         attack_menu[i] = new Text("-", text_font, screenHeight/20);
       attack_menu[i].setPosition(width, height);
@@ -391,7 +391,7 @@ public class BattleSystem extends Menu implements State
                   }
                 }
               }
-
+              
               if(victory)
               {
                 for(int i=team_size; i<characters_num; i++)

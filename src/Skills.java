@@ -91,6 +91,7 @@ public class Skills {
         for (int i = 0; i < this.applyee.length; i++) {
             if (this.applyee[i] == null) {
                 this.applyee[i] = applyee;
+                break;
             }
         }
     }
@@ -115,7 +116,7 @@ public class Skills {
     }
 
     /**
-     * use on of the static variables(ALL, FRIENLY, ENEMY) to determen on which
+     * use on of the static variables(ALL, FRIENLY, ENEMY) to determine on which
      * characters can this be casted
      *
      * @param i one of [ALL, FRIENLY, ENEMY]

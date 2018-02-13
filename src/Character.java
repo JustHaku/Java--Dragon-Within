@@ -115,11 +115,17 @@ public class Character extends Actor
     {
       if(skills[i]==null){
         skills[i] = s;
+        break;
       }
       else{
         System.out.println("Skill slot already assigned");
       }
     }
+  }
+
+  void replaceSkill(Skills s, int index)
+  {
+    skills[index] = s;
   }
 
 }
