@@ -23,7 +23,7 @@ public class MainMenu extends Menu implements State {
     private Music menuMusic;
 
     public MainMenu(RenderWindow window, int scale, int options_num) throws IOException {
-        menuWindow(window, scale, 288, 160, options_num);
+        menuWindow(window, scale, options_num);
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));

@@ -14,28 +14,28 @@ import org.jsfml.audio.*;
  */
 public class SkillsMenu extends Menu implements State
 {
-  private RenderWindow window;
+  /*private RenderWindow window;
   private int scale;
-  private Font text_font;
+  private Font text_font;*/
   private Text text;
   private boolean paused = false;
-  private int screenHeight;
-  private int screenWidth;
+  /*private int screenHeight;
+  private int screenWidth;*/
   private RectangleShape menuRect;
   private RectangleShape playerRect;
   public static boolean returnTo = false;
-  
+
   public SkillsMenu(RenderWindow window, int scale, int options_num) throws IOException
   {
-    menuWindow(window, scale, 288, 160, options_num);
-    this.window = window;
+    menuWindow(window, scale, options_num);
+    /*this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
-    screenWidth = 288*scale;
-    
+    screenWidth = 288*scale;*/
+
     text_font = new Font();
     text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
-    
+
     menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
     menuRect.setFillColor(new Color(11,2,138));
     menuRect.setPosition(5,5);
@@ -44,7 +44,7 @@ public class SkillsMenu extends Menu implements State
     playerRect.setFillColor(new Color(11,2,138));
     playerRect.setPosition(((screenWidth/4)*3)+10,5);
   }
-  
+
   /*
   * Main loop draws and controlls moving through menu.
   */
@@ -59,7 +59,7 @@ public class SkillsMenu extends Menu implements State
       window.draw(menuRect);
       window.draw(playerRect);
       window.display();
-      
+
       for(Event event : window.pollEvents())
       {
         KeyEvent keyEvent = event.asKeyEvent();
@@ -73,7 +73,7 @@ public class SkillsMenu extends Menu implements State
         {
           if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
           {
-            paused = true;            
+            paused = true;
           }
         }
       }

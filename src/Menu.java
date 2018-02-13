@@ -25,13 +25,13 @@ public class Menu
   private Music menuMusic;
 
 
-  void menuWindow(RenderWindow window, int scale, int width, int height, int options_num)
+  void menuWindow(RenderWindow window, int scale, int options_num)
   {
     this.options_num = options_num;
     this.window = window;
     this.scale = scale;
-    this.screenWidth = width*scale;
-    this.screenHeight = height*scale;
+    this.screenWidth = 288*scale;
+    this.screenHeight = 160*scale;
     text = newText(options_num);
   }
 

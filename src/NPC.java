@@ -32,7 +32,7 @@ public class NPC extends Character
     defence = def;
     speed = spd;
     level = lvl;
-    exp = exp_calc(exp_const, level);
+    exp = exp_calc();
     this.isFriendly = isFriendly;
 
 

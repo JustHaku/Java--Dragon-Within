@@ -112,12 +112,11 @@ public class Game implements State, Serializable {
         this.gridHeight = screenHeight / tileSize;
         window.setKeyRepeatEnabled(true);
         init();
-        try{
-        skill = BasicSkills.readSkills("./skills.xml");
-        skill.get(0).teachTo(player1);
-        skill.get(0).teachTo(Petros);
-        }
-        catch(Exception e){
+        try {
+            skill = BasicSkills.readSkills("./skills.xml");
+            skill.get(0).teachTo(player1);
+            skill.get(0).teachTo(Petros);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

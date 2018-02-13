@@ -20,7 +20,7 @@ public class StateMachine
   private static boolean locked = false;
   public static int state = 0;
   public static Game gameWorld;
-  
+
   public static void toggleLock(){
       locked = locked != true;
   }
@@ -33,8 +33,8 @@ public class StateMachine
     int screenWidth = 288;
     int screenHeight = 160;
     int scale = VideoMode.getDesktopMode().height/160;
-    
-    
+
+
     RenderWindow window = new RenderWindow();
     window.create(new VideoMode(screenWidth*scale, screenHeight*scale), "The Dragon Within Vol.1",WindowStyle.CLOSE);
     window.setFramerateLimit(60); // Limit the framerate to 60.
@@ -50,7 +50,7 @@ public class StateMachine
 
     State battleSystem = new BattleSystem(window, scale, 3, team);
     State inventoryMenu = new InventoryMenu(window, scale, 7, team);
-    State settingsMenu = new SettingsMenu(window, scale);
+    State settingsMenu = new SettingsMenu(window, scale, 3);
     State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv);
     State skillsMenu = new SkillsMenu(window, scale, 1);
     State magicMenu = new MagicMenu(window, scale, 1);
@@ -76,20 +76,20 @@ public class StateMachine
       else if(state == 3){
         states[state] = new InventoryMenu(window, scale, 7, team);
       }
-      
+
       // Change state if no new class is required.
       if(!locked){
-          state = states[state].run();              
+          state = states[state].run();
       }
-      
+
       //FileManager.save("src/saves/save000", (Game)gameWorld);
       if (state == 99)
       {
-          
-          
+
+
           gameWorld = new Game(window, scale);
           states[1] = gameWorld;
-          
+
           //window.setSize(new Vector2i(100,100));
           //System.out.println(window.getSize());
           state = 1;
