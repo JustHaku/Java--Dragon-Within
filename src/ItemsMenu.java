@@ -41,7 +41,7 @@ public class ItemsMenu extends Menu implements State {
         //this.g = g;
 
         text_font = new Font();
-        text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+        text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
         soundBuffer = new SoundBuffer();
         soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
@@ -57,22 +57,22 @@ public class ItemsMenu extends Menu implements State {
         playerRect.setFillColor(new Color(11, 2, 138));
         playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
 
-        text[0] = new Text("consumables", text_font, screenHeight / 10);
+        text[0] = new Text("consumables", text_font, screenHeight / 15);
         bounds = text[0].getLocalBounds();
         text[0].setOrigin(bounds.width / 2, bounds.height / 2);
         text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
 
-        text[1] = new Text("weapons", text_font, screenHeight / 10);
+        text[1] = new Text("weapons", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 2 + ((screenHeight / 20) / 2));
+        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 3);
 
-        text[2] = new Text("trinkets", text_font, screenHeight / 10);
+        text[2] = new Text("trinkets", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
         text[2].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 5);
 
-        text[3] = new Text("keyItems", text_font, screenHeight / 10);
+        text[3] = new Text("keyItems", text_font, screenHeight / 15);
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);

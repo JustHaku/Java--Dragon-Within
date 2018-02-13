@@ -28,7 +28,7 @@ public class InventoryMenu extends Menu implements State {
         this.team = team;
 
         text_font = new Font();
-        text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+        text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
         soundBuffer = new SoundBuffer();
         soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
@@ -57,37 +57,37 @@ public class InventoryMenu extends Menu implements State {
             (teamText.get(i)).setPosition(15, 5 + ((screenHeight / 6 - 2) * i));
         }
 
-        text[0] = new Text("Loadout", text_font, screenHeight / 10);
+        text[0] = new Text("Loadout", text_font, screenHeight / 15);
         bounds = text[0].getLocalBounds();
         text[0].setOrigin(bounds.width / 2, bounds.height / 2);
         text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
 
-        text[1] = new Text("Items", text_font, screenHeight / 10);
+        text[1] = new Text("Items", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
         text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 3);
 
-        text[2] = new Text("Skills", text_font, screenHeight / 10);
+        text[2] = new Text("Skills", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
         text[2].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 5);
 
-        text[3] = new Text("Magic", text_font, screenHeight / 10);
+        text[3] = new Text("Magic", text_font, screenHeight / 15);
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
 
-        text[4] = new Text("Config", text_font, screenHeight / 10);
+        text[4] = new Text("Config", text_font, screenHeight / 15);
         bounds = text[4].getLocalBounds();
         text[4].setOrigin(bounds.width / 2, bounds.height / 2);
         text[4].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 13);
 
-        text[5] = new Text("Main Menu", text_font, screenHeight / 10);
+        text[5] = new Text("Main Menu", text_font, screenHeight / 15);
         bounds = text[5].getLocalBounds();
         text[5].setOrigin(bounds.width / 2, bounds.height / 2);
         text[5].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 15);
 
-        text[6] = new Text("Quit", text_font, screenHeight / 10);
+        text[6] = new Text("Quit", text_font, screenHeight / 15);
         bounds = text[6].getLocalBounds();
         text[6].setOrigin(bounds.width / 2, bounds.height / 2);
         text[6].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 17);
