@@ -339,6 +339,19 @@ public class Game implements State, Serializable {
         maps.get(3).setWorldName("Orphanage 2F");
         maps.get(4).setWorldName("Bedroom 1");
         maps.get(5).setWorldName("Bedroom 2");
+        maps.get(6).setWorldName("Dustworth path 1");
+        maps.get(7).setWorldName("Freefall");
+        maps.get(8).setWorldName("???");
+        maps.get(9).setWorldName("???");
+        maps.get(10).setWorldName("???");
+        maps.get(11).setWorldName("Dustworth path 2");
+        maps.get(12).setWorldName("The Crossroads");
+        maps.get(13).setWorldName("Shorelands path");
+        maps.get(14).setWorldName("Shorelands crossing");
+        maps.get(15).setWorldName("Fisher's bay");
+        maps.get(16).setWorldName("Shorelands harbor 1");
+        maps.get(17).setWorldName("Shorelands harbor 2");
+        
 
         maps.get(0).setHostile();
 
@@ -445,20 +458,20 @@ public class Game implements State, Serializable {
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
         addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
 
-        addPort(2, 0, 8, 9, 8, 5, closeDoor); //Orphanage exit
-        addPort(2, 0, 9, 9, 8, 5, closeDoor); //Orphanage exit
+        addPort(2, 0, 8, 9, 8, 6, closeDoor); //Orphanage exit
+        addPort(2, 0, 9, 9, 8, 6, closeDoor); //Orphanage exit
         addPort(2, 3, 0, 2, 35, 18, 1, 5, stairs); //Orphanage left stairs to 1st floor
         addPort(2, 3, 17, 2, 34, 18, 16, 5, stairs); //Orphanage right stairs to 1st floor
 
-        addPort(3, 2, 0, 5, 36, 18, 1, 2, stairs); //Orphanage left stairs to ground floor
-        addPort(3, 2, 17, 5, 37, 18, 16, 2, stairs); //Orphanage right stairs to ground floor
+        addPort(3, 2, 0, 5, 36, 18, 1, 3, stairs); //Orphanage left stairs to ground floor
+        addPort(3, 2, 17, 5, 37, 18, 16, 3, stairs); //Orphanage right stairs to ground floor
         addPort(3, 4, 2, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to left bedroom
         addPort(3, 5, 12, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to right bedroom
 
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
         
-         addPort(6,7,8,0,7,8); //Path to first dungeon
+        addPort(6,7,8,0,7,8); //Path to first dungeon
         addPort(6,11,17,5,1,5); //Road to second forest map path
         addPort(6,11,17,6,1,6); //Road to second forest map path
         
@@ -489,6 +502,11 @@ public class Game implements State, Serializable {
         addPort(12,13,9,9,9,1); //Path from crossroads to fishing area
         addPort(12,13,10,9,10,1); //Path from crossroads to fishing area
         
+        addPort(12,13,1,9,1,1); //Upper map to sand house
+        addPort(12,13,2,9,2,1); //Upper map to sand house
+        addPort(12,13,3,9,3,1); //Upper map to sand house
+        addPort(12,13,4,9,4,1); //Upper map to sand house
+        
         addPort(13,12,8,0,8,8); //Return to crossroads from fishing area
         addPort(13,12,9,0,9,8); //Return to crossroads from fishing area
         addPort(13,12,10,0,10,8); //Return to crossroads from fishing area
@@ -497,9 +515,24 @@ public class Game implements State, Serializable {
         addPort(13,14,9,9,9,1); //Path from crossroads to fishing area
         addPort(13,14,10,9,10,1); //Path from crossroads to fishing area
         
+        addPort(13,14,1,9,1,1); //Sand house to bridge crossing
+        addPort(13,14,2,9,2,1); //Sand house to bridge crossing
+        addPort(13,14,3,9,3,1); //Sand house to bridge crossing
+        addPort(13,14,4,9,4,1); //Sand house to bridge crossing
+        
+        addPort(13,12,1,0,1,8); //Sand house to upper map
+        addPort(13,12,2,0,2,8); //Sand house to upper map
+        addPort(13,12,3,0,3,8); //Sand house to upper map
+        addPort(13,12,4,0,4,8); //Sand house to upper map
+        
         addPort(14,13,8,0,8,8); //Return to path from fishing area
         addPort(14,13,9,0,9,8); //Return to path from fishing area
         addPort(14,13,10,0,10,8); //Return to path from fishing area
+        
+        addPort(14,13,1,0,1,8); //Bridge crossing to sand house
+        addPort(14,13,2,0,2,8); //Bridge crossing to sand house
+        addPort(14,13,3,0,3,8); //Bridge crossing to sand house
+        addPort(14,13,4,0,4,8); //Bridge crossing to sand house
         
         addPort(14,15,0,1,16,1); //Bridge to fishing area start
         addPort(14,15,0,2,16,2); //Bridge to fishing area start
@@ -512,6 +545,39 @@ public class Game implements State, Serializable {
         addPort(15,14,17,3,1,1); //Return from main fishing area to path (left)
         addPort(15,14,17,4,1,1); //Return from main fishing area to path (left)
         addPort(15,14,17,5,1,1); //Return from main fishing area to path (left)
+        
+        addPort(15,16,0,1,16,1); //Main fishing area to lower sand harbor
+        addPort(15,16,0,2,16,2); //Main fishing area to lower sand harbor
+        addPort(15,16,0,3,16,3); //Main fishing area to lower sand harbor
+        addPort(15,16,0,4,16,4); //Main fishing area to lower sand harbor
+        addPort(15,16,0,5,16,5); //Main fishing area to lower sand harbor
+        
+        addPort(16,15,17,1,1,1); //Lower sand harbor to main fishing area
+        addPort(16,15,17,2,1,2); //Lower sand harbor to main fishing area
+        addPort(16,15,17,3,1,3); //Lower sand harbor to main fishing area
+        addPort(16,15,17,4,1,4); //Lower sand harbor to main fishing area
+        addPort(16,15,17,5,1,5); //Lower sand harbor to main fishing area
+        
+        addPort(16,17,17,0,17,8); //Lower sand harbor to upper sand harbor
+        addPort(16,17,16,0,16,8); //Lower sand harbor to upper sand harbor
+        addPort(16,17,15,0,15,8); //Lower sand harbor to upper sand harbor
+        addPort(16,17,14,0,14,8); //Lower sand harbor to upper sand harbor
+        
+        addPort(17,16,16,9,16,1); //Upper sand harbor to lower sand harbor
+        addPort(17,16,15,9,15,1); //Upper sand harbor to lower sand harbor
+        addPort(17,16,14,9,14,1); //Upper sand harbor to lower sand harbor
+        
+        addPort(17,6,17,0,17,8); //Upper sand harbor to upper side connection
+        addPort(17,6,16,0,16,8); //Upper sand harbor to upper side connection
+        addPort(17,6,15,0,15,8); //Upper sand harbor to upper side connection 
+        addPort(17,6,14,0,14,8); //Upper sand harbor to upper side connection
+        
+        addPort(13,18,0,7,16,7); //Right sand house to left sand house
+        addPort(18,13,17,7,1,7); //Left sand house to right sand house
+       
+        addPort(6,17,16,9,16,1); //Upper sand harbor to upper side connection
+        addPort(6,17,15,9,15,1); //Upper sand harbor to upper side connection 
+        addPort(6,17,14,9,14,1); //Upper sand harbor to upper side connection
     }
 
     private void referencePlayer() {
