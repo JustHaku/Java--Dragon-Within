@@ -20,19 +20,24 @@ public class StateMachine
   private static boolean locked = false;
   public static int state = 0;
   public static Game gameWorld;
+  private int scale;
   
   public static void toggleLock(){
       locked = locked != true;
+  }
+  public StateMachine(int scale)
+  {
+      this.scale = scale;
   }
 
   /**
   * Changes states/ screens when given the relevent number.
   */
-  public void run() throws InterruptedException, IOException
+  public int run() throws InterruptedException, IOException
   {
     int screenWidth = 288;
     int screenHeight = 160;
-    int scale = VideoMode.getDesktopMode().height/160;
+    //int scale = VideoMode.getDesktopMode().height/160;
     
     
     RenderWindow window = new RenderWindow();
@@ -94,6 +99,13 @@ public class StateMachine
           //System.out.println(window.getSize());
           state = 1;
       }
+      if (state > 100)
+      {
+          scale = state - 100;
+          state = 0;
+          window.close();
+      }
     }
+      return scale;
   }
 }

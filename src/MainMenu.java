@@ -127,7 +127,7 @@ public class MainMenu extends Menu implements State {
                             option = 1; // game world.
                         } else if (option == 3) {
                             SettingsMenu.returnTo = 0; // tells the inv menu where you returned from.
-                            option = 4; // settings menu.
+                            option = 106; // settings menu.
                         } else if (option == 4) {
                             window.close();
                         }
