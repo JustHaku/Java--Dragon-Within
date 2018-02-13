@@ -69,6 +69,7 @@ public class Game implements State, Serializable {
     private final Music openDoor = new Music();
     private final Music closeDoor = new Music();
     private final Music stairs = new Music();
+    private ArrayList<TalkNPC> npcs = new ArrayList<>();
 
     public static int state = 1;
 
@@ -93,11 +94,25 @@ public class Game implements State, Serializable {
     //Definition of item list
     Consumable potion = new Consumable(1, "Potion", 20, 0, 100);
     Consumable ether = new Consumable(2, "Ether", 0, 20, 150);
+    
+    TalkNPC pete;
 
     Weapon dagger = new Weapon(1, "Dagger", 60);
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
 
     public int worldNum = 0;
+
+    public ArrayList<MessageBox> constructMessage(String[] messages) {
+        ArrayList<MessageBox> m = new ArrayList<>();
+
+        for(String p: messages){
+            m.add(new MessageBox(0,Game.screenHeight - (49 * (Game.SCALE / 2)),p, Color.BLACK));            
+        }
+        
+        return m;       
+    }
+    
+    
 
     public Game(RenderWindow window, int scale) throws InterruptedException, IOException {
         Activator.activators.clear();
@@ -177,7 +192,6 @@ public class Game implements State, Serializable {
             }
         }
     }
-    
 
     //Creates copy of item and makes it an activator and then adds it to the world
     private void addActivator(int m, int x, int y, Consumable c) {
@@ -201,6 +215,23 @@ public class Game implements State, Serializable {
         for (Actor a : maps.get(m).getActor()) {
             if (a.x == x * Game.tileSize && a.y == y * Game.tileSize && a.getClass() == WorldPieceActor.class) {
                 d = new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f, (WorldPieceActor) a);
+            }
+        }
+        if (d != null) {
+            maps.get(m).getActor().add(d);
+            d.addAlt(x2, y2);
+        } else {
+            throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
+        }
+
+        //System.out.println(x + " " + y);
+    }
+    
+    private void addActivator(int m, int x, int y, Consumable c, Music f, int x2, int y2) {
+        AddItem d = null;
+        for (Actor a : maps.get(m).getActor()) {
+            if (a.x == x * Game.tileSize && a.y == y * Game.tileSize && a.getClass() == WorldPieceActor.class) {
+                d = new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(),c), playerInv, f, (WorldPieceActor) a);
             }
         }
         if (d != null) {
@@ -302,8 +333,8 @@ public class Game implements State, Serializable {
     }
 
     private void initActivators() {
-        //addActivator(0, 0, 5, potion);
-        //addActivator(0, 0, 4, ether);
+        addActivator(5, 4, 3, potion, openChest,24,5);
+        addActivator(5, 13, 3, ether, openChest, 24, 5);
         addActivator(1, 5, 6, dagger, openChest, 38, 11);
         addActivator(4, 8, 3, cleaver, openChest, 38, 11);
         //addActivator();
@@ -314,8 +345,46 @@ public class Game implements State, Serializable {
         player1 = new Player(playerSpriteSheet, maps, this);
         player1.setTilePosition(1, 4);
         worldNum = 5;
+        trader = new Trader("Trader",
+                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
+                        "Psssst. Wanna buy a potion?",
+                        Color.BLACK),
+                playerSpriteSheet,
+                1, 9,
+                this, window, playerInv, traderInv);
+        maps.get(0).getActor().add(trader);
         traderInv.addConsumable(potion);
         traderInv.addConsumable(ether);
+        
+        String[] s1 = {
+            "Welcome to the world of Galkevar",
+            "Use WASD to move around, E to interact, and ESC to exit menus.",
+            "Go forth and fulfil your destiny!"
+        } ;
+        npcs.add(new TalkNPC("Pete", constructMessage(s1) ,playerSpriteSheet, 1,10,7,3));
+        maps.get(5).getActor().add(npcs.get(0));
+        
+        String[] s2 = {
+            "I've been stuck in this orphanage for years...",
+            "We finally get to leave when we are 18...",
+            "Just 3 more lonely years."
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s2) ,playerSpriteSheet, 1,9,16,7));
+        maps.get(5).getActor().add(npcs.get(1));
+        
+        String[] s3 = {
+            "I get out in one week! I shall become a baker!"
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s3) ,playerSpriteSheet, 1,7,1,6));
+        maps.get(5).getActor().add(npcs.get(2));
+        
+        String[] s4 = {
+            "50 Years i have been a fisherman. My time is nearly over.",
+            "In that chest, over there, is a dagger...",
+            "Take it. You'll need it more than I, in these dark times."
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s4) ,playerSpriteSheet, 1,8,10,3));
+        maps.get(1).getActor().add(npcs.get(3));
 
     }
 
@@ -348,13 +417,14 @@ public class Game implements State, Serializable {
         addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
 
         addPort(2, 0, 8, 9, 8, 5, closeDoor); //Orphanage exit
-        addPort(2, 3, 0, 2, 35, 18, 2, 4, stairs); //Orphanage left stairs to 1st floor
-        addPort(2, 3, 17, 2, 34, 18, 15, 4, stairs); //Orphanage right stairs to 1st floor
+        addPort(2, 0, 9, 9, 8, 5, closeDoor); //Orphanage exit
+        addPort(2, 3, 0, 2, 35, 18, 1, 5, stairs); //Orphanage left stairs to 1st floor
+        addPort(2, 3, 17, 2, 34, 18, 16, 5, stairs); //Orphanage right stairs to 1st floor
 
-        addPort(3, 2, 0, 5, 36, 18, 2, 3, stairs); //Orphanage left stairs to ground floor
-        addPort(3, 2, 17, 5, 37, 18, 15, 3, stairs); //Orphanage right stairs to ground floor
-        addPort(3, 4, 2, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to left bedroom
-        addPort(3, 5, 12, 2, 37, 1, 8, 7, openDoor); //Orphanage hall to right bedroom
+        addPort(3, 2, 0, 5, 36, 18, 1, 2, stairs); //Orphanage left stairs to ground floor
+        addPort(3, 2, 17, 5, 37, 18, 16, 2, stairs); //Orphanage right stairs to ground floor
+        addPort(3, 4, 2, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to left bedroom
+        addPort(3, 5, 12, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to right bedroom
 
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
@@ -400,24 +470,15 @@ public class Game implements State, Serializable {
         state = 1;
         int menuSleep = 15;
         mainTheme.play();
-        trader = new Trader("Trader",
-                new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
-                        "Lets trade!",
-                        Color.BLACK),
-                playerSpriteSheet,
-                1, 9,
-                this, window, playerInv, traderInv);
-        maps.get(0).getActor().add(trader);
+        
 
         mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
-            
+
 //            if(subState = 2){
 //                
 //            }
-            for (Item a : playerInv.getWeapons()) {
-                System.out.println(a.getName());
-            }
+
 
             if (!player1.movementLock) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
@@ -478,14 +539,25 @@ public class Game implements State, Serializable {
             if (!trader.isHidden()) {
                 trader.drawMessage(window);
             }
+            
+            
+            
 
             if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
+            if(routeMessage != null){
                 routeMessage.draw(window);
+                
+            }
+                
             }
 
             if (h != null) {
                 h.Draw(window);
             }
+            for(TalkNPC n: npcs){
+                n.drawMessage(window);                  
+            }
+                              
 
             // Update the display with any changes.
             window.display();

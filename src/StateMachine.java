@@ -32,7 +32,7 @@ public class StateMachine
   {
     int screenWidth = 288;
     int screenHeight = 160;
-    int scale = VideoMode.getDesktopMode().height/160;
+    int scale = VideoMode.getDesktopMode().height/screenHeight;
     
     
     RenderWindow window = new RenderWindow();

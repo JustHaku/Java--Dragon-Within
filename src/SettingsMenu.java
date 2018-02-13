@@ -31,9 +31,9 @@ public class SettingsMenu extends Menu implements State
     screenWidth = 288*scale;
     
     text_font = new Font();
-    text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+    text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
     
-    text = new Text("Settings Menu\nPlace Holder", text_font, screenHeight/10);
+    text = new Text("Settings Menu\nPlace Holder", text_font, screenHeight/15);
     bounds = text.getLocalBounds();
     text.setOrigin(bounds.width / 2, bounds.height / 2);
     text.setPosition(screenWidth/2, screenHeight/2);

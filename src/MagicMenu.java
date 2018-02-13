@@ -34,7 +34,7 @@ public class MagicMenu extends Menu implements State
     screenWidth = 288*scale;
     
     text_font = new Font();
-    text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+    text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
     
     menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
     menuRect.setFillColor(new Color(11,2,138));

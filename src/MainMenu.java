@@ -26,7 +26,7 @@ public class MainMenu extends Menu implements State {
         menuWindow(window, scale, 288, 160, options_num);
 
         text_font = new Font();
-        text_font.loadFromFile(Paths.get("src/graphics/Menu/Stay_Wildy.ttf"));
+        text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
         soundBuffer = new SoundBuffer();
         soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));

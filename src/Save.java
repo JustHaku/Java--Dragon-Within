@@ -16,76 +16,73 @@ import java.util.ArrayList;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author LBals
  */
 public class Save implements Serializable {
-    
+
     static final long serialVersionUID = 42L;
-    
+
     private int worldNum;
     private int x;
     private int y;
     private Inventory i;
     private ArrayList<Boolean> active = new ArrayList<>();
-    
-    
-    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a){
+
+    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a) {
         worldNum = g.getWorldNum();
         x = p.getX();
         y = p.getY();
-        this.i = i;     
-        for(Activator k: a){
+        this.i = i;
+        for (Activator k : a) {
             active.add(k.activated);
         }
-    } 
-    
-    public int getWorld(){
+
+    }
+
+    public int getWorld() {
         return worldNum;
     }
-    
-    public int getX(){
+
+    public int getX() {
         return x;
     }
-    
-    public int getY(){
+
+    public int getY() {
         return y;
     }
-    
-    public Inventory getInventory(){
-        return i;  
+
+    public Inventory getInventory() {
+        return i;
     }
-    
-    public ArrayList<Boolean> getID(){
+
+    public ArrayList<Boolean> getID() {
         return active;
     }
-    
+
     public static void save(String fn, Save s) throws FileNotFoundException, IOException {
-        try{
+        try {
             Files.delete(Paths.get(fn));
-            
-        }catch(NoSuchFileException e){
-            
+
+        } catch (NoSuchFileException e) {
+
         }
-        
-        Files.createFile(Paths.get(fn));            
-        
-        
+
+        Files.createFile(Paths.get(fn));
+
         FileOutputStream fout = new FileOutputStream(fn);
         ObjectOutputStream oos = new ObjectOutputStream(fout);
         oos.writeObject(s);
         fout.close();
     }
-      
 
     public static Save load(String fn) throws FileNotFoundException, IOException, ClassNotFoundException {
         FileInputStream fin = new FileInputStream(fn);
         ObjectInputStream ois = new ObjectInputStream(fin);
         Save s = (Save) ois.readObject();
         fin.close();
-        
+
         return s;
     }
 }

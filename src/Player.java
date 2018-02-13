@@ -29,7 +29,7 @@ public class Player extends Character {
      */
     public Player(Texture imgTexture, ArrayList<WorldMap> m, Game g) {
         c1 = 1; // Both c1 and c2 represent the hardcoded co-ordinates for character sprite from the sheet.
-        c2 = 6;
+        c2 = 11;
         this.g = g;
         this.m = m;
 
