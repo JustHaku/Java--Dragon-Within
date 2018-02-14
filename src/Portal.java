@@ -11,6 +11,7 @@ import org.jsfml.graphics.Texture;
 
 /**
  * Creates a portal which loads another map when the player is within() it.
+ *
  * @author LBals
  */
 public class Portal extends Actor {
@@ -24,8 +25,10 @@ public class Portal extends Actor {
     private final ArrayList<Actor> actors;
     private Game m;
     private Music a = null;
+
     /**
      * Creates a portal which loads another map when the player is within() it.
+     *
      * @param player1 The player which interacts with portal
      * @param imgTexture Spritesheet of the world
      * @param x X location of the portal
@@ -35,11 +38,11 @@ public class Portal extends Actor {
      * @param p1 X Location of where to set the player when it enter the portal
      * @param p2 Y location of where to set the player when it enters the portal
      * @param w Index of world number to port to
-     * @param actors The arraylist of actors you want to act upon(The one containing the player)
+     * @param actors The arraylist of actors you want to act upon(The one
+     * containing the player)
      */
-    
-    
-    public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors, Game m) {
+
+    public Portal(Player player1, Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors, Game m) {
         // Draws rectange around selected piece
         this.actors = actors;
         this.w = w;
@@ -48,7 +51,7 @@ public class Portal extends Actor {
         this.player1 = player1;
         this.m = m;
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
-        
+
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
@@ -58,8 +61,8 @@ public class Portal extends Actor {
         setPosition = img::setPosition;
 
     }
-    
-    public Portal(Player player1,Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors, Game m, Music a) {
+
+    public Portal(Player player1, Texture imgTexture, int x, int y, int c1, int c2, int p1, int p2, int w, ArrayList<Actor> actors, Game m, Music a) {
         // Draws rectange around selected piece
         this.actors = actors;
         this.w = w;
@@ -68,7 +71,7 @@ public class Portal extends Actor {
         this.player1 = player1;
         this.m = m;
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
-        
+
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
@@ -76,7 +79,7 @@ public class Portal extends Actor {
         this.y = y * Game.tileSize;
 
         setPosition = img::setPosition;
-        
+
         this.a = a;
 
     }
@@ -86,23 +89,22 @@ public class Portal extends Actor {
         // Do this if actor hits this object.
         for (Actor a : actors) {
             if (a.obj != obj && a.within(x, y) && a.isPlayer()) {
-                
-                m.changeWorld(w);   
+
+                m.changeWorld(w);
                 player1.setPosition(p1, p2);
-                if(this.a != null){
-                    this.a.play();  
+                if (this.a != null) {
+                    this.a.play();
                 }
                 try {
                     Thread.sleep(250);
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Portal.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                
+
             }
         }
     }
 
-    
     @Override
     void draw(RenderWindow w) {
         w.draw(img);

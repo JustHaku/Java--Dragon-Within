@@ -8,13 +8,13 @@
  *
  * @author LBals
  */
-public class Weapon extends Item{
-    
+public class Weapon extends Item {
+
     int dmg;
-    
+
     public Weapon(int id, String name, int Damage) {
-        super(id,name);
+        super(id, name);
         this.dmg = Damage;
     }
-    
+
 }

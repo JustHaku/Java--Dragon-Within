@@ -33,10 +33,11 @@ public class Player extends Character {
         this.g = g;
         this.m = m;
 
-        /***THIS IS TEMPORARY, JUST FOR TESTING***/
+        /**
+         * *THIS IS TEMPORARY, JUST FOR TESTING**
+         */
         //skill_names[0] = "Punch";
         //skill_names[1] = "Quick Attack";
-
         name = "Main Player";
         max_health = 100;
         max_mana = 100;
@@ -69,7 +70,7 @@ public class Player extends Character {
 
     void moveLeft() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if(!movementLock){
+        if (!movementLock) {
             x -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -79,7 +80,7 @@ public class Player extends Character {
 
     void moveRight() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if(!movementLock){
+        if (!movementLock) {
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -89,37 +90,34 @@ public class Player extends Character {
 
     void moveUp() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if(!movementLock){
+        if (!movementLock) {
             y -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
 
         }
 
         //}
-
     }
 
     void moveDown() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if(!movementLock){
+        if (!movementLock) {
             y += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
 
         //}
-
     }
 
-    public void setTilePosition(int x, int y){
-        this.setPosition(x*Game.tileSize, y*Game.tileSize);
+    public void setTilePosition(int x, int y) {
+        this.setPosition(x * Game.tileSize, y * Game.tileSize);
     }
 
-
-    public int getX(){
+    public int getX() {
         return x;
     }
 
-    public int getY(){
+    public int getY() {
         return y;
     }
 
@@ -133,8 +131,6 @@ public class Player extends Character {
     boolean isPlayer() {
         return true;
     }
-
-
 
     @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
@@ -169,7 +165,7 @@ public class Player extends Character {
                 if (y < a.y) {
                     moveUp();
                 }
-            }else if(a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true){
+            } else if (a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true) {
                 if (x > a.x) {
                     moveRight();
                 }
@@ -183,7 +179,6 @@ public class Player extends Character {
                 if (y < a.y) {
                     moveUp();
                 }
-
 
             }
             return a;

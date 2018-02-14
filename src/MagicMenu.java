@@ -1,3 +1,4 @@
+
 import java.io.IOException;
 import java.nio.file.*;
 import java.util.ArrayList;
@@ -12,23 +13,21 @@ import org.jsfml.audio.*;
  *
  * @author Kirk Sparnenn
  */
-public class MagicMenu extends Menu implements State
-{
-  /*private RenderWindow window;
+public class MagicMenu extends Menu implements State {
+
+    /*private RenderWindow window;
   private int scale;
   private Font text_font;*/
-  private boolean paused = false;
-  /*private int screenHeight;
+    private boolean paused = false;
+    /*private int screenHeight;
   private int screenWidth;*/
-  private RectangleShape menuRect;
-  private RectangleShape playerRect;
-  public static boolean returnTo = false;
+    private RectangleShape menuRect;
+    private RectangleShape playerRect;
+    public static boolean returnTo = false;
 
-
-  public MagicMenu(RenderWindow window, int scale, int options_num) throws IOException
-  {
-    menuWindow(window, scale, options_num);
-    /*this.window = window;
+    public MagicMenu(RenderWindow window, int scale, int options_num) throws IOException {
+        menuWindow(window, scale, options_num);
+        /*this.window = window;
     this.scale = scale;
     screenHeight = 160*scale;
     screenWidth = 288*scale;
@@ -49,43 +48,35 @@ public class MagicMenu extends Menu implements State
     bounds = text[0].getLocalBounds();
     text[0].setOrigin(bounds.width / 2, bounds.height / 2);
     text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);*/
-  }
-
-  /*
-  * Main loop draws and controlls moving through menu.
-  */
-  @Override
-  public int run()
-  {
-    returnTo = true;
-    paused = false;
-    while(window.isOpen() && paused == false)
-    {
-      window.clear(Color.BLACK);
-      window.draw(menuRect);
-      window.draw(playerRect);
-      showSelection(text, option);
-      drawText(text);
-      window.display();
-
-      for(Event event : window.pollEvents())
-      {
-        KeyEvent keyEvent = event.asKeyEvent();
-
-        if(event.type == Event.Type.CLOSED)
-        {
-          window.close();
-        }
-
-        else if (event.type == Event.Type.KEY_PRESSED)
-        {
-          if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE"))
-          {
-            paused = true;
-          }
-        }
-      }
     }
-      return 3;
-  }
+
+    /*
+  * Main loop draws and controlls moving through menu.
+     */
+    @Override
+    public int run() {
+        returnTo = true;
+        paused = false;
+        while (window.isOpen() && paused == false) {
+            window.clear(Color.BLACK);
+            window.draw(menuRect);
+            window.draw(playerRect);
+            showSelection(text, option);
+            drawText(text);
+            window.display();
+
+            for (Event event : window.pollEvents()) {
+                KeyEvent keyEvent = event.asKeyEvent();
+
+                if (event.type == Event.Type.CLOSED) {
+                    window.close();
+                } else if (event.type == Event.Type.KEY_PRESSED) {
+                    if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
+                        paused = true;
+                    }
+                }
+            }
+        }
+        return 3;
+    }
 }

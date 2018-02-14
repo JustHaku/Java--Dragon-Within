@@ -23,7 +23,6 @@ public abstract class Actor {
     int xv = 0;
     int yv = 0;
 
-
     // Work out where object should be for next frame.
     abstract void calcMove(int minX, int minY, int maxX, int maxY);
 
@@ -31,37 +30,36 @@ public abstract class Actor {
     boolean within(int x, int y) {
         return false;
     }
-    
+
     boolean withinInteractive(int x, int y) {
         return false;
     }
 
-    void setValid(int x,int y){
+    void setValid(int x, int y) {
         xv = x;
         yv = y;
     }
 
     /**
-    *@param actor is the actor to be checked
-    *@return Determines if the actor can be interacted with or returns false if actor is redundant
-    */
-    boolean isInteractive(){
-    //assume actor is redundant
-      return false;
+     * @param actor is the actor to be checked
+     * @return Determines if the actor can be interacted with or returns false
+     * if actor is redundant
+     */
+    boolean isInteractive() {
+        //assume actor is redundant
+        return false;
     }
-    
-    void activate(){
-        
+
+    void activate() {
+
     }
 
     /**
-    *@return Indicates if actor is the main player
-    */
-    boolean isPlayer()
-    {
-      return false;
+     * @return Indicates if actor is the main player
+     */
+    boolean isPlayer() {
+        return false;
     }
-
 
     // Reposition the object.
     void performMove() {

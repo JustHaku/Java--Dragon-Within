@@ -8,26 +8,23 @@ import java.util.Scanner;
 import org.jsfml.graphics.Texture;
 
 /**
- * Creates world map using the tilemaps at
- * "src/tilemaps/w/w/_underlay",
- * "src/tilemaps/w/w/_overlay",
- * "src/tilemaps/w/w/_actorlay"
- * where x is the world number.
+ * Creates world map using the tilemaps at "src/tilemaps/w/w/_underlay",
+ * "src/tilemaps/w/w/_overlay", "src/tilemaps/w/w/_actorlay" where x is the
+ * world number.
  *
- * the -1 flag in all layers means do nothing.
- * the -2 flag in the over layer means add a barrier.
+ * the -1 flag in all layers means do nothing. the -2 flag in the over layer
+ * means add a barrier.
  *
  *
  * @author LBals
  */
-public class WorldMap implements Serializable
-{
+public class WorldMap implements Serializable {
 
     private Scanner[] scanners;
     private int layer;
     private String worldName = null;
     private int w;
-    
+
     private boolean hostile = false;
 
     private final ArrayList<WorldPiece> underlay = new ArrayList<>();
@@ -41,11 +38,10 @@ public class WorldMap implements Serializable
     private int[][] map_holder;
 
     /**
-     * Creates world map using the tilemaps at
-     * "src/tilemaps/w/w/_underlay",
-     * "src/tilemaps/w/w/_overlay",
-     * "src/tilemaps/w/w/_actorlay"
-     * where w is the world number.
+     * Creates world map using the tilemaps at "src/tilemaps/w/w/_underlay",
+     * "src/tilemaps/w/w/_overlay", "src/tilemaps/w/w/_actorlay" where w is the
+     * world number.
+     *
      * @param imgTexture World texture sprite sheet
      * @param w World number to load
      * @throws FileNotFoundException
@@ -76,10 +72,10 @@ public class WorldMap implements Serializable
             storeInts(scanners[i]);
         }
     }
-    
 
     /**
      * Returns under layer of the map
+     *
      * @return underlay
      */
     public ArrayList<WorldPiece> getUnder() {
@@ -88,6 +84,7 @@ public class WorldMap implements Serializable
 
     /**
      * Returns over layer of the map
+     *
      * @return overlay
      */
     public ArrayList<WorldPiece> getOver() {
@@ -96,6 +93,7 @@ public class WorldMap implements Serializable
 
     /**
      * Returns actor layer of the map.
+     *
      * @return actorlay
      */
     public ArrayList<Actor> getActor() {
@@ -107,12 +105,10 @@ public class WorldMap implements Serializable
         int q = 0;
 
         //Stores integers from map file into an array
-        while (sc.hasNextInt())
-        {
+        while (sc.hasNextInt()) {
             map_holder[q][p] = sc.nextInt();
             p++;
-            if (p % (Game.gridWidth * 2) == 0)
-            {
+            if (p % (Game.gridWidth * 2) == 0) {
                 p = 0;
                 q++;
             }
@@ -120,66 +116,49 @@ public class WorldMap implements Serializable
         layer++;
         buildMaps();
     }
-    
-    public void setWorldName(String s){
+
+    public void setWorldName(String s) {
         worldName = s;
     }
-    
-    public String getWorldName(){
-        if(worldName != null){
+
+    public String getWorldName() {
+        if (worldName != null) {
             return worldName + " (" + Integer.toString(w) + ")";
-            
-        }else{
+
+        } else {
             return "World: " + Integer.toString(w);
         }
     }
-    
-    public void setHostile(){
+
+    public void setHostile() {
         hostile = true;
     }
-    
-    public boolean isHostile(){
+
+    public boolean isHostile() {
         return hostile;
     }
-    
 
     private void buildMaps() {
-        for (int map_width = 0; map_width < Game.gridWidth; map_width++)
-        {
-            for (int map_height = 0; map_height < Game.gridHeight; map_height++)
-            {
-                if (layer == 1)
-                {
-                    if (map_holder[map_height][map_width * 2] == -1 && map_holder[map_height][(map_width * 2) + 1] == -1)
-                    {
-                      //do nothing
+        for (int map_width = 0; map_width < Game.gridWidth; map_width++) {
+            for (int map_height = 0; map_height < Game.gridHeight; map_height++) {
+                if (layer == 1) {
+                    if (map_holder[map_height][map_width * 2] == -1 && map_holder[map_height][(map_width * 2) + 1] == -1) {
+                        //do nothing
+                    } else {
+                        underlay.add(new WorldPiece(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1]));
                     }
-                    else
-                    {
-                      underlay.add(new WorldPiece(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1]));
+                } else if (layer == 2) {
+                    if (map_holder[map_height][map_width * 2] == -2 && map_holder[map_height][(map_width * 2) + 1] == -2) {
+                        actorlay.add(new WorldPieceActor(imgTexture, map_width, map_height, 0, 5, actorlay));
+                    } else {
+                        overlay.add(new WorldPiece(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1]));
                     }
-                }
-                else if (layer == 2)
-                {
-                  if (map_holder[map_height][map_width * 2] == -2 && map_holder[map_height][(map_width * 2) + 1] == -2)
-                  {
-                      actorlay.add(new WorldPieceActor(imgTexture, map_width, map_height, 0, 5,actorlay));
-                  }
-                  else
-                  {
-                      overlay.add(new WorldPiece(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1]));
-                  }
-                }
-                else if (layer == 3)
-                {
-                  if (map_holder[map_height][map_width * 2] == -1 && map_holder[map_height][(map_width * 2) + 1] == -1)
-                  {
-                    //do nothing
-                  }
-                  else
-                  {
-                      actorlay.add(new WorldPieceActor(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1],actorlay));
-                  }
+                } else if (layer == 3) {
+                    if (map_holder[map_height][map_width * 2] == -1 && map_holder[map_height][(map_width * 2) + 1] == -1) {
+                        //do nothing
+                    } else {
+                        actorlay.add(new WorldPieceActor(imgTexture, map_width, map_height, map_holder[map_height][map_width * 2], map_holder[map_height][(map_width * 2) + 1], actorlay));
+                    }
                 }
             }
         }

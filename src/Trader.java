@@ -28,26 +28,22 @@ public class Trader extends Actor {
     private Game g;
     private Thread t1;
     private Runnable r;
-    Trade trade;
+    private Trade trade;
     private final float ps = (float) 1;
     private Music m = new Music();
     private RenderWindow w;
     private Inventory playerInv;
     private Inventory traderInv;
 
-    public Trader(String name, MessageBox dialogue, Texture imgTexture, int c1, int c2, Game g, RenderWindow w, Inventory playerInv, Inventory traderInv,int x, int y) {
+    public Trader(String name, MessageBox dialogue, Texture imgTexture, int c1, int c2, Game g, RenderWindow w, Inventory playerInv, Inventory traderInv, int x, int y) {
         this.w = w;
         this.g = g;
         this.playerInv = playerInv;
         this.traderInv = traderInv;
-        this.x = x*Game.tileSize;
-        this.y = y*Game.tileSize;
-        
+        this.x = x * Game.tileSize;
+        this.y = y * Game.tileSize;
+
         trade = new Trade(w, Game.SCALE, this.playerInv, this.traderInv);
-        
-        
-        
-        
 
         try {
             m.openFromFile(Paths.get("src/audio/ui/click1.ogg"));
@@ -62,7 +58,6 @@ public class Trader extends Actor {
 
         img = new Sprite(imgTexture, state);
         img.setScale(Game.SCALE / ps, Game.SCALE / ps);
-
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
@@ -82,7 +77,7 @@ public class Trader extends Actor {
     }
 
     void nextLock() {
-        dialogue.showHide();
+        dialogue.hidden = false;
         m.play();
         Game.player1.movementLock = true;
         try {
@@ -105,15 +100,12 @@ public class Trader extends Actor {
                 break;
             }
         }
-        
-        synchronized(this){
+
+        synchronized (this) {
             StateMachine.states[10] = trade;
-            Game.state = 10;            
+            Game.state = 10;
         }
-        
-        
-        
-        
+
     }
 
     boolean isHidden() {
@@ -128,7 +120,7 @@ public class Trader extends Actor {
     synchronized void activate() {
 
         StateMachine.toggleLock();
-        
+
         StateMachine.toggleLock();
         if (!t1.isAlive()) {
             t1.start();

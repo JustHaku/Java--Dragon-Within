@@ -28,7 +28,7 @@ public class AddItem extends Activator {
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
@@ -37,7 +37,7 @@ public class AddItem extends Activator {
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory, Music m) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
@@ -48,7 +48,7 @@ public class AddItem extends Activator {
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory, Music m, WorldPieceActor wp) {
         super(imgTexture, text, x, y);
 
-        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE/2)), "You received: " + item.getName(), Color.BLACK);
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "You received: " + item.getName(), Color.BLACK);
 
         this.inventory = inventory;
         this.item = item;
@@ -103,7 +103,6 @@ public class AddItem extends Activator {
                 m.play();
             }
 
-            
             p.showHide();
 
             Thread t1 = new Thread(new Runnable() {

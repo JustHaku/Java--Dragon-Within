@@ -45,7 +45,6 @@ public class Trade extends Menu implements State {
     private RectangleShape traderBackground;
     private RectangleShape playerBackground;
 
-
     public Trade(RenderWindow window, int scale, Inventory playInv, Inventory traderInventory) {
         this.playInv = playInv;
         this.window = window;
@@ -70,8 +69,6 @@ public class Trade extends Menu implements State {
         }
 
         System.out.println("sfd");
-
-
 
     }
 
@@ -101,7 +98,7 @@ public class Trade extends Menu implements State {
     void showSelection(ArrayList<Text> textArray, int optionValue) {
         for (int i = 0; i < textArray.size(); i++) {
             if ((i + 1) == optionValue) {
-                textArray.get(i).setColor(new Color(255,128,128));
+                textArray.get(i).setColor(new Color(255, 128, 128));
             } else {
                 textArray.get(i).setColor(Color.WHITE);
             }
@@ -120,7 +117,7 @@ public class Trade extends Menu implements State {
         traderText.clear();
 
         count = 0;
-        for (Consumable c : this.playInv.getConsumables()) {
+        for (Consumable c : StateMachine.gameWorld.playerInv.getConsumables()) {
             playerText.add(new Text(c.getName()/* + " [" + c.value + "]"*/, text_font, screenHeight / 20));
             playerText.get(count).setPosition((screenWidth / 4) + (2 * scale), (scale * 3) + (13 * scale * count));
             count++;
@@ -133,13 +130,13 @@ public class Trade extends Menu implements State {
             count++;
         }
 
-        gold = new Text("Gold: " + Integer.toString(playInv.getGold()), text_font, screenHeight / 20);
+        gold = new Text("Gold: " + Integer.toString(StateMachine.gameWorld.playerInv.getGold()), text_font, screenHeight / 20);
         gold.setColor(Color.YELLOW);
         gold.setPosition(2 * scale, (scale * 3) + (13 * scale * 1));
 
         goldTrader = new Text("Gold: ∞", text_font, screenHeight / 20);
         goldTrader.setColor(Color.YELLOW);
-        goldTrader.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 1));
+        goldTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 1));
 
         pi = new Text("Player Inventory: ", text_font, screenHeight / 20);
         pi.setPosition((2 * scale), (scale * 3) + (13 * scale * 0));
@@ -161,7 +158,7 @@ public class Trade extends Menu implements State {
 
     void updateValue() {
         try {
-            value = new Text("Value: " + playInv.getConsumables().get(option - 1).value, text_font, screenHeight / 20);
+            value = new Text("Value: " + StateMachine.gameWorld.playerInv.getConsumables().get(option - 1).value, text_font, screenHeight / 20);
             if (subState == 1) {
                 value.setString("Value: ");
             }
@@ -180,18 +177,18 @@ public class Trade extends Menu implements State {
             if (subState == 0) {
                 valueTrader.setString("Value: ");
             }
-            valueTrader.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 2));
+            valueTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 2));
             valueTrader.setColor(Color.BLACK);
 
-        }catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             valueTrader = new Text("Value: ", text_font, screenHeight / 20);
-            valueTrader.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 2));
+            valueTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 2));
             valueTrader.setColor(Color.BLACK);
 
         }
 
         buy = new Text("Buy", text_font, screenHeight / 20);
-        buy.setPosition((screenWidth/2)+(2 * scale), (scale * 3) + (13 * scale * 3));
+        buy.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 3));
         buy.setColor(Color.BLACK);
 
         sell = new Text("Sell", text_font, screenHeight / 20);
@@ -214,13 +211,13 @@ public class Trade extends Menu implements State {
 
         Dude:
         while (window.isOpen() && state == 4) {
-            if(subState == 0){
-                playerBackground.setFillColor(new Color(153,153,255));
-                traderBackground.setFillColor(new Color(204,204,255));
+            if (subState == 0) {
+                playerBackground.setFillColor(new Color(153, 153, 255));
+                traderBackground.setFillColor(new Color(204, 204, 255));
             }
-            if(subState == 1){
-                traderBackground.setFillColor(new Color(153,153,255));
-                playerBackground.setFillColor(new Color(204,204,255));
+            if (subState == 1) {
+                traderBackground.setFillColor(new Color(153, 153, 255));
+                playerBackground.setFillColor(new Color(204, 204, 255));
             }
 
             window.clear(Color.BLUE);
@@ -242,7 +239,6 @@ public class Trade extends Menu implements State {
             window.draw(valueTrader);
             window.draw(buy);
             window.draw(goldTrader);
-
 
             if (subState == 0) {
                 showSelection(playerText, option);
@@ -298,12 +294,12 @@ public class Trade extends Menu implements State {
                             }
                             updateValue();
                         } else if (keyEvent.key == Keyboard.Key.valueOf("E")) {
-                            playInv.setGold(playInv.getConsumables().get(option - 1).value);
-                            playInv.getConsumables().remove(option - 1);
-                            if (option == playInv.getConsumables().size() + 1) {
+                            StateMachine.gameWorld.playerInv.setGold(StateMachine.gameWorld.playerInv.getConsumables().get(option - 1).value);
+                            StateMachine.gameWorld.playerInv.getConsumables().remove(option - 1);
+                            if (option == StateMachine.gameWorld.playerInv.getConsumables().size() + 1) {
                                 option--;
                             }
-                            if (playInv.getConsumables().isEmpty()) {
+                            if (StateMachine.gameWorld.playerInv.getConsumables().isEmpty()) {
                                 option++;
                                 subState = 1;
 
@@ -336,10 +332,10 @@ public class Trade extends Menu implements State {
                             updateValue();
                         } else if (keyEvent.key == Keyboard.Key.valueOf("E")) {
 
-                            if (traderInventory.getConsumables().get(option - 1).value <= playInv.getGold()) {
+                            if (traderInventory.getConsumables().get(option - 1).value <= StateMachine.gameWorld.playerInv.getGold()) {
                                 menuSound.play();
-                                playInv.setGold(-traderInventory.getConsumables().get(option - 1).value);
-                                playInv.addItem(new Consumable(
+                                StateMachine.gameWorld.playerInv.setGold(-traderInventory.getConsumables().get(option - 1).value);
+                                StateMachine.gameWorld.playerInv.addItem(new Consumable(
                                         traderInventory.getConsumables().get(option - 1).getId(),
                                         traderInventory.getConsumables().get(option - 1).getName(),
                                         traderInventory.getConsumables().get(option - 1)));

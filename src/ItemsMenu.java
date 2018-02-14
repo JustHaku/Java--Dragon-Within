@@ -88,7 +88,6 @@ public class ItemsMenu extends Menu implements State {
         option = 1;
         showSelection(text, option);
         items = StateMachine.gameWorld.playerInv.getConsumables(); // gets first inventory.
-        
 
         // sets up rectangles and text for items.
         for (int i = 0; i < items.size(); i++) {
@@ -99,11 +98,8 @@ public class ItemsMenu extends Menu implements State {
             itemText.add(new Text(((Item) items.get(i)).name, text_font, screenHeight / 15));
             (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
         }
-        
+
         showSelection(text, option);
-        
-        
-        
 
         while (window.isOpen() && paused == false) {
             window.clear(Color.BLACK);
@@ -115,7 +111,7 @@ public class ItemsMenu extends Menu implements State {
                 window.draw(itemRect.get(i));
                 window.draw(itemText.get(i));
             }
-                        
+
             window.display();
 
             for (Event event : window.pollEvents()) {

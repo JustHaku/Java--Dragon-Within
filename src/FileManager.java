@@ -27,16 +27,14 @@ public class FileManager {
         oos.writeObject(g);
         fout.close();
     }
-      
 
     public static Game read(String fn) throws FileNotFoundException, IOException, ClassNotFoundException {
         FileInputStream fin = new FileInputStream(fn);
         ObjectInputStream ois = new ObjectInputStream(fin);
         Game g = (Game) ois.readObject();
         fin.close();
-        
+
         return g;
     }
 
 }
-

@@ -23,14 +23,14 @@ import org.xml.sax.SAXException;
  * @author valka
  */
 public class BasicSkills {
-    
+
     static Skills.myBiConsumer<Character, Integer> manapay = (character, value) -> {
         if (character.mana - value < 0) {
             throw new Exception();
         }
         character.mana -= value;
     };
-    
+
     static Skills.myBiConsumer<Character, Integer> actionpay = (character, value) -> {
 //        if (character.actionp - value < 0) {
 //            throw new Exception();
@@ -62,18 +62,18 @@ public class BasicSkills {
 //            true, true);// skill is performed on the character casting it; the buff is removed after battle
     public static ArrayList<Skills> readSkills(String path) throws Exception {
         ArrayList<Skills> skillslist = new ArrayList<>();
-        
+
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder docBuilder = builderFactory.newDocumentBuilder();
             Document document = docBuilder.parse(new File("skills.xml"));
             document.normalize();
-            
+
             NodeList rootNodes = document.getElementsByTagName("skills");
             Element e = (Element) rootNodes.item(0);
-            
+
             NodeList skills = e.getElementsByTagName("skill");
-            
+
             for (int i = 0; i < skills.getLength(); i++) {
                 Element skill = (Element) skills.item(i);
                 //get attributes for a skill
@@ -92,7 +92,7 @@ public class BasicSkills {
                 // get description
                 child = (Element) skill.getElementsByTagName("description").item(0);
                 String descString = child.getTextContent();
-                
+
                 Skills.myBiConsumer<Character, Integer> wayofpaying = (payment.equals("mana")) ? manapay : actionpay;
                 Skills.myBiConsumer<Character, Integer> wayofapp = (character, value) -> {
 //                    character.takeDameage(type, value);
@@ -115,16 +115,16 @@ public class BasicSkills {
                 //make skill and add description
                 Skills skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, aff, affected, unary, revertable);
                 skl.setDescription(descString);
-                
+
                 skillslist.add(skl);
             }
-            
+
         } catch (ParserConfigurationException | SAXException | IOException ex) {
             throw new Exception();
         }
         return skillslist;
     }
-    
+
     public static void main(String[] args) {
         try {
             List<Skills> skills = readSkills("skills.xml");
@@ -133,20 +133,20 @@ public class BasicSkills {
             fr.health = 100;
             fr.attack = 60;
             fr.defence = 30;
-            
+
             Character en = new Character();
             en.mana = 50;
             en.health = 100;
             en.attack = 60;
             en.defence = 30;
-            
+
             Skills sk = skills.get(0);
             sk.teachTo(fr);
             sk.applyTo(en);
             sk.executeSkill();
-            
+
             System.out.println("BasicSkills.main()");
-            
+
         } catch (Exception ex) {
             Logger.getLogger(BasicSkills.class.getName()).log(Level.SEVERE, null, ex);
         }

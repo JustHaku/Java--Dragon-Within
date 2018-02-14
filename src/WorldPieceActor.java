@@ -45,12 +45,12 @@ public class WorldPieceActor extends Actor {
         setPosition = img::setPosition;
 
     }
-    
+
     public WorldPieceActor(Texture imgTexture, int x, int y, int c1, int c2, int d1, int d2, ArrayList<Actor> actors) {
         this.actors = actors;
         // Draws rectange around selected piece
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
-        
+
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
@@ -61,29 +61,28 @@ public class WorldPieceActor extends Actor {
         setPosition = img::setPosition;
 
     }
-    
-    public void addAlt(int c1, int c2){
-        alt = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);                
+
+    public void addAlt(int c1, int c2) {
+        alt = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
     }
-    
-    public void setAlt(){
-        if(alt != null){
-            img.setTextureRect(alt);            
+
+    public void setAlt() {
+        if (alt != null) {
+            img.setTextureRect(alt);
         }
-        
+
     }
-    
-    void setSmooth(){
+
+    void setSmooth() {
     }
 
     @Override
-    boolean within(int px, int py){
+    boolean within(int px, int py) {
         return px > x - (piece.height * (Game.SCALE)) && px < x + (piece.height * (Game.SCALE))
                 && py > y - (piece.height * (Game.SCALE)) && py < y + (piece.height * (Game.SCALE));
     }
 
-   
-   @Override
+    @Override
     void calcMove(int minx, int miny, int maxx, int maxy) {
     }
 

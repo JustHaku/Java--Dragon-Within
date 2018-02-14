@@ -35,13 +35,12 @@ public class BattleSystem extends Menu implements State {
 
         text[2] = new Text("Escape", text_font, screenHeight / 22);
 
-        textWidth = screenWidth/36 - screenWidth/42;
-        textHeight = screenHeight/12*10;
-        textSpace = screenHeight/18;
-        for(int i=0; i<options_num; i++)
-        {
-          text[i].setPosition(textWidth, textHeight);
-          textHeight += textSpace;
+        textWidth = screenWidth / 36 - screenWidth / 42;
+        textHeight = screenHeight / 12 * 10;
+        textSpace = screenHeight / 18;
+        for (int i = 0; i < options_num; i++) {
+            text[i].setPosition(textWidth, textHeight);
+            textHeight += textSpace;
         }
 
         team_size = team.size();
@@ -112,11 +111,11 @@ public class BattleSystem extends Menu implements State {
     void playerTurn(Character attacker) {
         int length = 5;
         int width = textWidth;
-        int height = textHeight - (textHeight/10 * 3);
+        int height = textHeight - (textHeight / 10 * 3);
 
         for (int i = 0; i < length; i++) {
             if (i == 4) {
-                height += textSpace/3;
+                height += textSpace / 3;
                 attack_menu[i] = new Text("Cancel", text_font, screenHeight / 29);
             } else if (attacker.skills[i] != null) {
                 attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 29);
@@ -234,7 +233,7 @@ public class BattleSystem extends Menu implements State {
 
                                                 if (battle.type == Event.Type.CLOSED) {
                                                     window.close(); //User closes window.
-                                                    break OuterLoop ;
+                                                    break OuterLoop;
                                                 } else if (battle.type == Event.Type.KEY_PRESSED) {
                                                     if (battleEvent.key == Keyboard.Key.valueOf("S")) {
                                                         menuSound.play();

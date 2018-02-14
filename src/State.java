@@ -1,4 +1,5 @@
-public interface State
-{
-  abstract int run();
+
+public interface State {
+
+    abstract int run();
 }

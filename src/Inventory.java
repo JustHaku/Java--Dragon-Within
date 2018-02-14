@@ -7,132 +7,129 @@ import java.util.ArrayList;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 /**
  *
  * @author LBals
  */
 public class Inventory implements Serializable {
-    
+
     static final long serialVersionUID = 42L;
-    
+
     private int gold = 2000;
-    
+
     private ArrayList<Consumable> consumables = new ArrayList<>();
-    private ArrayList<Weapon> weapons = new ArrayList<>();   
+    private ArrayList<Weapon> weapons = new ArrayList<>();
     private ArrayList<Trinket> trinkets = new ArrayList<>();
     private ArrayList<KeyItem> keyItems = new ArrayList<>();
-    
-    
-    public Inventory(){
-        
+
+    public Inventory() {
+
     }
-    
-    public int getGold(){
+
+    public int getGold() {
         return gold;
     }
-    
-    public void setGold(int g){
-        gold += g;        
+
+    public void setGold(int g) {
+        gold += g;
     }
-    
-    public ArrayList<Consumable> getConsumables(){
+
+    public ArrayList<Consumable> getConsumables() {
         return consumables;
     }
-    
-    public ArrayList<Weapon> getWeapons(){
+
+    public ArrayList<Weapon> getWeapons() {
         return weapons;
     }
-    
-    public ArrayList<Trinket> getTrinkets(){
+
+    public ArrayList<Trinket> getTrinkets() {
         return trinkets;
     }
-    
-    public ArrayList<KeyItem> getKeyItems(){
+
+    public ArrayList<KeyItem> getKeyItems() {
         return keyItems;
     }
-    
-    void addItem(Item item){
-        try{
-            keyItems.add((KeyItem)item);            
-        }catch(Exception e){
+
+    void addItem(Item item) {
+        try {
+            keyItems.add((KeyItem) item);
+        } catch (Exception e) {
             System.out.println("Not a keyitem");
-                        
+
         }
-         try{
-            weapons.add((Weapon)item);            
-        }catch(Exception e){
+        try {
+            weapons.add((Weapon) item);
+        } catch (Exception e) {
             System.out.println("Not a weapon");
-                        
+
         }
-          try{
-            trinkets.add((Trinket)item);            
-        }catch(Exception e){
+        try {
+            trinkets.add((Trinket) item);
+        } catch (Exception e) {
             System.out.println("Not a trinket");
-                        
+
         }
-           try{
-            consumables.add((Consumable)item);            
-        }catch(Exception e){
+        try {
+            consumables.add((Consumable) item);
+        } catch (Exception e) {
             System.out.println("Not a consumable");
-                        
+
         }
     }
-    
-    void addKeyItem(KeyItem keyItem){
+
+    void addKeyItem(KeyItem keyItem) {
         keyItems.add(keyItem);
     }
-    
-    void addWeapon(Weapon weapon){
+
+    void addWeapon(Weapon weapon) {
         weapons.add(weapon);
     }
-    
-    void addTrinket(Trinket trinket){
+
+    void addTrinket(Trinket trinket) {
         trinkets.add(trinket);
     }
-    
-    void addConsumable(Consumable consumable){
+
+    void addConsumable(Consumable consumable) {
         consumables.add(consumable);
     }
-    
-    void removeKeyItem(int id){
-        for(KeyItem ki: keyItems){
-            if(ki.getId() == id){
+
+    void removeKeyItem(int id) {
+        for (KeyItem ki : keyItems) {
+            if (ki.getId() == id) {
                 keyItems.remove(ki);
-            }            
+            }
         }
     }
-    
-    void removeWeapon(int id){
-        for(Weapon w: weapons){
-            if(w.getId() == id){
+
+    void removeWeapon(int id) {
+        for (Weapon w : weapons) {
+            if (w.getId() == id) {
                 weapons.remove(w);
-            }            
+            }
         }
     }
-    
-    void removeTrinket(int id){
-        for(Trinket t: trinkets){
-            if(t.getId() == id){
+
+    void removeTrinket(int id) {
+        for (Trinket t : trinkets) {
+            if (t.getId() == id) {
                 trinkets.remove(t);
-            }            
+            }
         }
     }
-    
-    void removeConsumable(int id){
-        for(Consumable c: consumables){
-            if(c.getId() == id){
+
+    void removeConsumable(int id) {
+        for (Consumable c : consumables) {
+            if (c.getId() == id) {
                 consumables.remove(c);
-            }            
+            }
         }
     }
-    
-    void dumpContents(){
+
+    void dumpContents() {
         System.out.println("Consumables:");
-        for(Consumable c: consumables){
+        for (Consumable c : consumables) {
             System.out.println(c.name);
         }
     }
-    
-    
+
 }

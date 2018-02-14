@@ -8,10 +8,10 @@
  *
  * @author LBals
  */
-public class KeyItem extends Item{
-    
+public class KeyItem extends Item {
+
     public KeyItem(int id, String name) {
         super(id, name);
     }
-    
+
 }

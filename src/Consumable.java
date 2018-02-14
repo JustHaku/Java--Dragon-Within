@@ -9,35 +9,31 @@
  * @author LBals
  */
 public class Consumable extends Item {
-    
+
     private int heal;
     private int regen;
-    
-    
-    
-    public Consumable(int id,String name, int heal, int regen, int value) {
-        super(id,name);
-        
+
+    public Consumable(int id, String name, int heal, int regen, int value) {
+        super(id, name);
+
         this.value = value;
-        
+
         this.heal = heal;
         this.regen = regen;
-        
-        
-        
+
     }
-    
-    Consumable(int id, String name, Consumable c){
-        super(id,name);
+
+    Consumable(int id, String name, Consumable c) {
+        super(id, name);
         heal = c.heal;
         regen = c.regen;
         value = c.value;
-        
+
     }
-    
-    public void use(Character p){
+
+    public void use(Character p) {
         p.heal(heal);
-        p.regen(regen); 
+        p.regen(regen);
     }
-    
+
 }
