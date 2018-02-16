@@ -50,6 +50,19 @@ public class StateMachine {
         window.setIcon(icon);
 
         gameWorld = new Game(window, scale);
+        
+        try {
+            Save s = Save.load("src/saves/save000");
+            StateMachine.gameWorld.load(s);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EOFException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
         State mainMenu = new MainMenu(window, scale, 4);
 
@@ -70,6 +83,8 @@ public class StateMachine {
         states[5] = itemsMenu;
         states[6] = skillsMenu;
         states[7] = magicMenu;
+
+        
 
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);

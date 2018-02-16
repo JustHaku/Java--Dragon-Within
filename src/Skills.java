@@ -150,6 +150,14 @@ public class Skills {
         return null;
     }
 
+    public boolean needsMoreCharacters(){
+      for(int i=0; i< applyee.length; i++){
+        if( applyee[i] == null)
+          return true;
+      }
+      return false;
+    }
+
     /**
      * teaches a skill to a character
      *
@@ -166,14 +174,14 @@ public class Skills {
      *
      * @throws Skills.NotEnoughSelectedException when there aren't enough
      * characters selected to cast the skill on
-     * @throws Skills.NotEnoughResorcesToCastException when the caster has not
+     * @throws Skills.NotEnoughResourcesToCastException when the caster has not
      * got enough resources to cast the spell
      */
-    public void executeSkill() throws NotEnoughSelectedException, NotEnoughResorcesToCastException {
+    public void executeSkill() throws NotEnoughSelectedException, NotEnoughResourcesToCastException {
         try {
             consuming.accept(applier, cost);
         } catch (Exception ex) {
-            throw new NotEnoughResorcesToCastException();
+            throw new NotEnoughResourcesToCastException();
         }
 
         try {
@@ -211,10 +219,10 @@ public class Skills {
      * Exception for when the character can't cast the spell because there isn't
      * enough mana
      */
-    public static class NotEnoughResorcesToCastException extends Exception {
+    public static class NotEnoughResourcesToCastException extends Exception {
 
-        public NotEnoughResorcesToCastException() {
-            super("not enough resorses to cast this skill");
+        public NotEnoughResourcesToCastException() {
+            super("not enough resources to cast this skill");
         }
     }
 }

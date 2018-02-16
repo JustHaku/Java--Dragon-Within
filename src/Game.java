@@ -74,6 +74,8 @@ public class Game implements State, Serializable {
     private final Music closeDoor = new Music();
     private final Music stairs = new Music();
     private ArrayList<TalkNPC> npcs = new ArrayList<>();
+    private ScriptedNPC paul;
+    private ScriptedNPC simon;
 
     public static int state = 1;
 
@@ -105,6 +107,7 @@ public class Game implements State, Serializable {
 
     Weapon dagger = new Weapon(1, "Dagger", 60);
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
+    Weapon shortsword = new Weapon(3, "Short Sword", 120);
 
     public int worldNum = 0;
 
@@ -147,18 +150,26 @@ public class Game implements State, Serializable {
      */
     public void changeWorld(int w) {
         battleChance = 0;
-
-        try {
-            System.out.println("Saved");
-            s = new Save(playerInv, player1, this, Activator.activators);
-            Save.save("src/saves/save000", s);
-        } catch (IOException ex) {
-            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        
+        
+        
+        
         worldNum = w;
         String worldName = maps.get(worldNum).getWorldName();
         routeMessage = new MessageBox(Game.screenWidth - (190 * (Game.SCALE)), 0, worldName, Color.BLACK);
         routeClock.restart();
+        
+        try {
+            System.out.println("Saved");
+            s = new Save(playerInv, player1, this, Activator.activators, ScriptedNPC.scriptedNPCs);
+            Save.save("src/saves/save000", s);
+        } catch (IOException ex) {
+            Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        
 
     }
 
@@ -167,18 +178,24 @@ public class Game implements State, Serializable {
     }
 
     public void load(Save s) {
-        changeWorld(s.getWorld());
-        player1.setPosition(s.getX(), (s.getY()));
-        playerInv = s.getInventory();
+        
+        
+        
         for (Activator a : Activator.activators) {
-            System.out.println(a.activated);
             if (s.getID().get(Activator.activators.indexOf(a)) == true) {
                 a.setActivated();
             }
         }
-        for (Boolean a : s.getID()) {
-            System.out.println("Save file: " + a);
+        for (ScriptedNPC a : ScriptedNPC.scriptedNPCs) {
+            if (s.getID2().get(ScriptedNPC.scriptedNPCs.indexOf(a)) == true) {
+                a.setHad();
+            }
         }
+        worldNum = s.getWorld();
+        player1.setPosition(s.getX(), (s.getY()));
+        playerInv = s.getInventory();
+        
+        System.out.println("Loaded");
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
@@ -338,9 +355,21 @@ public class Game implements State, Serializable {
         maps.get(3).setWorldName("Orphanage 2F");
         maps.get(4).setWorldName("Bedroom 1");
         maps.get(5).setWorldName("Bedroom 2");
+        maps.get(6).setWorldName("Dustworth path 1");
+        maps.get(7).setWorldName("Freefall");
+        maps.get(8).setWorldName("???");
+        maps.get(9).setWorldName("???");
+        maps.get(10).setWorldName("???");
+        maps.get(11).setWorldName("Dustworth path 2");
+        maps.get(12).setWorldName("The Crossroads");
+        maps.get(13).setWorldName("Shorelands path");
+        maps.get(14).setWorldName("Shorelands crossing");
+        maps.get(15).setWorldName("Fisher's bay");
+        maps.get(16).setWorldName("Shorelands harbor 1");
+        maps.get(17).setWorldName("Shorelands harbor 2");
+        maps.get(18).setWorldName("Trader's Inn");
 
-        maps.get(0).setHostile();
-
+        // maps.get(0).setHostile();
     }
 
     private void initActivators() {
@@ -414,6 +443,21 @@ public class Game implements State, Serializable {
         npcs.add(new TalkNPC("Pete", constructMessage(s5), playerSpriteSheet, 1, 8, 7, 5));
         maps.get(6).getActor().add(npcs.get(4));
 
+        paul = new ScriptedNPC(playerSpriteSheet, 1, 8, 6, 5);
+        maps.get(0).getActor().add(paul);
+        paul.addDialogue(new String[]{"Hello, here are some items to get you started on your journey!."});
+        ArrayList<Item> qr = new ArrayList<>();
+        qr.add(new Consumable(potion.getId(),potion.getName(),potion));
+        qr.add(new Weapon(shortsword.getId(),shortsword.getName(),shortsword.dmg));
+        paul.addItems(qr);
+        
+        simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
+        maps.get(16).getActor().add(simon);
+        simon.addDialogue(new String[]{"Hi, my name is Stronso.", "I can take you to Flowdowth landing if you wish."});
+        simon.addOptional(new String[]{"Would you like to set sail? (Y/N)"}, new String[]{"Off we go."}, new String[]{"If you change your mind, i'll be here."});
+        simon.setCost(250);
+        simon.addTeleport(12, 6, 1);
+
     }
 
     private void loadSounds() throws IOException {
@@ -444,73 +488,61 @@ public class Game implements State, Serializable {
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
         addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
 
-        addPort(2, 0, 8, 9, 8, 5, closeDoor); //Orphanage exit
-        addPort(2, 0, 9, 9, 8, 5, closeDoor); //Orphanage exit
+        addPort(2, 0, 8, 9, 8, 6, closeDoor); //Orphanage exit
+        addPort(2, 0, 9, 9, 8, 6, closeDoor); //Orphanage exit
         addPort(2, 3, 0, 2, 35, 18, 1, 5, stairs); //Orphanage left stairs to 1st floor
         addPort(2, 3, 17, 2, 34, 18, 16, 5, stairs); //Orphanage right stairs to 1st floor
 
-        addPort(3, 2, 0, 5, 36, 18, 1, 2, stairs); //Orphanage left stairs to ground floor
-        addPort(3, 2, 17, 5, 37, 18, 16, 2, stairs); //Orphanage right stairs to ground floor
+        addPort(3, 2, 0, 5, 36, 18, 1, 3, stairs); //Orphanage left stairs to ground floor
+        addPort(3, 2, 17, 5, 37, 18, 16, 3, stairs); //Orphanage right stairs to ground floor
         addPort(3, 4, 2, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to left bedroom
         addPort(3, 5, 12, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to right bedroom
 
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
 
-        addPort(6, 7, 8, 0, 7, 8); //Path to first dungeon
-        addPort(6, 11, 17, 5, 1, 5); //Road to second forest map path
-        addPort(6, 11, 17, 6, 1, 6); //Road to second forest map path
-
-        addPort(7, 6, 7, 9, 8, 1); //First dungeon back to path
-        addPort(7, 6, 8, 9, 9, 1); //First dungeon back to path
+        addExtPort(7, 6, 7, 9, 2, "x"); //Path to first dungeon (buggy?)
+        addExtPort(6, 11, 17, 5, 2, "y"); //Road to second forest map path
 
         addPort(7, 8, 7, 4, 7, 1); //First dungeon drop
 
-        addPort(8, 9, 1, 3, 8, 3); //First dungeon escape room
+        addPort(8, 9, 1, 3, 8, 3); //First dungeon escape room (stairs)
+        addPort(9, 8, 10, 3, 3, 3); //Return to main dungeon (stairs)
+        addPort(8, 10, 16, 3, 2, 4); //First dungeon treasury/boss room (stairs)
+        addPort(9, 7, 8, 1, 7, 6); //First dungeon escape ladder (ladder)
+        addPort(10, 8, 1, 3, 14, 3); //Treasury room escape stairs to main (stairs)
 
-        addPort(8, 10, 16, 3, 2, 4); //First dungeon treasury/boss room
+        addExtPort(11, 12, 17, 5, 2, "y"); //Road to crossroads
 
-        addPort(9, 7, 8, 1, 7, 6); //First dungeon escape ladder
-        addPort(9, 8, 10, 3, 3, 3); //Escape to main dungeon teleport
+        addExtPort(12, 13, 8, 9, 3, "x"); //Crossroads to bridge
 
-        addPort(10, 8, 1, 3, 14, 3); //First dungeon escape ladder
+        addExtPort(12, 13, 1, 9, 4, "x"); //Top peek from sand to crossroads   
 
-        addPort(11, 12, 17, 5, 1, 5); //Road to third forest map path
-        addPort(11, 12, 17, 6, 1, 6); //Road to third forest map path
+        addExtPort(13, 14, 8, 9, 3, "x"); //Path above bridge
 
-        addPort(11, 6, 0, 5, 16, 5); //Road to third forest map path
-        addPort(11, 6, 0, 6, 16, 6); //Road to third forest map path
+        addExtPort(13, 14, 1, 9, 4, "x"); //Sand area above bridge
 
-        addPort(12, 11, 0, 5, 16, 5); //Road to first sand map path
-        addPort(12, 11, 0, 6, 16, 6); //Road to first sand map path
+        addExtPort(15, 14, 17, 1, 5, "y"); //Bride to main fishing area
 
-        addPort(12, 13, 8, 9, 8, 1); //Path from crossroads to fishing area
-        addPort(12, 13, 9, 9, 9, 1); //Path from crossroads to fishing area
-        addPort(12, 13, 10, 9, 10, 1); //Path from crossroads to fishing area
+        addExtPort(16, 15, 17, 1, 5, "y"); //Lower sand harbor to main fishing are
 
-        addPort(13, 12, 8, 0, 8, 8); //Return to crossroads from fishing area
-        addPort(13, 12, 9, 0, 9, 8); //Return to crossroads from fishing area
-        addPort(13, 12, 10, 0, 10, 8); //Return to crossroads from fishing area
+        addExtPort(17, 16, 14, 9, 3, "x"); //Upper sand harbor to lower sand harbor
 
-        addPort(13, 14, 8, 9, 8, 1); //Path from crossroads to fishing area
-        addPort(13, 14, 9, 9, 9, 1); //Path from crossroads to fishing area
-        addPort(13, 14, 10, 9, 10, 1); //Path from crossroads to fishing area
+        addExtPort(6, 17, 14, 9, 3, "x"); //Top peek from left sand harbor
 
-        addPort(14, 13, 8, 0, 8, 8); //Return to path from fishing area
-        addPort(14, 13, 9, 0, 9, 8); //Return to path from fishing area
-        addPort(14, 13, 10, 0, 10, 8); //Return to path from fishing area
+        addExtPort(18, 13, 17, 1, 9, "y"); //Sand house to right peek
 
-        addPort(14, 15, 0, 1, 16, 1); //Bridge to fishing area start
-        addPort(14, 15, 0, 2, 16, 2); //Bridge to fishing area start
-        addPort(14, 15, 0, 3, 16, 3); //Bridge to fishing area start
-        addPort(14, 15, 0, 4, 16, 4); //Bridge to fishing area start
-        addPort(14, 15, 0, 5, 16, 5); //Bridge to fishing area start
+        addExtPort(18, 15, 1, 9, 17, "x"); //Sand house to Fishing area
 
-        addPort(15, 14, 17, 1, 1, 1); //Return from main fishing area to path (left)
-        addPort(15, 14, 17, 2, 1, 1); //Return from main fishing area to path (left)
-        addPort(15, 14, 17, 3, 1, 1); //Return from main fishing area to path (left)
-        addPort(15, 14, 17, 4, 1, 1); //Return from main fishing area to path (left)
-        addPort(15, 14, 17, 5, 1, 1); //Return from main fishing area to path (left)
+        addExtPort(17, 18, 17, 1, 8, "y"); //Left harbor to sand house
+
+        addExtPort(11, 18, 1, 9, 9, "x"); //Top peek to sand house
+
+        addPort(6, 11, 17, 8, 1, 8); //Left peek to middle peek (sand area)
+        addPort(11, 6, 0, 8, 16, 8); //Middle peek to left peek (sand area)
+        addPort(11, 12, 17, 8, 1, 8); //Middle peek to right peek (sand area)
+        addPort(12, 11, 0, 8, 16, 8); //Right peek to middle peek (sand area)
+
     }
 
     private void referencePlayer() {
@@ -637,6 +669,14 @@ public class Game implements State, Serializable {
             for (TalkNPC n : npcs) {
                 n.drawMessage(window);
             }
+            
+            if(paul != null){
+                paul.drawMessage(window);
+            }
+            if(simon != null){
+                simon.drawMessage(window);
+            }
+            
 
             // Update the display with any changes.
             window.display();

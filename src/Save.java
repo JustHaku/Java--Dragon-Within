@@ -29,14 +29,18 @@ public class Save implements Serializable {
     private int y;
     private Inventory i;
     private ArrayList<Boolean> active = new ArrayList<>();
+    private ArrayList<Boolean> active2 = new ArrayList<>();
 
-    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a) {
+    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a, ArrayList<ScriptedNPC> ad) {
         worldNum = g.getWorldNum();
         x = p.getX();
         y = p.getY();
         this.i = i;
         for (Activator k : a) {
             active.add(k.activated);
+        }
+        for (ScriptedNPC k : ad) {
+            active2.add(k.hadItems);
         }
 
     }
@@ -59,6 +63,10 @@ public class Save implements Serializable {
 
     public ArrayList<Boolean> getID() {
         return active;
+    }
+    
+    public ArrayList<Boolean> getID2() {
+        return active2;
     }
 
     public static void save(String fn, Save s) throws FileNotFoundException, IOException {

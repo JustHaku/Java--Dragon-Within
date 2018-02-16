@@ -21,7 +21,7 @@ public class Item implements Serializable {
         this.name = name;
 
     }
-
+    
     int getId() {
         return id;
     }

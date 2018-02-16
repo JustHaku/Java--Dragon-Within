@@ -61,6 +61,15 @@ public class MessageBox {
         this.background = background;
         this.text = text;
     }
+    
+    public void editText(String s){
+        text.setString(s);
+    }
+    
+    public String getText(){
+        return text.getString();
+    }
+
 
     void draw(RenderWindow w) {
         w.draw(background);
