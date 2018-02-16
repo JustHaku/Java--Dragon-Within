@@ -52,10 +52,10 @@ public class Character extends Actor {
     @Override
     void calcMove(int minX, int minY, int maxX, int maxY) {
     }
-  void takeDamage(String type, int value)
-  {
-    health = Math.max(health-value, 0);
-  }
+
+    void takeDamage(String type, int value) {
+        health = Math.max(health - value, 0);
+    }
 
 
     /**

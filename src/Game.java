@@ -368,6 +368,7 @@ public class Game implements State, Serializable {
         maps.get(16).setWorldName("Shorelands harbor 1");
         maps.get(17).setWorldName("Shorelands harbor 2");
         maps.get(18).setWorldName("Trader's Inn");
+        
 
         // maps.get(0).setHostile();
     }
@@ -501,48 +502,49 @@ public class Game implements State, Serializable {
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
 
-        addExtPort(7, 6, 7, 9, 2, "x"); //Path to first dungeon (buggy?)
-        addExtPort(6, 11, 17, 5, 2, "y"); //Road to second forest map path
-
-        addPort(7, 8, 7, 4, 7, 1); //First dungeon drop
-
-        addPort(8, 9, 1, 3, 8, 3); //First dungeon escape room (stairs)
-        addPort(9, 8, 10, 3, 3, 3); //Return to main dungeon (stairs)
-        addPort(8, 10, 16, 3, 2, 4); //First dungeon treasury/boss room (stairs)
-        addPort(9, 7, 8, 1, 7, 6); //First dungeon escape ladder (ladder)
-        addPort(10, 8, 1, 3, 14, 3); //Treasury room escape stairs to main (stairs)
-
-        addExtPort(11, 12, 17, 5, 2, "y"); //Road to crossroads
-
-        addExtPort(12, 13, 8, 9, 3, "x"); //Crossroads to bridge
-
-        addExtPort(12, 13, 1, 9, 4, "x"); //Top peek from sand to crossroads   
-
-        addExtPort(13, 14, 8, 9, 3, "x"); //Path above bridge
-
-        addExtPort(13, 14, 1, 9, 4, "x"); //Sand area above bridge
-
-        addExtPort(15, 14, 17, 1, 5, "y"); //Bride to main fishing area
-
-        addExtPort(16, 15, 17, 1, 5, "y"); //Lower sand harbor to main fishing are
-
-        addExtPort(17, 16, 14, 9, 3, "x"); //Upper sand harbor to lower sand harbor
-
-        addExtPort(6, 17, 14, 9, 3, "x"); //Top peek from left sand harbor
-
-        addExtPort(18, 13, 17, 1, 9, "y"); //Sand house to right peek
-
-        addExtPort(18, 15, 1, 9, 17, "x"); //Sand house to Fishing area
-
-        addExtPort(17, 18, 17, 1, 8, "y"); //Left harbor to sand house
-
-        addExtPort(11, 18, 1, 9, 9, "x"); //Top peek to sand house
-
-        addPort(6, 11, 17, 8, 1, 8); //Left peek to middle peek (sand area)
-        addPort(11, 6, 0, 8, 16, 8); //Middle peek to left peek (sand area)
-        addPort(11, 12, 17, 8, 1, 8); //Middle peek to right peek (sand area)
-        addPort(12, 11, 0, 8, 16, 8); //Right peek to middle peek (sand area)
-
+        addExtPort(7,6,7,9,2,"x"); //Path to first dungeon (buggy?)
+        addExtPort(6,11,17,5,2,"y"); //Road to second forest map path
+        
+        addPort(7,8,7,4,7,1); //First dungeon drop
+         
+        addPort(8,9,1,3,8,3); //First dungeon escape room (stairs)
+        addPort(9,8,10,3,3,3); //Return to main dungeon (stairs)
+        addPort(8,10,16,3,2,4); //First dungeon treasury/boss room (stairs)
+        addPort(9,7,8,1,7,6); //First dungeon escape ladder (ladder)
+        addPort(10,8,1,3,14,3); //Treasury room escape stairs to main (stairs)
+       
+        addExtPort(11,12,17,5,2,"y"); //Road to crossroads
+        
+        addExtPort(12,13,8,9,3,"x"); //Crossroads to bridge
+     
+        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads   
+   
+        addExtPort(13,14,8,9,3,"x"); //Path above bridge
+        
+        addExtPort(13,14,1,9,4,"x"); //Sand area above bridge
+       
+        addExtPort(15,14,17,1,5,"y"); //Bride to main fishing area
+        
+        addExtPort(16,15,17,1,5,"y"); //Lower sand harbor to main fishing are
+    
+        addExtPort(17,16,14,9,3,"x"); //Upper sand harbor to lower sand harbor
+        
+        addExtPort(6,17,14,9,3,"x"); //Top peek from left sand harbor
+        
+        addExtPort(18,13,17,1,9,"y"); //Sand house to right peek
+        
+        addExtPort(18,15,1,9,17,"x"); //Sand house to Fishing area
+        
+        addExtPort(17,18,17,1,8,"y"); //Left harbor to sand house
+        
+        addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
+        
+        addPort(6,11,17,8,1,8); //Left peek to middle peek (sand area)
+        addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
+        addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
+        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
+        
+        
     }
 
     private void referencePlayer() {
