@@ -15,39 +15,39 @@ import org.jsfml.audio.*;
  */
 public class MagicMenu extends Menu implements State {
 
-    /*private RenderWindow window;
-  private int scale;
-  private Font text_font;*/
+    private RenderWindow window;
+    private int scale;
+    private Font text_font;
     private boolean paused = false;
-    /*private int screenHeight;
-  private int screenWidth;*/
+    private int screenHeight;
+    private int screenWidth;
     private RectangleShape menuRect;
     private RectangleShape playerRect;
     public static boolean returnTo = false;
 
     public MagicMenu(RenderWindow window, int scale, int options_num) throws IOException {
-        menuWindow(window, scale, options_num);
-        /*this.window = window;
-    this.scale = scale;
-    screenHeight = 160*scale;
-    screenWidth = 288*scale;
-    option = 1;
-    
-    text_font = new Font();
-    text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
-    
-    menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
-    menuRect.setFillColor(new Color(11,2,138));
-    menuRect.setPosition(5,5);
+      menuWindow(window, scale, options_num);
+      this.window = window;
+      this.scale = scale;
+      screenHeight = 160*scale;
+      screenWidth = 288*scale;
+      option = 1;
+      
+      text_font = new Font();
+      text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
+      
+      menuRect = new RectangleShape(new Vector2f((screenWidth/4)*3, screenHeight - 10));
+      menuRect.setFillColor(new Color(11,2,138));
+      menuRect.setPosition(5,5);
 
-    playerRect = new RectangleShape(new Vector2f((screenWidth/4) - 15, screenHeight - 10));
-    playerRect.setFillColor(new Color(11,2,138));
-    playerRect.setPosition(((screenWidth/4)*3)+10,5);
-    
-    text[0] = new Text("Magic", text_font, screenHeight / 15);
-    bounds = text[0].getLocalBounds();
-    text[0].setOrigin(bounds.width / 2, bounds.height / 2);
-    text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);*/
+      playerRect = new RectangleShape(new Vector2f((screenWidth/4) - 15, screenHeight - 10));
+      playerRect.setFillColor(new Color(11,2,138));
+      playerRect.setPosition(((screenWidth/4)*3)+10,5);
+      
+      text[0] = new Text("Magic", text_font, screenHeight / 15);
+      bounds = text[0].getLocalBounds();
+      text[0].setOrigin(bounds.width / 2, bounds.height / 2);
+      text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
     }
 
     /*

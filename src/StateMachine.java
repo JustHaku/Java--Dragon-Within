@@ -29,17 +29,13 @@ public class StateMachine {
         locked = locked != true;
     }
 
-    public StateMachine(int scale) {
-        this.scale = scale;
-    }
-
     /**
      * Changes states/ screens when given the relevent number.
      */
     public int run() throws InterruptedException, IOException {
         int screenWidth = 288;
         int screenHeight = 160;
-        //int scale = VideoMode.getDesktopMode().height/160;
+        scale = VideoMode.getDesktopMode().height/160;
 
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
