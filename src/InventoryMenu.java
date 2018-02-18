@@ -179,7 +179,7 @@ public class InventoryMenu extends Menu implements State {
                                             if (hover <= 0) {
                                                 hover = 0;
                                             }
-                                        } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
+                                        /*} else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
                                             if (selected == false) {
                                                 select = hover;
                                                 selected = true;
@@ -201,7 +201,7 @@ public class InventoryMenu extends Menu implements State {
                                                     select = -1;
                                                     selected = false;
                                                 }
-                                            }
+                                            }*/
                                         } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
                                             breakOut = true;
                                             hover = -1;
