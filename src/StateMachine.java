@@ -67,7 +67,7 @@ public class StateMachine {
 
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
-        State settingsMenu = new SettingsMenu(window, scale, 3);
+        State credits = new Credits(window, scale);
         State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv);
         State skillsMenu = new SkillsMenu(window, scale, 0, team);
         State magicMenu = new MagicMenu(window, scale, 0, team);
@@ -75,7 +75,7 @@ public class StateMachine {
         states[1] = gameWorld;
         states[2] = battleSystem;
         states[3] = inventoryMenu;
-        states[4] = settingsMenu;
+        states[4] = credits;
         states[5] = itemsMenu;
         states[6] = skillsMenu;
         states[7] = magicMenu;

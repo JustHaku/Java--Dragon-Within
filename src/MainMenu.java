@@ -53,7 +53,7 @@ public class MainMenu extends Menu implements State {
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
         text[1].setPosition(screenWidth / 2, screenHeight / 4 + screenHeight / 10);
 
-        text[2] = new Text("Settings", text_font, screenHeight / 10);
+        text[2] = new Text("Credits", text_font, screenHeight / 10);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
         text[2].setPosition(screenWidth / 2, screenHeight / 4 + screenHeight / 5);
@@ -128,8 +128,8 @@ public class MainMenu extends Menu implements State {
                             }
                             option = 1; // game world.
                         } else if (option == 3) {
-                            SettingsMenu.returnTo = 0; // tells the inv menu where you returned from.
-                            option = 106; // settings menu.
+                            Credits.returnTo = 0; // tells the inv menu where you returned from.
+                            option = 4; // settings menu.
                         } else if (option == 4) {
                             window.close();
                         }

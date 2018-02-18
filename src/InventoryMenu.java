@@ -77,7 +77,7 @@ public class InventoryMenu extends Menu implements State {
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
 
-        text[4] = new Text("Config", text_font, screenHeight / 15);
+        text[4] = new Text("Credits", text_font, screenHeight / 15);
         bounds = text[4].getLocalBounds();
         text[4].setOrigin(bounds.width / 2, bounds.height / 2);
         text[4].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 13);
@@ -100,9 +100,9 @@ public class InventoryMenu extends Menu implements State {
     public int run() {
         paused = false;
         // sets which item on the menu to be selected on return.
-        if (SettingsMenu.returnTo == 3) {
+        if (Credits.returnTo == 3) {
             option = 5;
-            SettingsMenu.returnTo = 0;
+            Credits.returnTo = 0;
         } else if (ItemsMenu.returnTo == true) {
             option = 2;
             ItemsMenu.returnTo = false;
@@ -242,7 +242,7 @@ public class InventoryMenu extends Menu implements State {
                             } else if (option == 4) {
                                 option = 7;
                             } else if (option == 5) {
-                                SettingsMenu.returnTo = 3;
+                                Credits.returnTo = 3;
                                 option = 4;
                             } else if (option == 6) {
                                 option = 0;
