@@ -29,17 +29,13 @@ public class StateMachine {
         locked = locked != true;
     }
 
-    public StateMachine(int scale) {
-        this.scale = scale;
-    }
-
     /**
      * Changes states/ screens when given the relevent number.
      */
     public int run() throws InterruptedException, IOException {
         int screenWidth = 288;
         int screenHeight = 160;
-        //int scale = VideoMode.getDesktopMode().height/160;
+        scale = VideoMode.getDesktopMode().height/160;
 
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
@@ -71,15 +67,15 @@ public class StateMachine {
 
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
-        State settingsMenu = new SettingsMenu(window, scale, 3);
-        State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv);
-        State skillsMenu = new SkillsMenu(window, scale, 1);
-        State magicMenu = new MagicMenu(window, scale, 1);
+        State credits = new Credits(window, scale);
+        State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv, team);
+        State skillsMenu = new SkillsMenu(window, scale, 0, team);
+        State magicMenu = new MagicMenu(window, scale, 0, team);
         states[0] = mainMenu;
         states[1] = gameWorld;
         states[2] = battleSystem;
         states[3] = inventoryMenu;
-        states[4] = settingsMenu;
+        states[4] = credits;
         states[5] = itemsMenu;
         states[6] = skillsMenu;
         states[7] = magicMenu;

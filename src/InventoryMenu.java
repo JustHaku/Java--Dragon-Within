@@ -49,11 +49,9 @@ public class InventoryMenu extends Menu implements State {
             teamRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 6 - 10)));
             (teamRect.get(i)).setFillColor(new Color(50, 45, 138));
             (teamRect.get(i)).setPosition(10, 10 + ((screenHeight / 6 - 2) * i));
-            //int[] stats = (team.get(i)).getStats();
-            //teamText.add(new Text((team.get(i)).name + "     LV: " + i + "\nHP:" + stats[2] + " / " + stats[3] + "     MP:" + stats[1] + " / " + stats[0], text_font, screenHeight/15));
             teamText.add(new Text((team.get(i)).name + "     LV: " + (team.get(i)).level + "\nHP:"
-                    + (team.get(i)).max_health + " / " + (team.get(i)).health + "     MP:"
-                    + (team.get(i)).max_mana + " / " + (team.get(i)).mana, text_font, screenHeight / 15));
+                    + (team.get(i)).health + " / " + (team.get(i)).max_health + "     MP:"
+                    + (team.get(i)).mana + " / " + (team.get(i)).max_mana, text_font, screenHeight / 15));
             (teamText.get(i)).setPosition(15, 5 + ((screenHeight / 6 - 2) * i));
         }
 
@@ -77,7 +75,7 @@ public class InventoryMenu extends Menu implements State {
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
         text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
 
-        text[4] = new Text("Config", text_font, screenHeight / 15);
+        text[4] = new Text("Credits", text_font, screenHeight / 15);
         bounds = text[4].getLocalBounds();
         text[4].setOrigin(bounds.width / 2, bounds.height / 2);
         text[4].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 13);
@@ -100,9 +98,9 @@ public class InventoryMenu extends Menu implements State {
     public int run() {
         paused = false;
         // sets which item on the menu to be selected on return.
-        if (SettingsMenu.returnTo == 3) {
+        if (Credits.returnTo == 3) {
             option = 5;
-            SettingsMenu.returnTo = 0;
+            Credits.returnTo = 0;
         } else if (ItemsMenu.returnTo == true) {
             option = 2;
             ItemsMenu.returnTo = false;
@@ -179,7 +177,8 @@ public class InventoryMenu extends Menu implements State {
                                             if (hover <= 0) {
                                                 hover = 0;
                                             }
-                                        } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
+                                            //loadout
+                                        /*} else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
                                             if (selected == false) {
                                                 select = hover;
                                                 selected = true;
@@ -201,7 +200,7 @@ public class InventoryMenu extends Menu implements State {
                                                     select = -1;
                                                     selected = false;
                                                 }
-                                            }
+                                            }*/
                                         } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
                                             breakOut = true;
                                             hover = -1;
@@ -242,7 +241,7 @@ public class InventoryMenu extends Menu implements State {
                             } else if (option == 4) {
                                 option = 7;
                             } else if (option == 5) {
-                                SettingsMenu.returnTo = 3;
+                                Credits.returnTo = 3;
                                 option = 4;
                             } else if (option == 6) {
                                 option = 0;
