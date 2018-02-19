@@ -25,7 +25,7 @@ public class Skills {
     private int value;
 
     Character applier;
-    private Character[] targets;
+    private Character[] applyee;
     private myBiConsumer<Character, Integer> consuming;
     private myBiConsumer<Character, Integer> applying;
     public final int affects;
@@ -59,7 +59,7 @@ public class Skills {
         unary = isUnary;
         revertable = isRevertable;
 
-        this.targets = new Character[affected];
+        this.applyee = new Character[affected];
         this.affects = affects;
     }
 
@@ -84,13 +84,13 @@ public class Skills {
     /**
      * Adds a character that this skill needs to be applied to
      *
-     * @param target character that this skill needs to be applied to
+     * @param applyee character that this skill needs to be applied to
      */
-    public void applyTo(Character target) {
+    public void applyTo(Character applyee) {
 
-        for (int i = 0; i < this.targets.length; i++) {
-            if (this.targets[i] == null) {
-                this.targets[i] = target;
+        for (int i = 0; i < this.applyee.length; i++) {
+            if (this.applyee[i] == null) {
+                this.applyee[i] = applyee;
                 break;
             }
         }
@@ -101,8 +101,8 @@ public class Skills {
      * on.
      */
     public void unBindAll() {
-        for (int i = 0; i < this.targets.length; i++) {
-            this.targets[i] = null;
+        for (int i = 0; i < this.applyee.length; i++) {
+            this.applyee[i] = null;
         }
     }
 
@@ -150,21 +150,12 @@ public class Skills {
         return null;
     }
 
-    /**
-     * Checks whether you would needs more targets to apply this skill to
-     *
-     * @return
-     */
-    public boolean needsMoreTargets() {
-
-        return targets[targets.length - 1] == null;
-
-//        for (int i = 0; i < targets.length; i++) {
-//            if (targets[i] == null) {
-//                return true;
-//            }
-//        }
-//        return false;
+    public boolean needsMoreCharacters(){
+      for(int i=0; i< applyee.length; i++){
+        if( applyee[i] == null)
+          return true;
+      }
+      return false;
     }
 
     /**
@@ -175,21 +166,6 @@ public class Skills {
     public void teachTo(Character dude) {
         applier = dude;
         dude.addSkill(this);
-    }
-
-    /**
-     * Checks whether the caster has enough resources to cast the ability
-     *
-     * @return
-     */
-    public boolean canItBeCast() {
-        try {
-            consuming.accept(applier, cost);
-            consuming.accept(applier, -cost);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
     /**
@@ -209,7 +185,7 @@ public class Skills {
         }
 
         try {
-            for (Character ap : targets) {
+            for (Character ap : applyee) {
                 applying.accept(ap, applier.attack + value);
             }
         } catch (Exception e) {
