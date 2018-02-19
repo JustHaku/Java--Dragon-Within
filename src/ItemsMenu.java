@@ -30,9 +30,11 @@ public class ItemsMenu extends Menu implements State {
     public static boolean returnTo = false;
     public Game g;
     private Inventory playInv;
+    private ArrayList<Character> team;
 
-    public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv) throws IOException {
+    public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv, ArrayList<Character> team) throws IOException {
         menuWindow(window, scale, options_num);
+        this.team = team; 
         /*this.window = window;
         this.scale = scale;
         screenHeight = 160 * scale;
@@ -88,6 +90,7 @@ public class ItemsMenu extends Menu implements State {
         option = 1;
         showSelection(text, option);
         items = StateMachine.gameWorld.playerInv.getConsumables(); // gets first inventory.
+        boolean closeReq = false;
 
         // sets up rectangles and text for items.
         for (int i = 0; i < items.size(); i++) {
@@ -117,7 +120,7 @@ public class ItemsMenu extends Menu implements State {
             for (Event event : window.pollEvents()) {
                 KeyEvent keyEvent = event.asKeyEvent();
 
-                if (event.type == Event.Type.CLOSED) {
+                if (event.type == Event.Type.CLOSED || closeReq == true) {
                     window.close();
                 } else if (event.type == Event.Type.KEY_PRESSED) {
                     if (keyEvent.key == Keyboard.Key.valueOf("S")) {
@@ -138,7 +141,117 @@ public class ItemsMenu extends Menu implements State {
                         option--;
                         if (option <= 1) {
                             option = 1;
+                        }                        
+                    } else if (keyEvent.key == Keyboard.Key.valueOf("E") && option == 1 && items.size() != 0) {
+                      int hover = 0;
+                      boolean breakOut = false; // used to escape second loop.
+
+                      while (breakOut == false) {
+                        for (Event events : window.pollEvents()) {
+                          KeyEvent keyEvents = events.asKeyEvent();
+
+                          if (events.type == Event.Type.CLOSED) {
+                              closeReq = true;
+                              breakOut = true;
+                          } else if (events.type == Event.Type.KEY_PRESSED) {
+                              if (keyEvents.key == Keyboard.Key.valueOf("S")) {
+                                  menuSound.play();
+                                  hover++;                                  
+                              } else if (keyEvents.key == Keyboard.Key.valueOf("W")) {
+                                  menuSound.play();
+                                  hover--;                                  
+                              } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
+                                int selected = 0;
+                                boolean breakOut2 = false; // used to escape second loop.
+                                ArrayList<Text> teamText = new ArrayList<>();
+                                
+                                for (int i = 0; i < team.size(); i++) {
+                                  teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+                                  bounds = teamText.get(i).getLocalBounds();
+                                  teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
+                                  teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
+                                } 
+
+                                while (breakOut2 == false) {                                  
+                                  for (Event events2 : window.pollEvents()) {
+                                    KeyEvent keyEvents2 = events2.asKeyEvent();
+
+                                    if (events2.type == Event.Type.CLOSED) {
+                                        closeReq = true;
+                                        breakOut = true;
+                                        breakOut2 = true;
+                                    } else if (events2.type == Event.Type.KEY_PRESSED) {
+                                        if (keyEvents2.key == Keyboard.Key.valueOf("S")) {
+                                            menuSound.play();
+                                            selected ++;                                            
+                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("W")) {
+                                            menuSound.play();
+                                            selected --;                                            
+                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("E")) {
+                                          ((Consumable)items.get(hover)).use(team.get(selected));
+                                          items.remove(hover);
+                                          breakOut2 = true;
+                                          breakOut = true;
+                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("ESCAPE")) {
+                                          breakOut2 = true;
+                                        }
+                                    }
+                                  }
+                                  if (selected >= team.size()) {
+                                      selected = team.size() - 1;
+                                  }
+                                  else if (selected <= 0) {
+                                      selected = 0;
+                                  }
+                                  window.clear(Color.BLACK);
+                                  window.draw(menuRect);
+                                  window.draw(playerRect);
+                                  for (int i = 0; i < team.size(); i++) {              
+                                    teamText.get(i).setColor(Color.WHITE);
+                                    teamText.get(selected).setColor(Color.BLACK);
+                                    window.draw(teamText.get(i));
+                                  }
+                                  
+                                  // resets items menu.
+                                  for (int i = 0; i < itemRect.size(); i++) {
+                                      window.draw(itemRect.get(i));
+                                      window.draw(itemText.get(i));
+                                  }
+
+                                  window.display();
+                                }                                  
+                              } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
+                                  breakOut = true;
+                                  for (int i = 0; i < itemRect.size(); i++) {
+                                      (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                  }
+                              }
+                          }
+                          if (hover >= items.size()) {
+                              hover = items.size() - 1;
+                          }
+                          else if (hover <= 0) {
+                              hover = 0;
+                          }
+                          window.clear(Color.BLACK);
+                          window.draw(menuRect);
+                          window.draw(playerRect);
+                          drawText(text);
+                          
+                          // resets items menu.
+                          for (int i = 0; i < itemRect.size(); i++) {
+                              if (hover == i) {
+                                  (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
+                              } else {
+                                  (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                              }
+                              window.draw(itemRect.get(i));
+                              window.draw(itemText.get(i));
+                          }
+
+                          window.display();
                         }
+                      }                        
                     } else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
                         paused = true;
                     }
