@@ -155,6 +155,7 @@ public class Game implements State, Serializable {
         
         
         worldNum = w;
+        
         String worldName = maps.get(worldNum).getWorldName();
         routeMessage = new MessageBox(Game.screenWidth - (190 * (Game.SCALE)), 0, worldName, Color.BLACK);
         routeClock.restart();
