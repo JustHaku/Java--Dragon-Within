@@ -91,6 +91,8 @@ public class ItemsMenu extends Menu implements State {
         showSelection(text, option);
         items = StateMachine.gameWorld.playerInv.getConsumables(); // gets first inventory.
         boolean closeReq = false;
+        itemRect = new ArrayList<>();
+        itemText = new ArrayList<>(); 
 
         // sets up rectangles and text for items.
         for (int i = 0; i < items.size(); i++) {
@@ -171,6 +173,17 @@ public class ItemsMenu extends Menu implements State {
                                   teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
                                   teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
                                 } 
+                                
+                                itemRect = new ArrayList<>();
+                                itemText = new ArrayList<>(); 
+                                for (int i = 0; i < items.size(); i++) {
+                                    itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                                    (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                    (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+
+                                    itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                                    (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                                }
 
                                 while (breakOut2 == false) {                                  
                                   for (Event events2 : window.pollEvents()) {
@@ -219,7 +232,17 @@ public class ItemsMenu extends Menu implements State {
                                   }
 
                                   window.display();
-                                }                                  
+                                }
+                                itemRect = new ArrayList<>();
+                                itemText = new ArrayList<>(); 
+                                for (int i = 0; i < items.size(); i++) {
+                                    itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                                    (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                    (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+
+                                    itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                                    (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                                }
                               } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
                                   breakOut = true;
                                   for (int i = 0; i < itemRect.size(); i++) {
@@ -251,7 +274,17 @@ public class ItemsMenu extends Menu implements State {
 
                           window.display();
                         }
-                      }                        
+                      }
+                      itemRect = new ArrayList<>();
+                      itemText = new ArrayList<>(); 
+                      for (int i = 0; i < items.size(); i++) {
+                          itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                          (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                          (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+
+                          itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                          (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                      }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
                         paused = true;
                     }
