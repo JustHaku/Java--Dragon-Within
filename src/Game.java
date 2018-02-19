@@ -367,7 +367,10 @@ public class Game implements State, Serializable {
         maps.get(15).setWorldName("Fisher's bay");
         maps.get(16).setWorldName("Shorelands harbor 1");
         maps.get(17).setWorldName("Shorelands harbor 2");
-        maps.get(18).setWorldName("Trader's Inn");
+        maps.get(18).setWorldName("Trader's Meet");
+        maps.get(19).setWorldName("Trader's Inn");
+        maps.get(20).setWorldName("Windy Crossing 1");
+        maps.get(20).setWorldName("Windy Crossing 2");
         
 
         // maps.get(0).setHostile();
