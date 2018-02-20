@@ -247,6 +247,8 @@ public class BattleSystem extends Menu implements State {
                             boolean turn_end = false;
                             boolean fight_end = false;
                             boolean victory = false;
+                            int dead_counter_team = 0;
+                            int dead_counter_enemy = 0;
 
                             while (fight_end == false) {
                                 for (int x = 0; x < characters_num; x++) {
@@ -262,7 +264,7 @@ public class BattleSystem extends Menu implements State {
                                         boolean pressed = false;
                                         boolean has_chosen = false;
                                         System.out.println("It's " + attacker.name + "'s turn!\n");
-
+                                        System.out.println("fight option is "+fight_option);
                                         while (window.isOpen() && turn_end == false) {
                                             window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
                                             drawText(attack_menu);
@@ -282,6 +284,8 @@ public class BattleSystem extends Menu implements State {
                                                       if (fight_option != 5) {
                                                           fight_option++;
                                                       }
+                                                      /*********/
+                                                      System.out.println("fight option is "+fight_option);
                                                     }
                                                     else if (battleEvent.key == Keyboard.Key.valueOf("W") && !pressed) {
                                                       pressed = true;
@@ -289,9 +293,12 @@ public class BattleSystem extends Menu implements State {
                                                       if (fight_option != 1) {
                                                           fight_option--;
                                                       }
+                                                      /**********/
+                                                      System.out.println("fight option is "+fight_option);
                                                     }
                                                     else if (battleEvent.key == Keyboard.Key.valueOf("E") && !pressed)
                                                     {
+                                                      System.out.println("Chosen fight option is "+fight_option);
                                                       pressed = true;
                                                       int range_low = 0;
                                                       int range_high = characters_num-1;
@@ -314,7 +321,8 @@ public class BattleSystem extends Menu implements State {
                                                           }
                                                           char_select = range_low;
                                                           //ContinueAttack:
-
+                                                          /*********/
+                                                          System.out.println("Range high: "+range_high+"\nRange low: "+range_low);
                                                           /***HERE IS APPLYEE SELECTION, EXIT LOOP ONCE SELECTED***/
                                                           while (skill.needsMoreTargets())
                                                           {
@@ -324,6 +332,7 @@ public class BattleSystem extends Menu implements State {
                                                               for (Event selectSomeone : window.pollEvents())
                                                               {
                                                                 KeyEvent select = selectSomeone.asKeyEvent();
+                                                                //int sign = 1;
 
                                                                 if (selectSomeone.type == Event.Type.CLOSED)
                                                                 {
@@ -335,31 +344,85 @@ public class BattleSystem extends Menu implements State {
                                                                   if (select.key == Keyboard.Key.valueOf("A"))
                                                                   {
                                                                     menuSound.play();
-                                                                    if(char_select != range_low)
+                                                                    char_select--;
+                                                                    //sign = -1;
+                                                                    //IF ENEMY IS DEAD, GO TO NEXT ENEMY, IF ALL DEAD, EXIT
+                                                                    if(char_select < range_low)
+                                                                      char_select = range_high;
+                                                                      /*
+                                                                    while(!battle_participants[char_select].isAlive)
+                                                                    {
+                                                                      if(dead_counter_enemy == team_size)
+                                                                        break;
                                                                       char_select--;
+                                                                      if(char_select < range_low)
+                                                                        char_select = range_high;
+                                                                      dead_counter_enemy++;
+                                                                    }*/
+
                                                                   }
                                                                   else if(select.key == Keyboard.Key.valueOf("D"))
                                                                   {
                                                                     menuSound.play();
-                                                                    if(char_select != range_high)
+                                                                    char_select++;
+                                                                    //sign = 1;
+                                                                    if(char_select > range_high)
+                                                                      char_select = range_low;
+                                                                      /*
+                                                                    while(!battle_participants[char_select].isAlive)
+                                                                    {
+                                                                      if(dead_counter_enemy == team_size)
+                                                                        break;
                                                                       char_select++;
+                                                                      if(char_select > range_high)
+                                                                        char_select = range_low;
+                                                                      dead_counter_enemy++;
+                                                                    }
+                                                                    */
+
                                                                   }
                                                                   else if(select.key == Keyboard.Key.valueOf("E"))
                                                                   {
                                                                     has_chosen = true;
                                                                   }
+
+
+                                                                  /****TRYING TO FIND DEAD CHARS AND REMOVE FROM SELECTION****/
+                                                                  /*System.out.println("Before while loop: "+ char_select);
+                                                                  while(true)
+                                                                  {
+                                                                    if(char_select < range_low)
+                                                                      char_select = range_high;
+                                                                    else if(char_select > range_high)
+                                                                      char_select = range_low;
+                                                                    if(!battle_participants[char_select].isAlive)
+                                                                      char_select += sign*1;
+                                                                    else
+                                                                      break;
+                                                                    System.out.println("after one iteration " + char_select );
+                                                                  }
+                                                                  System.out.println("after while loop: "+ char_select);*/
+
+
+
+
+
                                                                 }
                                                               }
                                                             }
                                                             skill.addTarget(battle_participants[char_select]);
+                                                            System.out.println("Selected target is number: "+char_select);
                                                           }
 
 
 
                                                           try
                                                           {
+                                                            System.out.println("Before exec, health is: "+battle_participants[char_select].health);
                                                             skill.executeSkill();
-                                                            skill.getReverted();
+                                                            System.out.println("After exec, health is: "+battle_participants[char_select].health);
+                                                            if(skill.revertable)
+                                                              revertibles.add(skill.getReverted());
                                                             //TODO gget the reversable from the skill and add it to a list
                                                           }
                                                           catch(Exception e)
@@ -367,6 +430,7 @@ public class BattleSystem extends Menu implements State {
                                                             e.printStackTrace();
                                                           }
                                                           skill.unBindAll();
+                                                          System.out.println("Removing targets");
                                                           turn_end = true;
 
                                                         }
@@ -412,8 +476,7 @@ public class BattleSystem extends Menu implements State {
                                      * *TESTING THAT A TEAM IS DEAD - END
                                      * BATTLE**
                                      */
-                                    int dead_counter_team = 0;
-                                    int dead_counter_enemy = 0;
+
                                     for (int i = 0; i < characters_num; i++) {
                                         if (battle_participants[i].isAlive == false) {
                                             if (i < team_size) {
