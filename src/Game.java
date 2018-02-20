@@ -370,7 +370,8 @@ public class Game implements State, Serializable {
         maps.get(18).setWorldName("Trader's Meet");
         maps.get(19).setWorldName("Trader's Inn");
         maps.get(20).setWorldName("Windy Crossing 1");
-        maps.get(20).setWorldName("Windy Crossing 2");
+        maps.get(21).setWorldName("Windy Crossing 2");
+        maps.get(21).setWorldName("The Withered forest");
         
 
         // maps.get(0).setHostile();
@@ -518,6 +519,9 @@ public class Game implements State, Serializable {
         addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
         addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
         addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)  
+        addPort(22,23,4,4,8,8); //Cave stairs
+        addPort(22,23,4,5,8,8); //Cave stairs
+        addPort(23,22,8,0,6,4); //Cave escape ladder
        
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
@@ -537,7 +541,8 @@ public class Game implements State, Serializable {
         addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
         addExtPort(20,12,8,9,3,"x"); //Path to main city from crossroads
         addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
-  
+        addExtPort(22,21,17,3,4,"y"); //Path to cave
+        addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
         
         
     }
@@ -653,9 +658,10 @@ public class Game implements State, Serializable {
                 trader2.drawMessage(window);
             }
 
-            //if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
-            if (routeMessage != null) {
-                routeMessage.draw(window);
+            if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
+             if (routeMessage != null) {
+                    routeMessage.draw(window);
+             }
 
             }
 
