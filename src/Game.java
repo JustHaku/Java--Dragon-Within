@@ -379,6 +379,8 @@ public class Game implements State, Serializable {
         maps.get(19).setWorldName("Trader's Inn");
         maps.get(20).setWorldName("Windy Crossing 1");
         maps.get(21).setWorldName("Windy Crossing 2");
+        maps.get(21).setWorldName("The Withered forest");
+        
 
         maps.get(6).setHostile();
         maps.get(7).setHostile();
