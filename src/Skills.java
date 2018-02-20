@@ -72,11 +72,11 @@ public class Skills {
     }
 
     /**
-     * Adds a character that this skill needs to be applied to
+     * Adds a target that this skill needs to be applied to
      *
      * @param applyee character that this skill needs to be applied to
      */
-    public void applyTo(Character applyee) {
+    public void addTarget(Character applyee) {
 
         for (int i = 0; i < this.targets.length; i++) {
             if (this.targets[i] == null) {

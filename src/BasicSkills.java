@@ -227,7 +227,7 @@ public class BasicSkills {
 
             Skills sk = fireball;
             sk.teachTo(fr);
-            sk.applyTo(en);
+            sk.addTarget(en);
             sk.executeSkill();
 
 //            System.out.println("BasicSkills.main()");
