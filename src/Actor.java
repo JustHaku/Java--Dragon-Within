@@ -3,6 +3,7 @@ import java.util.function.BiConsumer;
 import java.util.function.IntConsumer;
 import org.jsfml.graphics.Drawable;
 import org.jsfml.graphics.RenderWindow;
+import org.jsfml.graphics.*;
 
 /**
  * Abstract class to be extended for adding collision into the game.
@@ -11,9 +12,14 @@ import org.jsfml.graphics.RenderWindow;
  */
 public abstract class Actor {
 
-    Drawable obj; //The object to set for collision.
-    IntConsumer rotate;
-    BiConsumer<Float, Float> setPosition;
+    protected int c1, c2;
+    protected Sprite img;
+    protected IntRect state;  // The Players current character model from the spritesheet.
+    protected Drawable obj; //The object to set for collision.
+    protected IntConsumer rotate;
+    protected BiConsumer<Float, Float> setPosition;
+
+    protected final float ps = (float) 1;
 
     int x = 0;	// Current X-coordinate.
     int y = 0;	// Current Y-coordinate.

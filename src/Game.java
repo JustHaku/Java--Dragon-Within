@@ -60,8 +60,8 @@ public class Game implements State, Serializable {
 
     //private Event event;
     // Textures for the game.
+    public static final Texture playerSpriteSheet = new Texture();
     public final Texture worldSpriteSheet = new Texture();
-    public final Texture playerSpriteSheet = new Texture();
     public final Texture barrierTexture = new Texture();
     public final Texture uiTexture = new Texture();
 
@@ -150,15 +150,15 @@ public class Game implements State, Serializable {
      */
     public void changeWorld(int w) {
         battleChance = 0;
-        
-        
-        
-        
+
+
+
+
         worldNum = w;
         String worldName = maps.get(worldNum).getWorldName();
         routeMessage = new MessageBox(Game.screenWidth - (190 * (Game.SCALE)), 0, worldName, Color.BLACK);
         routeClock.restart();
-        
+
         try {
             System.out.println("Saved");
             s = new Save(playerInv, player1, this, Activator.activators, ScriptedNPC.scriptedNPCs);
@@ -166,10 +166,10 @@ public class Game implements State, Serializable {
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        
-        
-        
+
+
+
+
 
     }
 
@@ -178,9 +178,9 @@ public class Game implements State, Serializable {
     }
 
     public void load(Save s) {
-        
-        
-        
+
+
+
         for (Activator a : Activator.activators) {
             if (s.getID().get(Activator.activators.indexOf(a)) == true) {
                 a.setActivated();
@@ -194,7 +194,7 @@ public class Game implements State, Serializable {
         worldNum = s.getWorld();
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
-        
+
         System.out.println("Loaded");
     }
 
@@ -208,12 +208,12 @@ public class Game implements State, Serializable {
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
-                    //battleChance++;
+                    battleChance+=5;
 
                 } else if (footstepsState == 1) {
                     footsteps2.play();
                     footstepsState = 0;
-                    //battleChance++;
+                    battleChance+=5;
 
                 }
                 footstepsTimer.restart();
@@ -371,7 +371,7 @@ public class Game implements State, Serializable {
         maps.get(19).setWorldName("Trader's Inn");
         maps.get(20).setWorldName("Windy Crossing 1");
         maps.get(20).setWorldName("Windy Crossing 2");
-        
+
 
         // maps.get(0).setHostile();
     }
@@ -454,7 +454,7 @@ public class Game implements State, Serializable {
         qr.add(new Consumable(potion.getId(),potion.getName(),potion));
         qr.add(new Weapon(shortsword.getId(),shortsword.getName(),shortsword.dmg));
         paul.addItems(qr);
-        
+
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
         maps.get(16).getActor().add(simon);
         simon.addDialogue(new String[]{"Hi, my name is Stronso.", "I can take you to Flowdowth landing if you wish."});
@@ -503,7 +503,7 @@ public class Game implements State, Serializable {
         addPort(3, 5, 12, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to right bedroom
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
-        
+
         addPort(6,7,8,0,7,8); //Path to first dungeon
         addPort(6,7,9,0,8,8); //Path to first dungeon
         addPort(7,6,7,9,8,1); //Path from first dungeon
@@ -517,14 +517,14 @@ public class Game implements State, Serializable {
         addPort(6,11,17,8,1,8); //Left peek to middle peek (sand area)
         addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
         addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
-        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)  
-       
+        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
+
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
         addExtPort(6,11,17,5,2,"y"); //Road to second forest map path
         addExtPort(11,12,17,5,2,"y"); //Road to crossroads
         addExtPort(12,13,8,9,3,"x"); //Crossroads to bridge
-        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads   
+        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads
         addExtPort(13,14,8,9,3,"x"); //Path above bridge
         addExtPort(13,14,1,9,4,"x"); //Sand area above bridge
         addExtPort(15,14,17,1,5,"y"); //Bride to main fishing area
@@ -537,9 +537,9 @@ public class Game implements State, Serializable {
         addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
         addExtPort(20,12,8,9,3,"x"); //Path to main city from crossroads
         addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
-  
-        
-        
+
+
+
     }
 
     private void referencePlayer() {
@@ -666,14 +666,14 @@ public class Game implements State, Serializable {
             for (TalkNPC n : npcs) {
                 n.drawMessage(window);
             }
-            
+
             if(paul != null){
                 paul.drawMessage(window);
             }
             if(simon != null){
                 simon.drawMessage(window);
             }
-            
+
 
             // Update the display with any changes.
             window.display();

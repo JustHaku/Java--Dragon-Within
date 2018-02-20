@@ -33,11 +33,6 @@ public class Player extends Character {
         this.g = g;
         this.m = m;
 
-        /**
-         * *THIS IS TEMPORARY, JUST FOR TESTING**
-         */
-        //skill_names[0] = "Punch";
-        //skill_names[1] = "Quick Attack";
         name = "Main Player";
         max_health = 100;
         max_mana = 100;
@@ -49,11 +44,10 @@ public class Player extends Character {
         exp = 0;
         level = 1;
         isFriendly = true;
-        //exp = 367;
-        //level = level_calc(exp_const, exp, 0);
 
         state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
 
+        //left off here
         img = new Sprite(imgTexture, state);
         img.setScale(Game.SCALE / ps, Game.SCALE / ps); // Changes player scale to 2/3 of tile size.
 

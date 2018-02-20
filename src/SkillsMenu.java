@@ -33,7 +33,7 @@ public class SkillsMenu extends Menu implements State {
 
     public SkillsMenu(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException {
         menuWindow(window, scale, options_num);
-        this.team = team;        
+        this.team = team;
         this.window = window;
         this.scale = scale;
         screenHeight = 160 * scale;
@@ -42,7 +42,7 @@ public class SkillsMenu extends Menu implements State {
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
-        
+
         soundBuffer = new SoundBuffer();
         soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
 
@@ -56,7 +56,7 @@ public class SkillsMenu extends Menu implements State {
         playerRect = new RectangleShape(new Vector2f((screenWidth / 4) - 15, screenHeight - 10));
         playerRect.setFillColor(new Color(11, 2, 138));
         playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
-        
+
         for (int i = 0; i < 4; i++) {
             skillsRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 4 - 10)));
             (skillsRect.get(i)).setFillColor(new Color(50, 45, 138));
@@ -65,13 +65,13 @@ public class SkillsMenu extends Menu implements State {
             skillsText.add(new Text("" + i, text_font, screenHeight / 15));
             (skillsText.get(i)).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
         }
-        
+
         for (int i = 0; i < team.size(); i++) {
             teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
             bounds = teamText.get(i).getLocalBounds();
             teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
             teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
-        }        
+        }
     }
 
     /*
@@ -83,15 +83,15 @@ public class SkillsMenu extends Menu implements State {
         paused = false;
         selected = 0;
         teamText.get(selected).setColor(Color.BLACK);
-        
+
         teamText = new ArrayList<>();
         for (int i = 0; i < team.size(); i++) {
           teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
           bounds = teamText.get(i).getLocalBounds();
           teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
           teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
-        }        
-        
+        }
+
         while (window.isOpen() && paused == false) {
             window.clear(Color.BLACK);
             window.draw(menuRect);
@@ -101,13 +101,16 @@ public class SkillsMenu extends Menu implements State {
 
             // Uncoment when skills are implimented.
             for (int i = 0; i < 4; i++) {
-              //skillsText.add(new Text(skills[i].getName(), text_font, screenHeight / 15));
-              //skillsText.get(i).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
-              window.draw(skillsRect.get(i));
-              //window.draw(skillsText.get(i));
+              if(skills[i] != null)
+              {
+                skillsText.add(new Text(skills[i].getName()+"\n"+skills[i].getDescription(), text_font, screenHeight / 15));
+                skillsText.get(i).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
+                window.draw(skillsRect.get(i));
+                window.draw(skillsText.get(i));
+              }
             }
-            
-            for (int i = 0; i < team.size(); i++) {              
+
+            for (int i = 0; i < team.size(); i++) {
               teamText.get(i).setColor(Color.WHITE);
               teamText.get(selected).setColor(Color.BLACK);
               window.draw(teamText.get(i));
@@ -127,13 +130,13 @@ public class SkillsMenu extends Menu implements State {
                         selected++;
                         if (selected >= team.size()-1) {
                             selected = team.size()-1;
-                        }                      
+                        }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("W")) {
                       menuSound.play();
                         selected--;
                         if (selected <= 0) {
                             selected = 0;
-                        }                      
+                        }
                     }
                 }
             }

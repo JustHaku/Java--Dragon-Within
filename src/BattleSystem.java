@@ -19,12 +19,16 @@ public class BattleSystem extends Menu implements State {
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
     private int exp_gain, temp, characters_num, team_size, textWidth, textHeight, textSpace;
     private Text[] attack_menu, items_menu;
+    private ArrayList<Runnable> revertibles;
+    private Animation villos;
 
-    public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException {
-
+    public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException
+    {
         menuWindow(window, scale, options_num);
         attack_menu = newText(4 + 1);
         //items_menu = newText(number of items in inventory);
+        villos = new Animation();
+        villos.loadTextures(Game.playerSpriteSheet);
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
@@ -33,12 +37,13 @@ public class BattleSystem extends Menu implements State {
         text[1] = new Text("Items", text_font, screenHeight / 22);
         text[2] = new Text("Escape", text_font, screenHeight / 22);
 
-        textWidth = screenWidth / 36 - screenWidth / 42;
-        textHeight = screenHeight / 12 * 10;
-        textSpace = screenHeight / 18;
-        for (int i = 0; i < options_num; i++) {
-            text[i].setPosition(textWidth, textHeight);
-            textHeight += textSpace;
+        textWidth = screenWidth/36 - screenWidth/42;
+        textHeight = screenHeight/12*9+50;
+        textSpace = screenHeight/18;
+        for(int i=0; i<options_num; i++)
+        {
+          text[i].setPosition(textWidth, textHeight);
+          textHeight += textSpace;
         }
 
         team_size = team.size();
@@ -53,6 +58,32 @@ public class BattleSystem extends Menu implements State {
         }
 
         exp_gain = 0;
+        revertibles = new ArrayList<>();
+    }
+
+    protected class Animation extends Actor
+    {
+      @Override
+      void calcMove(int a, int b, int c, int d){}
+
+      void loadTextures(Texture enemy_sheet) throws IOException
+      {
+        int scale = VideoMode.getDesktopMode().height/160;
+        int x = 160*scale;
+        int y = 288*scale;
+        c1 = 1;
+        c2 = 3;
+        //enemy_sheet = new Texture();
+        //enemy_sheet.loadFromFile(Paths.get("src/graphics/world/roguelikeChar_transparent.png"));
+        state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
+        img = new Sprite(enemy_sheet, state);
+        img.setScale(Game.SCALE / ps, Game.SCALE / ps); // Changes player scale to 2/3 of tile size.
+
+        img.setPosition(x, y);
+
+        obj = img; // Sets img as collision object.
+        setPosition = img::setPosition;
+      }
     }
 
     /**
@@ -70,6 +101,18 @@ public class BattleSystem extends Menu implements State {
         turn_state = bubbleSort(turn_state, speed_array);
     }
 
+    /**
+    *Method uses bubblesort technique for ordering an array from Largest to Smallest
+    *@param arr is the array to be returned, which gets ordered according to the
+    *second array parsed in arguments. It "mirrors" the other array's changes
+    *@param turns is the array to be ordered from largest to smallest
+    *@return the second array parsed as an argument, ordered in descending ordered
+    *-
+    *-
+    *NOTE:Both arrays must be of same length, otherwise
+    *the method will returned a distorted array, than a sorted one.
+    *(Because the sorting of one array is affected directly to the other)
+    */
     int[] bubbleSort(int[] arr, int[] turns) {
         int length = arr.length;
         int temp = 0;
@@ -109,11 +152,11 @@ public class BattleSystem extends Menu implements State {
     void playerTurn(Character attacker) {
         int length = 5;
         int width = textWidth;
-        int height = textHeight - (textHeight / 10 * 3);
+        int height = textHeight - (textHeight/10 * 3);
 
         for (int i = 0; i < length; i++) {
             if (i == 4) {
-                height += textSpace / 3;
+                height += textSpace/3;
                 attack_menu[i] = new Text("Cancel", text_font, screenHeight / 29);
             } else if (attacker.skills[i] != null) {
                 attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 29);
@@ -177,6 +220,7 @@ public class BattleSystem extends Menu implements State {
         while (window.isOpen() && end == false) {
             window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
             drawText(text);  //method that draws all elements in text[] array on the screen
+            window.draw(villos.obj);
             window.display();
 
             for (Event event : window.pollEvents()) {
@@ -206,16 +250,18 @@ public class BattleSystem extends Menu implements State {
 
                             while (fight_end == false) {
                                 for (int x = 0; x < characters_num; x++) {
-                                    if (battle_participants[(turn_state[x])].isFriendly && battle_participants[(turn_state[x])].isAlive) {
+                                  Character attacker = battle_participants[(turn_state[x])];
+                                    if (attacker.isFriendly && attacker.isAlive) {
                                         if (fight_end == false) {
                                             turn_end = false;
                                         }
 
-                                        playerTurn(battle_participants[(turn_state[x])]);
+                                        playerTurn(attacker);
                                         int fight_option = 1;
                                         int char_select;
                                         boolean pressed = false;
-                                        System.out.println("It's " + battle_participants[(turn_state[x])].name + "'s turn!\n");
+                                        boolean has_chosen = false;
+                                        System.out.println("It's " + attacker.name + "'s turn!\n");
 
                                         while (window.isOpen() && turn_end == false) {
                                             window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
@@ -248,18 +294,18 @@ public class BattleSystem extends Menu implements State {
                                                     {
                                                       pressed = true;
                                                       int range_low = 0;
-                                                      int range_high = characters_num;
+                                                      int range_high = characters_num-1;
 
                                                       if (fight_option != 5 && !attack_menu[fight_option - 1].getString().equals("-"))
                                                       {
-                                                        if(battle_participants[(turn_state[x])].isFriendly && battle_participants[(turn_state[x])].isAlive)
+                                                        if(attacker.isFriendly && attacker.isAlive)
                                                         {
-                                                          Skills skill = battle_participants[(turn_state[x])].skills[fight_option-1];
+                                                          Skills skill = attacker.skills[fight_option-1];
                                                           if(skill != null)
                                                           {
                                                             if(!skill.doesitAffect(Skills.ENEMY))
                                                             {
-                                                              range_high = team_size;
+                                                              range_high = team_size - 1;
                                                             }
                                                             else if(!skill.doesitAffect(Skills.FRIENDLY))
                                                             {
@@ -270,40 +316,51 @@ public class BattleSystem extends Menu implements State {
                                                           //ContinueAttack:
 
                                                           /***HERE IS APPLYEE SELECTION, EXIT LOOP ONCE SELECTED***/
-                                                          for (Event selectSomeone : window.pollEvents())
+                                                          while (skill.needsMoreTargets())
                                                           {
-                                                            KeyEvent select = selectSomeone.asKeyEvent();
+                                                            has_chosen = false;
+                                                            while(!has_chosen)
+                                                            {
+                                                              for (Event selectSomeone : window.pollEvents())
+                                                              {
+                                                                KeyEvent select = selectSomeone.asKeyEvent();
 
-                                                            if (selectSomeone.type == Event.Type.CLOSED)
-                                                            {
-                                                                window.close(); //User closes window.
-                                                                break OuterLoop;
+                                                                if (selectSomeone.type == Event.Type.CLOSED)
+                                                                {
+                                                                    window.close(); //User closes window.
+                                                                    break OuterLoop;
+                                                                }
+                                                                else if (selectSomeone.type == Event.Type.KEY_PRESSED)
+                                                                {
+                                                                  if (select.key == Keyboard.Key.valueOf("A"))
+                                                                  {
+                                                                    menuSound.play();
+                                                                    if(char_select != range_low)
+                                                                      char_select--;
+                                                                  }
+                                                                  else if(select.key == Keyboard.Key.valueOf("D"))
+                                                                  {
+                                                                    menuSound.play();
+                                                                    if(char_select != range_high)
+                                                                      char_select++;
+                                                                  }
+                                                                  else if(select.key == Keyboard.Key.valueOf("E"))
+                                                                  {
+                                                                    has_chosen = true;
+                                                                  }
+                                                                }
+                                                              }
                                                             }
-                                                            else if (selectSomeone.type == Event.Type.KEY_PRESSED)
-                                                            {
-                                                              if (select.key == Keyboard.Key.valueOf("A"))
-                                                              {
-                                                                if(char_select != range_low)
-                                                                  char_select--;
-                                                              }
-                                                              else if(select.key == Keyboard.Key.valueOf("D"))
-                                                              {
-                                                                if(char_select != range_high)
-                                                                  char_select++;
-                                                              }
-                                                              else if(select.key == Keyboard.Key.valueOf("E"))
-                                                              {
-                                                                //break ContinueAttack;
-                                                                break;    //BREAK SELECT
-                                                              }
-                                                            }
+                                                            skill.addTarget(battle_participants[char_select]);
                                                           }
 
-                                                          //Program resumes from here after break 'select'
-                                                          skill.applyTo(battle_participants[char_select]);
+
+
                                                           try
                                                           {
                                                             skill.executeSkill();
+                                                            skill.getReverted();
+                                                            //TODO gget the reversable from the skill and add it to a list
                                                           }
                                                           catch(Exception e)
                                                           {
@@ -323,79 +380,6 @@ public class BattleSystem extends Menu implements State {
                                                         turn_end = true;
                                                         fight_end = true;
                                                       }
-                                                      /*for (Event battle : window.pollEvents())
-                                                          KeyEvent battleEvent = battle.asKeyEvent();*/
-                                                      /*while (skill.needsMoreCharacters()){
-
-
-
-                                                      }*/
-
-
-
-
-
-
-
-
-
-                                                        /*if (fight_option == 1) {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-")) {
-                                                                System.out.println("No skill assigned to this slot!");
-                                                            }
-                                                            else {
-                                                                battle_participants[2].health -= 27;
-                                                                if (battle_participants[2].health <= 0) {
-                                                                    battle_participants[2].isAlive = false;
-                                                                    battle_participants[2].health = 0;
-                                                                }
-                                                                turn_end = true;
-                                                                System.out.println(battle_participants[(turn_state[x])].name
-                                                                        + " inflicted 20 damage to " + battle_participants[2].name + "1");
-                                                                System.out.println(battle_participants[2].name + "1 has "
-                                                                        + battle_participants[2].health + "/" + battle_participants[2].max_health);
-                                                            }
-                                                        }
-                                                        else if (fight_option == 2)
-                                                        {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
-                                                            {
-                                                                System.out.println("No skill assigned to this slot!");
-                                                            }
-                                                            else
-                                                            {
-                                                                battle_participants[3].health -= 50;
-                                                                if (battle_participants[3].health <= 0)
-                                                                {
-                                                                    battle_participants[3].isAlive = false;
-                                                                    battle_participants[3].health = 0;
-                                                                }
-                                                                turn_end = true;
-                                                                System.out.println(battle_participants[(turn_state[x])].name
-                                                                        + " inflicted 50 damage to " + battle_participants[3].name + "2");
-                                                                System.out.println(battle_participants[3].name + "2 has "
-                                                                        + battle_participants[3].health + "/" + battle_participants[3].max_health);
-                                                            }
-                                                        }
-                                                        else if (fight_option == 3)
-                                                        {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
-                                                            {
-                                                                System.out.println("No skill assigned to this slot!");
-                                                            }
-                                                        }
-                                                        else if (fight_option == 4)
-                                                        {
-                                                            if (attack_menu[fight_option - 1].getString().equals("-"))
-                                                            {
-                                                                System.out.println("No skill assigned to this slot!");
-                                                            }
-                                                        }
-                                                        else if (fight_option == 5)
-                                                        {
-                                                            turn_end = true;
-                                                            fight_end = true;
-                                                        }*/
                                                     }
                                                     showSelection(attack_menu, fight_option);
                                                     pressed = false;
@@ -403,7 +387,10 @@ public class BattleSystem extends Menu implements State {
                                             }
                                         }
 
-                                    } else if (battle_participants[(turn_state[x])].isAlive == true && fight_end == false && battle_participants[(turn_state[x])].isFriendly == false) {
+                                    }
+                                    else if (attacker.isAlive == true &&
+                                             fight_end == false && attacker.isFriendly == false)
+                                    {
                                         System.out.println("\nEnemy turn!   (Wait 1.5 seconds..)");
                                         Text enemyAttack = new Text("Enemy turn!", text_font, screenHeight/25);
                                         enemyAttack.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/16));
@@ -412,7 +399,7 @@ public class BattleSystem extends Menu implements State {
                                         window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
                                         window.draw(enemyAttack);
                                         window.display();
-                                        enemyTurn(battle_participants[(turn_state[x])], battle_participants, team_size);
+                                        enemyTurn(attacker, battle_participants, team_size);
 
                                         try {
                                             Thread.sleep(1500);
@@ -478,10 +465,19 @@ public class BattleSystem extends Menu implements State {
                                 end = true;
                             }
 
-                        } else if (option == 2) {
+                        // TODO go through the list of of reversables and so that buffes are removed
+                           for(Runnable r : revertibles)
+                           {
+                             r.run();
+                           }
+                        }
+                        else if (option == 2)
+                        {
                             //open inventoryMenu
                             //end = true;
-                        } else if (option == 3) {
+                        }
+                        else if (option == 3)
+                        {
                             //go back to gameWorld
                             option = 1;
                             end = true;
