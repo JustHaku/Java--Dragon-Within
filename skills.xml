@@ -1,5 +1,5 @@
 <skills>
-    <skill name="fireball" cost="0" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
+    <skill name="fireball" cost="0" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="true">
         <name>Fire Ball</name>
         <description>Hurl a ball of fire into an enemy's face dealing dunk magic.</description>
     </skill>

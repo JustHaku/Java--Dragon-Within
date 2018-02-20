@@ -69,9 +69,14 @@ public class BasicSkills {
      * @return
      */
     private static Skills.myBiConsumer<Character, Integer> getTypedDamageSkill(String element) {
-        return (t, u) -> {
-            t.takeDamage(element, u);
+        return new Skills.myBiConsumer<Character, Integer>() {
+            @Override
+            public void accept(Character t, Integer u) throws Exception {
+                System.out.println("dealing damage");
+                t.takeDamage(element, u);
+            }
         };
+
     }
 
     private Document skillDocument;
@@ -127,7 +132,7 @@ public class BasicSkills {
         String payment = skill.getAttribute("payment");
         int damage = Integer.parseInt(skill.getAttribute("value"));
         String type = skill.getAttribute("type");
-        String affway = skill.getAttribute("afftype");
+        String affway = skill.getAttribute("affway");
         String affect = skill.getAttribute("affect");
         int affected = Integer.parseInt(skill.getAttribute("affected"));
         boolean unary = Boolean.parseBoolean(skill.getAttribute("unary"));
@@ -167,6 +172,7 @@ public class BasicSkills {
         //make skill and add description
         Skills skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, aff, affected, unary, revertable);
         skl.setDescription(descString);
+        skl.setDamaging(affway.equals("damage"));
 
         return skl;
     }
@@ -229,6 +235,9 @@ public class BasicSkills {
             sk.teachTo(fr);
             sk.addTarget(en);
             sk.executeSkill();
+            Runnable r = sk.getReverted();
+            r.run();
+            System.out.println("BasicSkills.main()");
 
 //            System.out.println("BasicSkills.main()");
         } catch (Skills.NotEnoughResourcesToCastException | Skills.NotEnoughSelectedException ex) {

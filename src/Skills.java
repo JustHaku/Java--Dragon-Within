@@ -22,6 +22,7 @@ public class Skills {
 
     public final boolean unary;
     public final boolean revertable;
+    private boolean damaging = false;
 
     /**
      * Creates a new skill
@@ -125,19 +126,18 @@ public class Skills {
      *
      * @return
      */
-    public Skills getReverted() {
-        if (revertable) {
-            this.value *= -1;
+    public Runnable getReverted() {
+
+        return () -> {
             try {
-                Skills clone = (Skills) this.clone();
-                return clone;
-            } catch (CloneNotSupportedException e) {
-                return null;
-            } finally {
-                value *= -1;
+                for (Character ap : targets) {
+                    applying.accept(ap, -(value));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-        return null;
+        };
+
     }
 
     /**
@@ -192,13 +192,21 @@ public class Skills {
         }
 
         try {
+            //for damaging abilities the value retrieved from the xml file acts as a percentage
+            if (damaging) {
+                value = applier.attack * value / 100;
+            }
             for (Character ap : targets) {
-                applying.accept(ap, applier.attack + value);
+                applying.accept(ap, value);
             }
         } catch (Exception e) {
             e.printStackTrace();
-
+            throw new NotEnoughSelectedException();
         }
+    }
+
+    public void setDamaging(boolean d) {
+        this.damaging = d;
     }
 
     /**
