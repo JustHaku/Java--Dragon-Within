@@ -24,7 +24,7 @@ public class Character extends Actor {
     protected boolean isAlive = true;
 
     protected final int exp_const = 50;
-    protected final float ps = (float) 1;
+    protected final float ps = (float) 1.0;
 
     public ArrayList<Object> collectStats() {
         ArrayList<Object> stats = new ArrayList<>();
