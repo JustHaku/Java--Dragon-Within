@@ -218,7 +218,7 @@ public class Skills {
         try {
             //for damaging abilities the value retrieved from the xml file acts as a percentage
             if (damaging) {
-                value = applier.attack * value / 100;
+                value = (applier.totalDmg() * value / 100) + applier.totalDmg();
             }
             for (Character ap : targets) {
                 applying.accept(ap, value);
