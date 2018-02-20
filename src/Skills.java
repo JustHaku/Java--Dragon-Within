@@ -1,14 +1,4 @@
 
-import java.util.function.BiConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.ir.CatchNode;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author LBals
@@ -32,6 +22,7 @@ public class Skills {
 
     public final boolean unary;
     public final boolean revertable;
+    private boolean damaging = false;
 
     /**
      * Creates a new skill
@@ -82,15 +73,15 @@ public class Skills {
     }
 
     /**
-     * Adds a character that this skill needs to be applied to
+     * Adds a target that this skill needs to be applied to
      *
-     * @param target character that this skill needs to be applied to
+     * @param applyee character that this skill needs to be applied to
      */
-    public void applyTo(Character target) {
+    public void addTarget(Character applyee) {
 
         for (int i = 0; i < this.targets.length; i++) {
             if (this.targets[i] == null) {
-                this.targets[i] = target;
+                this.targets[i] = applyee;
                 break;
             }
         }
@@ -135,36 +126,27 @@ public class Skills {
      *
      * @return
      */
-    public Skills getReverted() {
-        if (revertable) {
-            this.value *= -1;
+    public Runnable getReverted() {
+
+        return () -> {
             try {
-                Skills clone = (Skills) this.clone();
-                return clone;
-            } catch (CloneNotSupportedException e) {
-                return null;
-            } finally {
-                value *= -1;
+                for (Character ap : targets) {
+                    applying.accept(ap, -(value));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        }
-        return null;
+        };
+
     }
 
     /**
-     * Checks whether you would needs more targets to apply this skill to
+     * Checks if the skill requires the selection of more targets
      *
-     * @return
+     * @return true if targets are needed
      */
     public boolean needsMoreTargets() {
-
         return targets[targets.length - 1] == null;
-
-//        for (int i = 0; i < targets.length; i++) {
-//            if (targets[i] == null) {
-//                return true;
-//            }
-//        }
-//        return false;
     }
 
     /**
@@ -178,11 +160,11 @@ public class Skills {
     }
 
     /**
-     * Checks whether the caster has enough resources to cast the ability
+     * Checks whether the caster of the skill has enough recourses to cast it
      *
-     * @return
+     * @return true if it can be casted
      */
-    public boolean canItBeCast() {
+    public boolean canItbeCast() {
         try {
             consuming.accept(applier, cost);
             consuming.accept(applier, -cost);
@@ -203,19 +185,28 @@ public class Skills {
      */
     public void executeSkill() throws NotEnoughSelectedException, NotEnoughResourcesToCastException {
         try {
+            System.out.println(this.canItbeCast());
             consuming.accept(applier, cost);
         } catch (Exception ex) {
             throw new NotEnoughResourcesToCastException();
         }
 
         try {
+            //for damaging abilities the value retrieved from the xml file acts as a percentage
+            if (damaging) {
+                value = applier.attack * value / 100;
+            }
             for (Character ap : targets) {
-                applying.accept(ap, applier.attack + value);
+                applying.accept(ap, value);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             throw new NotEnoughSelectedException();
-
         }
+    }
+
+    public void setDamaging(boolean d) {
+        this.damaging = d;
     }
 
     /**

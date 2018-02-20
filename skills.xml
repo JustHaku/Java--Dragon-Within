@@ -1,6 +1,0 @@
-<skills>
-    <skill cost="50" payment="mana" damage="100" type="fire" affect="enemy" affected="1" unary="false" revertable ="false">
-        <name>Fire Ball</name>
-        <description>Hurl a ball of fire into an enemy's face dealing dunk magic.</description>
-    </skill>
-</skills>
