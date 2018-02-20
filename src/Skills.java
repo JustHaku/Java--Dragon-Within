@@ -1,14 +1,4 @@
 
-import java.util.function.BiConsumer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import jdk.nashorn.internal.ir.CatchNode;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author LBals
@@ -25,7 +15,7 @@ public class Skills {
     private int value;
 
     Character applier;
-    private Character[] applyee;
+    private Character[] targets;
     private myBiConsumer<Character, Integer> consuming;
     private myBiConsumer<Character, Integer> applying;
     public final int affects;
@@ -59,7 +49,7 @@ public class Skills {
         unary = isUnary;
         revertable = isRevertable;
 
-        this.applyee = new Character[affected];
+        this.targets = new Character[affected];
         this.affects = affects;
     }
 
@@ -88,9 +78,9 @@ public class Skills {
      */
     public void applyTo(Character applyee) {
 
-        for (int i = 0; i < this.applyee.length; i++) {
-            if (this.applyee[i] == null) {
-                this.applyee[i] = applyee;
+        for (int i = 0; i < this.targets.length; i++) {
+            if (this.targets[i] == null) {
+                this.targets[i] = applyee;
                 break;
             }
         }
@@ -101,8 +91,8 @@ public class Skills {
      * on.
      */
     public void unBindAll() {
-        for (int i = 0; i < this.applyee.length; i++) {
-            this.applyee[i] = null;
+        for (int i = 0; i < this.targets.length; i++) {
+            this.targets[i] = null;
         }
     }
 
@@ -150,12 +140,13 @@ public class Skills {
         return null;
     }
 
-    public boolean needsMoreCharacters(){
-      for(int i=0; i< applyee.length; i++){
-        if( applyee[i] == null)
-          return true;
-      }
-      return false;
+    /**
+     * Checks if the skill requires the selection of more targets
+     *
+     * @return true if targets are needed
+     */
+    public boolean needsMoreTargets() {
+        return targets[targets.length - 1] == null;
     }
 
     /**
@@ -169,6 +160,21 @@ public class Skills {
     }
 
     /**
+     * Checks whether the caster of the skill has enough recourses to cast it
+     *
+     * @return true if it can be casted
+     */
+    public boolean canItbeCast() {
+        try {
+            consuming.accept(applier, cost);
+            consuming.accept(applier, -cost);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    /**
      * executes the skill on the characters that were added by the
      * {@link Skills.applyTo}
      *
@@ -179,17 +185,18 @@ public class Skills {
      */
     public void executeSkill() throws NotEnoughSelectedException, NotEnoughResourcesToCastException {
         try {
+            System.out.println(this.canItbeCast());
             consuming.accept(applier, cost);
         } catch (Exception ex) {
             throw new NotEnoughResourcesToCastException();
         }
 
         try {
-            for (Character ap : applyee) {
+            for (Character ap : targets) {
                 applying.accept(ap, applier.attack + value);
             }
         } catch (Exception e) {
-            throw new NotEnoughSelectedException();
+            e.printStackTrace();
 
         }
     }
