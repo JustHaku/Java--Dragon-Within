@@ -393,7 +393,7 @@ public class BattleSystem extends Menu implements State {
                                     {
                                         System.out.println("\nEnemy turn!   (Wait 1.5 seconds..)");
                                         Text enemyAttack = new Text("Enemy turn!", text_font, screenHeight/25);
-                                        enemyAttack.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/16));
+                                        enemyAttack.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/25));
                                         enemyAttack.setColor(Color.RED);
 
                                         window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white

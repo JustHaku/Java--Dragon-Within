@@ -23,7 +23,7 @@ import org.jsfml.system.Clock;
  */
 public class Game implements State, Serializable {
 
-    public static final int spd = 4; //The speed in which the player moves at.
+    public static final int spd = 2; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
     public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
     public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
@@ -35,8 +35,10 @@ public class Game implements State, Serializable {
 
     //String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly -> Constructor for unique npc
     public static NPC Petros = new NPC("Petros", 103, 104, 15, 16, 12, 3, true);
+    public static NPC Luke = new NPC("Luke", 103, 104, 15, 16, 12, 3, true);
     private RenderWindow window;
     private int battleChance = 0;
+    private int steps = 0;
 
     private Save s;
 
@@ -76,6 +78,7 @@ public class Game implements State, Serializable {
     private ArrayList<TalkNPC> npcs = new ArrayList<>();
     private ScriptedNPC paul;
     private ScriptedNPC simon;
+    private ScriptedNPC luke;
 
     public static int state = 1;
 
@@ -83,6 +86,7 @@ public class Game implements State, Serializable {
     private final Clock footstepsTimer = new Clock();
     private final Clock saveTimer = new Clock();
     private final Clock routeClock = new Clock();
+    private final Clock moveClock = new Clock();
 
     private MessageBox routeMessage;
 
@@ -95,12 +99,14 @@ public class Game implements State, Serializable {
     private String FontPath; // Where fonts were found.
 
     // Arrays lists for background pieces (WorldPiece) and foreground pieces (Actor)
-    private final ArrayList<WorldMap> maps = new ArrayList<>();
+    public ArrayList<WorldMap> maps = new ArrayList<>();
 
     //Definition of item list
     Consumable potion = new Consumable(1, "Potion", 20, 0, 100);
     Consumable ether = new Consumable(2, "Ether", 0, 20, 150);
-
+    Consumable superPotion = new Consumable(3, "Super Potion", 50, 0, 300);
+    Consumable superEther = new Consumable(4, "Super Ether", 0, 50, 400);
+    Consumable recover = new Consumable(5, "Super Ether", 50, 50, 850);
     Consumable freshFish = new Consumable(2, "\"Fresh Fish\"", -20, 0, 5);
 
     TalkNPC pete;
@@ -108,6 +114,8 @@ public class Game implements State, Serializable {
     Weapon dagger = new Weapon(1, "Dagger", 60);
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
     Weapon shortsword = new Weapon(3, "Short Sword", 120);
+    Weapon bow = new Weapon(4, "Wooden Bow", 150);
+    Weapon excalibur = new Weapon(5, "Excalibur", 150);
 
     public int worldNum = 0;
 
@@ -149,12 +157,13 @@ public class Game implements State, Serializable {
      * @return Array list of actors.
      */
     public void changeWorld(int w) {
-        battleChance = 0;
-
-
-
 
         worldNum = w;
+        if (maps.get(worldNum).isHostile() == false) {
+            battleChance = 0;
+            steps = 0;
+        }
+
         String worldName = maps.get(worldNum).getWorldName();
         routeMessage = new MessageBox(Game.screenWidth - (190 * (Game.SCALE)), 0, worldName, Color.BLACK);
         routeClock.restart();
@@ -167,10 +176,6 @@ public class Game implements State, Serializable {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-
-
-
-
     }
 
     public int getWorldNum() {
@@ -178,8 +183,6 @@ public class Game implements State, Serializable {
     }
 
     public void load(Save s) {
-
-
 
         for (Activator a : Activator.activators) {
             if (s.getID().get(Activator.activators.indexOf(a)) == true) {
@@ -202,18 +205,23 @@ public class Game implements State, Serializable {
     private void playFootsteps() {
         if (!isMinimized) {
             if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
-                if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(20)) == 0) {
+                if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(16 - steps)) == 0) {
                     battleChance = 10;
                 }
+
+                if(steps < 16){
+                    steps++;
+                    System.out.println(steps);
+
+                }
+
                 if (footstepsState == 0) {
                     footsteps1.play();
                     footstepsState = 1;
-                    battleChance+=5;
 
                 } else if (footstepsState == 1) {
                     footsteps2.play();
                     footstepsState = 0;
-                    battleChance+=5;
 
                 }
                 footstepsTimer.restart();
@@ -370,10 +378,22 @@ public class Game implements State, Serializable {
         maps.get(18).setWorldName("Trader's Meet");
         maps.get(19).setWorldName("Trader's Inn");
         maps.get(20).setWorldName("Windy Crossing 1");
-        maps.get(20).setWorldName("Windy Crossing 2");
+        maps.get(21).setWorldName("Windy Crossing 2");
+        maps.get(21).setWorldName("The Withered forest");
 
 
-        // maps.get(0).setHostile();
+        maps.get(6).setHostile();
+        maps.get(7).setHostile();
+        maps.get(8).setHostile();
+        maps.get(9).setHostile();
+        maps.get(10).setHostile();
+        maps.get(11).setHostile();
+        maps.get(12).setHostile();
+        maps.get(13).setHostile();
+        maps.get(17).setHostile();
+        maps.get(20).setHostile();
+        maps.get(21).setHostile();
+
     }
 
     private void initActivators() {
@@ -381,6 +401,7 @@ public class Game implements State, Serializable {
         addActivator(5, 13, 3, ether, openChest, 24, 5);
         addActivator(1, 5, 6, dagger, openChest, 38, 11);
         addActivator(4, 8, 3, cleaver, openChest, 38, 11);
+//        addActivator(4, 8, 3, cleaver, openChest, 38, 11);
         //addActivator();
 
     }
@@ -447,13 +468,56 @@ public class Game implements State, Serializable {
         npcs.add(new TalkNPC("Pete", constructMessage(s5), playerSpriteSheet, 1, 8, 7, 5));
         maps.get(6).getActor().add(npcs.get(4));
 
+        String[] s6 = {
+            "This world is scary.",
+            "I can't even move my arms or legs..."
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s6), playerSpriteSheet, 1, 8, 4, 5));
+        maps.get(4).getActor().add(npcs.get(5));
+
+        String[] s7 = {
+            "I remember an old man who told me that dragons used to exists.",
+            "What a load of rubbish, haha!"
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s7), playerSpriteSheet, 0, 7, 7, 5));
+        maps.get(4).getActor().add(npcs.get(6));
+
+        String[] s8 = {
+            "That's my boyfriend!",
+            "He could kick the shit out of you...",
+            "So stay away."
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s8), playerSpriteSheet, 0, 5, 7, 3));
+        maps.get(3).getActor().add(npcs.get(7));
+
+        String[] s9 = {
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s9), playerSpriteSheet, 1, 6, 6, 3));
+        maps.get(3).getActor().add(npcs.get(8));
+
+        String[] s10 = {
+            "*Nom, nom, nom*",
+            "Can't you see that i'm eating?",
+            "Go away!"
+
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s10), playerSpriteSheet, 1, 6, 14, 5));
+        maps.get(2).getActor().add(npcs.get(9));
+
         paul = new ScriptedNPC(playerSpriteSheet, 1, 8, 6, 5);
         maps.get(0).getActor().add(paul);
         paul.addDialogue(new String[]{"Hello, here are some items to get you started on your journey!."});
         ArrayList<Item> qr = new ArrayList<>();
-        qr.add(new Consumable(potion.getId(),potion.getName(),potion));
-        qr.add(new Weapon(shortsword.getId(),shortsword.getName(),shortsword.dmg));
+        qr.add(new Consumable(potion.getId(), potion.getName(), potion));
+        qr.add(new Weapon(shortsword.getId(), shortsword.getName(), shortsword.dmg));
         paul.addItems(qr);
+
+        luke = new ScriptedNPC(playerSpriteSheet, 1, 8, 7, 4);
+        maps.get(2).getActor().add(luke);
+        luke.addDialogue(new String[]{"Lets get going!"});
+        luke.addCompanion(Luke);
+
+
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
         maps.get(16).getActor().add(simon);
@@ -518,6 +582,9 @@ public class Game implements State, Serializable {
         addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
         addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
         addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
+        addPort(22,23,4,4,8,8); //Cave stairs
+        addPort(22,23,4,5,8,8); //Cave stairs
+        addPort(23,22,8,0,6,4); //Cave escape ladder
 
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
@@ -537,7 +604,8 @@ public class Game implements State, Serializable {
         addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
         addExtPort(20,12,8,9,3,"x"); //Path to main city from crossroads
         addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
-
+        addExtPort(22,21,17,3,4,"y"); //Path to cave
+        addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
 
 
     }
@@ -589,7 +657,8 @@ public class Game implements State, Serializable {
 //            if(subState = 2){
 //
 //            }
-            if (!player1.movementLock) {
+//            if (!player1.movementLock && moveClock.getElapsedTime().asSeconds() > 0.1 ) {
+                moveClock.restart();
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                     player1.moveUp();
                     playFootsteps();
@@ -603,7 +672,7 @@ public class Game implements State, Serializable {
                     player1.moveRight();
                     playFootsteps();
                 }
-            }
+//            }
 
             mainTheme.getStatus();
             if (window.isOpen()) {
@@ -614,6 +683,7 @@ public class Game implements State, Serializable {
             // Starts a battle every 10 steps.
             if (battleChance >= 10) {
                 battleChance = 0;
+                steps = 0;
                 mainTheme.pause();
                 state = 2;
             }
@@ -653,13 +723,12 @@ public class Game implements State, Serializable {
                 trader2.drawMessage(window);
             }
 
-            //if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
-            if (routeMessage != null) {
-                routeMessage.draw(window);
+            if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
+             if (routeMessage != null) {
+                    routeMessage.draw(window);
+             }
 
             }
-
-            //}
             if (h != null) {
                 h.Draw(window);
             }
@@ -667,13 +736,15 @@ public class Game implements State, Serializable {
                 n.drawMessage(window);
             }
 
-            if(paul != null){
+            if (paul != null) {
                 paul.drawMessage(window);
             }
-            if(simon != null){
+            if (simon != null) {
                 simon.drawMessage(window);
             }
-
+            if (luke != null) {
+                luke.drawMessage(window);
+            }
 
             // Update the display with any changes.
             window.display();
@@ -716,5 +787,4 @@ public class Game implements State, Serializable {
         //int peter = 2;
         return state;
     }
-
 }

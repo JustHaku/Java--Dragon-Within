@@ -3,8 +3,10 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.jsfml.audio.Music;
 import org.jsfml.graphics.Texture;
 
 /**
@@ -30,6 +32,8 @@ public class WorldMap implements Serializable {
     private final ArrayList<WorldPiece> underlay = new ArrayList<>();
     private final ArrayList<WorldPiece> overlay = new ArrayList<>();
     private final ArrayList<Actor> actorlay = new ArrayList<>();
+    
+    public static ArrayList<Music> music = new ArrayList<>();
 
     String src_path = "src/tilemaps/";
 
@@ -80,6 +84,23 @@ public class WorldMap implements Serializable {
      */
     public ArrayList<WorldPiece> getUnder() {
         return underlay;
+    }
+    
+    public static void loadMusic() throws IOException{
+        for(int i = 0; i <100; i++){
+            music.add(new Music());
+        }
+        
+        loadMusic(0,"src/audio/rpg/main_theme.ogg");  
+    }
+    
+    private static void loadMusic(int tar, String path) throws IOException{
+        music.get(tar).openFromFile(Paths.get(path));
+        
+    }
+    
+    public void addChangeMusic(){
+        
     }
 
     /**
