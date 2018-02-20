@@ -144,6 +144,9 @@ public class BasicSkills {
         // get description
         child = (Element) skill.getElementsByTagName("description").item(0);
         String descString = child.getTextContent();
+        // getting post effect description        
+        child = (Element) skill.getElementsByTagName("post").item(0);
+        String post = child.getTextContent();
 
         Skills.myBiConsumer<Character, Integer> wayofpaying = SKILLMAP.get(payment);
 
@@ -172,6 +175,7 @@ public class BasicSkills {
         //make skill and add description
         Skills skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, aff, affected, unary, revertable);
         skl.setDescription(descString);
+        skl.setPostEffectText(post);
         skl.setDamaging(affway.equals("damage"));
 
         return skl;
@@ -235,12 +239,9 @@ public class BasicSkills {
             sk.teachTo(fr);
             sk.addTarget(en);
             sk.executeSkill();
+            System.out.println(sk.getPostEffectText());
             Runnable r = sk.getReverted();
-            r.run();
-            System.out.println("BasicSkills.main()");
-
-//            System.out.println("BasicSkills.main()");
-        } catch (Skills.NotEnoughResourcesToCastException | Skills.NotEnoughSelectedException ex) {
+            r.run();} catch (Skills.NotEnoughResourcesToCastException | Skills.NotEnoughSelectedException ex) {
             Logger.getLogger(BasicSkills.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
