@@ -300,7 +300,7 @@ public class BattleSystem extends Menu implements State {
                                                           }
 
                                                           //Program resumes from here after break 'select'
-                                                          skill.applyTo(battle_participants[char_select]);
+//                                                          skill.applyTo(battle_participants[char_select]);
                                                           try
                                                           {
                                                             skill.executeSkill();
