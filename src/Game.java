@@ -62,8 +62,8 @@ public class Game implements State, Serializable {
 
     //private Event event;
     // Textures for the game.
+    public static final Texture playerSpriteSheet = new Texture();
     public final Texture worldSpriteSheet = new Texture();
-    public final Texture playerSpriteSheet = new Texture();
     public final Texture barrierTexture = new Texture();
     public final Texture uiTexture = new Texture();
 
@@ -116,7 +116,7 @@ public class Game implements State, Serializable {
     Weapon shortsword = new Weapon(3, "Short Sword", 120);
     Weapon bow = new Weapon(4, "Wooden Bow", 150);
     Weapon excalibur = new Weapon(5, "Excalibur", 150);
-    
+
     public int worldNum = 0;
 
     public ArrayList<MessageBox> constructMessage(String[] messages) {
@@ -208,11 +208,11 @@ public class Game implements State, Serializable {
                 if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(16 - steps)) == 0) {
                     battleChance = 10;
                 }
-                
+
                 if(steps < 16){
                     steps++;
                     System.out.println(steps);
-                    
+
                 }
 
                 if (footstepsState == 0) {
@@ -380,7 +380,7 @@ public class Game implements State, Serializable {
         maps.get(20).setWorldName("Windy Crossing 1");
         maps.get(21).setWorldName("Windy Crossing 2");
         maps.get(21).setWorldName("The Withered forest");
-        
+
 
         maps.get(6).setHostile();
         maps.get(7).setHostile();
@@ -467,21 +467,21 @@ public class Game implements State, Serializable {
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s5), playerSpriteSheet, 1, 8, 7, 5));
         maps.get(6).getActor().add(npcs.get(4));
-        
+
         String[] s6 = {
             "This world is scary.",
             "I can't even move my arms or legs..."
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s6), playerSpriteSheet, 1, 8, 4, 5));
         maps.get(4).getActor().add(npcs.get(5));
-        
+
         String[] s7 = {
             "I remember an old man who told me that dragons used to exists.",
             "What a load of rubbish, haha!"
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s7), playerSpriteSheet, 0, 7, 7, 5));
         maps.get(4).getActor().add(npcs.get(6));
-        
+
         String[] s8 = {
             "That's my boyfriend!",
             "He could kick the shit out of you...",
@@ -489,17 +489,17 @@ public class Game implements State, Serializable {
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s8), playerSpriteSheet, 0, 5, 7, 3));
         maps.get(3).getActor().add(npcs.get(7));
-        
+
         String[] s9 = {
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s9), playerSpriteSheet, 1, 6, 6, 3));
         maps.get(3).getActor().add(npcs.get(8));
-        
+
         String[] s10 = {
             "*Nom, nom, nom*",
             "Can't you see that i'm eating?",
             "Go away!"
-            
+
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s10), playerSpriteSheet, 1, 6, 14, 5));
         maps.get(2).getActor().add(npcs.get(9));
@@ -511,13 +511,13 @@ public class Game implements State, Serializable {
         qr.add(new Consumable(potion.getId(), potion.getName(), potion));
         qr.add(new Weapon(shortsword.getId(), shortsword.getName(), shortsword.dmg));
         paul.addItems(qr);
-        
+
         luke = new ScriptedNPC(playerSpriteSheet, 1, 8, 7, 4);
         maps.get(2).getActor().add(luke);
         luke.addDialogue(new String[]{"Lets get going!"});
         luke.addCompanion(Luke);
-        
-        
+
+
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
         maps.get(16).getActor().add(simon);
@@ -567,7 +567,7 @@ public class Game implements State, Serializable {
         addPort(3, 5, 12, 2, 37, 1, 8, 8, openDoor); //Orphanage hall to right bedroom
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
-        
+
         addPort(6,7,8,0,7,8); //Path to first dungeon
         addPort(6,7,9,0,8,8); //Path to first dungeon
         addPort(7,6,7,9,8,1); //Path from first dungeon
@@ -581,17 +581,17 @@ public class Game implements State, Serializable {
         addPort(6,11,17,8,1,8); //Left peek to middle peek (sand area)
         addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
         addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
-        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)  
+        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
         addPort(22,23,4,4,8,8); //Cave stairs
         addPort(22,23,4,5,8,8); //Cave stairs
         addPort(23,22,8,0,6,4); //Cave escape ladder
-       
+
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
         addExtPort(6,11,17,5,2,"y"); //Road to second forest map path
         addExtPort(11,12,17,5,2,"y"); //Road to crossroads
         addExtPort(12,13,8,9,3,"x"); //Crossroads to bridge
-        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads   
+        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads
         addExtPort(13,14,8,9,3,"x"); //Path above bridge
         addExtPort(13,14,1,9,4,"x"); //Sand area above bridge
         addExtPort(15,14,17,1,5,"y"); //Bride to main fishing area
@@ -606,8 +606,8 @@ public class Game implements State, Serializable {
         addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
         addExtPort(22,21,17,3,4,"y"); //Path to cave
         addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
-        
-        
+
+
     }
 
     private void referencePlayer() {

@@ -42,6 +42,7 @@ public class MainMenu extends Menu implements State {
         this.mainBGsp = getBGSprite(mainBG);
         mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
         mainBGsp.setPosition(screenWidth / 2, screenHeight / 2);
+        mainBGsp.setScale(Game.SCALE/5, Game.SCALE/5);
 
         text[0] = new Text("New Game", text_font, screenHeight / 10);
         bounds = text[0].getLocalBounds();

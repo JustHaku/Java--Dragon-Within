@@ -11,6 +11,7 @@ public class Skills {
 
     private String name;
     private String description;
+    private String posteffect;
     private int cost;
     private int value;
 
@@ -64,12 +65,26 @@ public class Skills {
     }
 
     /**
-     * Returns description of the skill;
+     * Returns description of the skill. IMPORTANT call this after executeSkill
+     * and before unBindAll
      *
      * @return description of the skill;
      */
     public String getDescription() {
         return description;
+    }
+
+    public String getPostEffectText() {
+        StringBuilder bul = new StringBuilder();
+
+        for (Character c : targets) {
+            String temp = posteffect.replaceFirst("!", Integer.toString(value));
+            bul.append(c.name).append(temp).append("\n");
+        }
+
+        bul.deleteCharAt(bul.length() - 1);
+
+        return bul.toString();
     }
 
     /**
@@ -104,6 +119,15 @@ public class Skills {
      */
     public void setDescription(String desc) {
         this.description = desc;
+    }
+
+    /**
+     * Sets the post effect description of the skill
+     *
+     * @param post effect description
+     */
+    public void setPostEffectText(String post) {
+        this.posteffect = post;
     }
 
     /**
@@ -194,7 +218,7 @@ public class Skills {
         try {
             //for damaging abilities the value retrieved from the xml file acts as a percentage
             if (damaging) {
-                value = applier.attack * value / 100;
+                value = (applier.totalDmg() * value / 100) + applier.totalDmg();
             }
             for (Character ap : targets) {
                 applying.accept(ap, value);
