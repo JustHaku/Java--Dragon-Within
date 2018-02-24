@@ -1,7 +1,8 @@
-
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import org.jsfml.window.*;
 import org.jsfml.graphics.*;
@@ -33,7 +34,7 @@ public class StateMachine {
      * Changes states/ screens when given the relevent number.
      */
     public int run() throws InterruptedException, IOException {
-        
+
         int screenWidth = 288;
         int screenHeight = 160;
         scale = VideoMode.getDesktopMode().height / 160;
@@ -47,15 +48,20 @@ public class StateMachine {
         window.setIcon(icon);
 
         gameWorld = new Game(window, scale);
-        
-
+        Save s;
+        try {
+            s = Save.load("src/saves/save000");
+            gameWorld.load(s);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
 
         State mainMenu = new MainMenu(window, scale, 4);
 
-        
         //team.add(Game.Petros);
-
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
         State credits = new Credits(window, scale);
@@ -73,21 +79,6 @@ public class StateMachine {
 
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);
-        
-        try {
-            Save s = Save.load("src/saves/save000");
-            StateMachine.gameWorld.load(s);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EOFException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
 
         while (window.isOpen()) {
             if (state == 2) {
@@ -103,11 +94,29 @@ public class StateMachine {
 
             //FileManager.save("src/saves/save000", (Game)gameWorld);
             if (state == 99) {
+                team.clear();
+                Activator.activators.clear();
+                ScriptedNPC.scriptedNPCs.clear();
 
                 gameWorld = new Game(window, scale);
                 states[1] = gameWorld;
-                team.clear();
+                
                 team.add(Game.player1);
+
+                try {
+                    Files.delete(Paths.get("src/saves/save000"));
+
+                } catch (NoSuchFileException e) {
+
+                }
+
+                try {
+                    System.out.println("Saved");
+                    s = new Save(gameWorld.playerInv, Game.player1, gameWorld, Activator.activators, ScriptedNPC.scriptedNPCs, StateMachine.team);
+                    Save.save("src/saves/save000", s);
+                } catch (IOException ex) {
+                    Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
                 //window.setSize(new Vector2i(100,100));
                 //System.out.println(window.getSize());

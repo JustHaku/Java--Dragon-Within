@@ -39,7 +39,7 @@ public class BasicSkills implements Serializable {
     private final static HashMap<String, Skills.myBiConsumer<Character, Integer>> SKILLMAP = new HashMap<>();
 
     //fill in the skillmap
-    static {
+    static  {
         SKILLMAP.put("heal", (character, value) -> {
         });
 

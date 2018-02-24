@@ -35,7 +35,7 @@ public class Game implements State, Serializable {
 
     //String name, int health, int mana, int atk, int def, int spd, int lvl, boolean isFriendly -> Constructor for unique npc
     public static NPC Petros = new NPC("Petros", 103, 104, 15, 16, 12, 3, true);
-    public static NPC Luke = new NPC("Luke", 103, 104, 15, 16, 12, 3, true);
+    public static NPC Luke = new NPC("Leuthard", 103, 104, 15, 16, 12, 3, true);
     private RenderWindow window;
     private int battleChance = 0;
     private int steps = 0;
@@ -143,7 +143,7 @@ public class Game implements State, Serializable {
         try {
             skill = BasicSkills.readSkills("./skills.xml");
             skill.get(0).teachTo(player1);
-            skill.get(0).teachTo(Petros);
+            skill.get(0).teachTo(Luke);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -184,6 +184,7 @@ public class Game implements State, Serializable {
 
     public void load(Save s) {
         StateMachine.team.clear();
+        StateMachine.team.add(Game.player1);
 
         for (Activator a : Activator.activators) {
             if (s.getID().get(Activator.activators.indexOf(a)) == true) {
@@ -198,13 +199,16 @@ public class Game implements State, Serializable {
         worldNum = s.getWorld();
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
-        StateMachine.team.add(Game.player1);
+        
         
         for(ArrayList<Object> a: s.stats){
-            StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a); 
+            try{
+                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);                 
+            }catch(IndexOutOfBoundsException e){
+                System.out.println("Too many");
+            }
+            
         }
-        
-        /*StateMachine.team = s.team*/;
 
         System.out.println("Loaded");
     }
@@ -501,7 +505,7 @@ public class Game implements State, Serializable {
         npcs.add(new TalkNPC("Pete", constructMessage(s8), playerSpriteSheet, 0, 5, 7, 3));
         maps.get(3).getActor().add(npcs.get(7));
 
-        String[] s9 = {};
+        String[] s9 = {"Grrrrr."};
         npcs.add(new TalkNPC("Pete", constructMessage(s9), playerSpriteSheet, 1, 6, 6, 3));
         maps.get(3).getActor().add(npcs.get(8));
 

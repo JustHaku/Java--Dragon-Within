@@ -99,19 +99,35 @@ public class AddItem extends Activator {
             if (wp != null) {
                 wp.setAlt();
             }
-            if (m != null) {
-                m.play();
-            }
-
-            p.showHide();
 
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
                     long startTime = System.currentTimeMillis(); //fetch starting time
-                    while (false || (System.currentTimeMillis() - startTime) < 2000) {
-                        // do something
+                    Game.player1.movementLock = true;
+                    p.showHide();
+                    if (m != null) {
+                        m.play();
                     }
-                    p.hide();
+                    
+                    try {
+                        Thread.sleep(350);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Trader.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    while (true) {
+                        if (Keyboard.isKeyPressed(Keyboard.Key.E)) {
+                            p.hide();
+                            try {
+                                Thread.sleep(350);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Trader.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                            break;
+                        }
+                    }
+                    
+                    Game.player1.movementLock = false;
 
                 }
             });

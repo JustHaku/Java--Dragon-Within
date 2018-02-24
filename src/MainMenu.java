@@ -115,6 +115,7 @@ public class MainMenu extends Menu implements State {
                             Game.mainTheme.stop();
                             option = 99; // new game.
                         } else if (option == 2) {
+                            StateMachine.team.clear();
                             try {
                                 Save s = Save.load("src/saves/save000");
                                 StateMachine.gameWorld.load(s);
@@ -127,6 +128,7 @@ public class MainMenu extends Menu implements State {
                             } catch (IOException ex) {
                                 Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                             }
+                            
                             option = 1; // game world.
                         } else if (option == 3) {
                             Credits.returnTo = 0; // tells the inv menu where you returned from.

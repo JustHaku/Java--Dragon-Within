@@ -177,7 +177,15 @@ public class Player extends Character {
             }
             return a;
         }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
-            a.activate();
+            if(movementLock == false){
+                a.activate();
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
         });
     }
 }

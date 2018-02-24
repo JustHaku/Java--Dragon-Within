@@ -167,8 +167,8 @@ public class ItemsMenu extends Menu implements State {
                                 boolean breakOut2 = false; // used to escape second loop.
                                 ArrayList<Text> teamText = new ArrayList<>();
                                 
-                                for (int i = 0; i < team.size(); i++) {
-                                  teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+                                for (int i = 0; i < StateMachine.team.size(); i++) {
+                                  teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
                                   bounds = teamText.get(i).getLocalBounds();
                                   teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
                                   teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
@@ -201,7 +201,7 @@ public class ItemsMenu extends Menu implements State {
                                             menuSound.play();
                                             selected --;                                            
                                         } else if (keyEvents2.key == Keyboard.Key.valueOf("E")) {
-                                          ((Consumable)items.get(hover)).use(team.get(selected));
+                                          ((Consumable)items.get(hover)).use(StateMachine.team.get(selected));
                                           items.remove(hover);
                                           breakOut2 = true;
                                           breakOut = true;
@@ -210,8 +210,8 @@ public class ItemsMenu extends Menu implements State {
                                         }
                                     }
                                   }
-                                  if (selected >= team.size()) {
-                                      selected = team.size() - 1;
+                                  if (selected >= StateMachine.team.size()) {
+                                      selected = StateMachine.team.size() - 1;
                                   }
                                   else if (selected <= 0) {
                                       selected = 0;
@@ -219,7 +219,7 @@ public class ItemsMenu extends Menu implements State {
                                   window.clear(Color.BLACK);
                                   window.draw(menuRect);
                                   window.draw(playerRect);
-                                  for (int i = 0; i < team.size(); i++) {              
+                                  for (int i = 0; i < StateMachine.team.size(); i++) {              
                                     teamText.get(i).setColor(Color.WHITE);
                                     teamText.get(selected).setColor(Color.BLACK);
                                     window.draw(teamText.get(i));

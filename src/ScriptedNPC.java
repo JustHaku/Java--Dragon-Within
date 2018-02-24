@@ -29,7 +29,7 @@ public class ScriptedNPC extends Actor {
     private Thread t1;
     private Runnable r;
     private final float ps = (float) 1;
-    private Music m = new Music();
+    public static Music m = new Music();
     private ArrayList<MessageBox> preOption = null;
     private ArrayList<MessageBox> dialogue = null;
     private ArrayList<MessageBox> yesOption = null;

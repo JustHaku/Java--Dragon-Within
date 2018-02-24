@@ -13,8 +13,8 @@ public class Character extends Actor implements Serializable
     
   static final long serialVersionUID = 42L;
   protected String name;
-  protected transient Skills[] skills = new Skills[4]; //The skills each player has
-  protected transient Item[] held_items = new Item[4];
+  protected Skills[] skills = new Skills[4]; //The skills each player has
+  protected Item[] held_items = new Item[4];
   protected int level, exp, health, mana, speed, attack, defence, max_health, max_mana;
 
   protected boolean isFriendly;
@@ -27,7 +27,7 @@ public class Character extends Actor implements Serializable
     ArrayList<Object> stats = new ArrayList<>();
 
     stats.add(name);
-    //stats.add(skills);
+    
     stats.add(held_items);
 //    stats.add(c1);
 //    stats.add(c2);
@@ -42,6 +42,7 @@ public class Character extends Actor implements Serializable
     stats.add(max_mana);
     stats.add(isAlive);
     stats.add(isFriendly);
+    //stats.add(skills);
 
     return stats;
   }
@@ -60,6 +61,7 @@ public class Character extends Actor implements Serializable
       max_mana = (int)stats.get(10);
       isAlive = (boolean)stats.get(11);
       isFriendly = (boolean)stats.get(12);
+      //skills = (Skills[])stats.get(13);
   }
 
   @Override

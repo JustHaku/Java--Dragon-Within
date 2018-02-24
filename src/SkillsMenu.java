@@ -66,8 +66,8 @@ public class SkillsMenu extends Menu implements State {
             (skillsText.get(i)).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
         }
 
-        for (int i = 0; i < team.size(); i++) {
-            teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+        for (int i = 0; i < StateMachine.team.size(); i++) {
+            teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
             bounds = teamText.get(i).getLocalBounds();
             teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
             teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
@@ -82,11 +82,14 @@ public class SkillsMenu extends Menu implements State {
         returnTo = true;
         paused = false;
         selected = 0;
-        teamText.get(selected).setColor(Color.BLACK);
+        if(!teamText.isEmpty()){
+            teamText.get(selected).setColor(Color.BLACK);            
+        }
+        
 
         teamText = new ArrayList<>();
-        for (int i = 0; i < team.size(); i++) {
-          teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+        for (int i = 0; i < StateMachine.team.size(); i++) {
+          teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
           bounds = teamText.get(i).getLocalBounds();
           teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
           teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
@@ -97,7 +100,7 @@ public class SkillsMenu extends Menu implements State {
             window.draw(menuRect);
             window.draw(playerRect);
             skillsText = new ArrayList<>();
-            skills = team.get(selected).skills;
+            skills = StateMachine.team.get(selected).skills;
 
             // Uncoment when skills are implimented.
             for (int i = 0; i < 4; i++) {
@@ -110,7 +113,7 @@ public class SkillsMenu extends Menu implements State {
               }
             }
 
-            for (int i = 0; i < team.size(); i++) {
+            for (int i = 0; i < StateMachine.team.size(); i++) {
               teamText.get(i).setColor(Color.WHITE);
               teamText.get(selected).setColor(Color.BLACK);
               window.draw(teamText.get(i));
@@ -128,8 +131,8 @@ public class SkillsMenu extends Menu implements State {
                     } else if (keyEvent.key == Keyboard.Key.valueOf("S")) {
                         menuSound.play();
                         selected++;
-                        if (selected >= team.size()-1) {
-                            selected = team.size()-1;
+                        if (selected >= StateMachine.team.size()-1) {
+                            selected = StateMachine.team.size()-1;
                         }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("W")) {
                       menuSound.play();
