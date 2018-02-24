@@ -45,13 +45,13 @@ public class InventoryMenu extends Menu implements State {
         playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
 
         // Sets the amount of rectangles and text to go in them.
-        for (int i = 0; i < team.size(); i++) {
+        for (int i = 0; i < StateMachine.team.size(); i++) {
             teamRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 6 - 10)));
             (teamRect.get(i)).setFillColor(new Color(50, 45, 138));
             (teamRect.get(i)).setPosition(10, 10 + ((screenHeight / 6 - 2) * i));
-            teamText.add(new Text((team.get(i)).name + "     LV: " + (team.get(i)).level + "\nHP:"
-                    + (team.get(i)).health + " / " + (team.get(i)).max_health + "     MP:"
-                    + (team.get(i)).mana + " / " + (team.get(i)).max_mana, text_font, screenHeight / 15));
+            teamText.add(new Text((StateMachine.team.get(i)).name + "     LV: " + (StateMachine.team.get(i)).level + "\nHP:"
+                    + (StateMachine.team.get(i)).health + " / " + (StateMachine.team.get(i)).max_health + "     MP:"
+                    + (StateMachine.team.get(i)).mana + " / " + (StateMachine.team.get(i)).max_mana, text_font, screenHeight / 15));
             (teamText.get(i)).setPosition(15, 5 + ((screenHeight / 6 - 2) * i));
         }
 

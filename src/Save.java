@@ -30,19 +30,24 @@ public class Save implements Serializable {
     private Inventory i;
     private ArrayList<Boolean> active = new ArrayList<>();
     private ArrayList<Boolean> active2 = new ArrayList<>();
+    public ArrayList<Character> team = new ArrayList<>();
+    ArrayList<ArrayList<Object>> stats = new ArrayList<ArrayList<Object>>();
 
-    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a, ArrayList<ScriptedNPC> ad) {
+    public Save(Inventory i, Player p, Game g, ArrayList<Activator> a, ArrayList<ScriptedNPC> ad, ArrayList<Character> team) {
         worldNum = g.getWorldNum();
         x = p.getX();
         y = p.getY();
         this.i = i;
+        /*this.team = team;*/
+        for(Character k : team){
+            stats.add(k.collectStats());
+        }
         for (Activator k : a) {
             active.add(k.activated);
         }
         for (ScriptedNPC k : ad) {
             active2.add(k.hadItems);
         }
-
     }
 
     public int getWorld() {

@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.util.*;
 import org.jsfml.graphics.IntRect;
 import org.jsfml.graphics.Sprite;
@@ -7,11 +8,13 @@ import org.jsfml.window.Keyboard;
 *Base-Class for creating characters in the game.
 *@author Petros Soutzis
 */
-public class Character extends Actor
+public class Character extends Actor implements Serializable
 {
+    
+  static final long serialVersionUID = 42L;
   protected String name;
-  protected Skills[] skills = new Skills[4]; //The skills each player has
-  protected Item[] held_items = new Item[4];
+  protected transient Skills[] skills = new Skills[4]; //The skills each player has
+  protected transient Item[] held_items = new Item[4];
   protected int level, exp, health, mana, speed, attack, defence, max_health, max_mana;
 
   protected boolean isFriendly;
@@ -24,10 +27,10 @@ public class Character extends Actor
     ArrayList<Object> stats = new ArrayList<>();
 
     stats.add(name);
-    stats.add(skills);
+    //stats.add(skills);
     stats.add(held_items);
-    stats.add(c1);
-    stats.add(c2);
+//    stats.add(c1);
+//    stats.add(c2);
     stats.add(level);
     stats.add(exp);
     stats.add(health);
@@ -41,6 +44,22 @@ public class Character extends Actor
     stats.add(isFriendly);
 
     return stats;
+  }
+  
+  public void distributeStats(ArrayList<Object> stats){
+      name = (String)stats.get(0);
+      held_items = (Item[])stats.get(1);
+      level = (int)stats.get(2);
+      exp = (int)stats.get(3);
+      health = (int)stats.get(4);
+      mana = (int)stats.get(5);
+      speed = (int)stats.get(6);
+      attack = (int)stats.get(7);
+      defence = (int)stats.get(8);
+      max_health = (int)stats.get(9);
+      max_mana = (int)stats.get(10);
+      isAlive = (boolean)stats.get(11);
+      isFriendly = (boolean)stats.get(12);
   }
 
   @Override

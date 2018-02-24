@@ -33,9 +33,10 @@ public class StateMachine {
      * Changes states/ screens when given the relevent number.
      */
     public int run() throws InterruptedException, IOException {
+        
         int screenWidth = 288;
         int screenHeight = 160;
-        scale = VideoMode.getDesktopMode().height/160;
+        scale = VideoMode.getDesktopMode().height / 160;
 
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
@@ -47,23 +48,13 @@ public class StateMachine {
 
         gameWorld = new Game(window, scale);
         
-        try {
-            Save s = Save.load("src/saves/save000");
-            StateMachine.gameWorld.load(s);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EOFException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
+        
 
         State mainMenu = new MainMenu(window, scale, 4);
 
-        team.add(Game.player1);
-        team.add(Game.Petros);
+        
+        //team.add(Game.Petros);
 
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
@@ -80,10 +71,23 @@ public class StateMachine {
         states[6] = skillsMenu;
         states[7] = magicMenu;
 
-        
-
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);
+        
+        try {
+            Save s = Save.load("src/saves/save000");
+            StateMachine.gameWorld.load(s);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EOFException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
 
         while (window.isOpen()) {
             if (state == 2) {
@@ -102,6 +106,8 @@ public class StateMachine {
 
                 gameWorld = new Game(window, scale);
                 states[1] = gameWorld;
+                team.clear();
+                team.add(Game.player1);
 
                 //window.setSize(new Vector2i(100,100));
                 //System.out.println(window.getSize());

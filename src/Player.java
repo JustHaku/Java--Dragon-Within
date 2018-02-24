@@ -64,7 +64,7 @@ public class Player extends Character {
 
     void moveLeft() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             x -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -74,7 +74,7 @@ public class Player extends Character {
 
     void moveRight() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -84,7 +84,7 @@ public class Player extends Character {
 
     void moveUp() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             y -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
 
@@ -95,7 +95,7 @@ public class Player extends Character {
 
     void moveDown() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             y += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }

@@ -170,7 +170,7 @@ public class Game implements State, Serializable {
 
         try {
             System.out.println("Saved");
-            s = new Save(playerInv, player1, this, Activator.activators, ScriptedNPC.scriptedNPCs);
+            s = new Save(playerInv, player1, this, Activator.activators, ScriptedNPC.scriptedNPCs, StateMachine.team);
             Save.save("src/saves/save000", s);
         } catch (IOException ex) {
             Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
@@ -183,6 +183,7 @@ public class Game implements State, Serializable {
     }
 
     public void load(Save s) {
+        StateMachine.team.clear();
 
         for (Activator a : Activator.activators) {
             if (s.getID().get(Activator.activators.indexOf(a)) == true) {
@@ -197,36 +198,47 @@ public class Game implements State, Serializable {
         worldNum = s.getWorld();
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
+        StateMachine.team.add(Game.player1);
+        
+        for(ArrayList<Object> a: s.stats){
+            StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a); 
+        }
+        
+        /*StateMachine.team = s.team*/;
 
         System.out.println("Loaded");
     }
 
     //Slows down the footsteps and also has 2 sounds for footsteps.
     private void playFootsteps() {
-        if (!isMinimized) {
-            if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
-                if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(16 - steps)) == 0) {
-                    battleChance = 10;
+        if (player1.movementLock == false) {
+            if (!isMinimized) {
+                if (footstepsTimer.getElapsedTime().asMilliseconds() > 350) {
+                    if (maps.get(worldNum).isHostile() && Math.floor(Math.random() * Math.floor(16 - steps)) == 0) {
+                        battleChance = 10;
+                    }
+
+                    if (steps < 16) {
+                        steps++;
+                        System.out.println(steps);
+
+                    }
+
+                    if (footstepsState == 0) {
+                        footsteps1.play();
+                        footstepsState = 1;
+
+                    } else if (footstepsState == 1) {
+                        footsteps2.play();
+                        footstepsState = 0;
+
+                    }
+                    footstepsTimer.restart();
                 }
-
-                if(steps < 16){
-                    steps++;
-                    System.out.println(steps);
-
-                }
-
-                if (footstepsState == 0) {
-                    footsteps1.play();
-                    footstepsState = 1;
-
-                } else if (footstepsState == 1) {
-                    footsteps2.play();
-                    footstepsState = 0;
-
-                }
-                footstepsTimer.restart();
             }
+
         }
+
     }
 
     //Creates copy of item and makes it an activator and then adds it to the world
@@ -381,7 +393,6 @@ public class Game implements State, Serializable {
         maps.get(21).setWorldName("Windy Crossing 2");
         maps.get(21).setWorldName("The Withered forest");
 
-
         maps.get(6).setHostile();
         maps.get(7).setHostile();
         maps.get(8).setHostile();
@@ -490,8 +501,7 @@ public class Game implements State, Serializable {
         npcs.add(new TalkNPC("Pete", constructMessage(s8), playerSpriteSheet, 0, 5, 7, 3));
         maps.get(3).getActor().add(npcs.get(7));
 
-        String[] s9 = {
-        };
+        String[] s9 = {};
         npcs.add(new TalkNPC("Pete", constructMessage(s9), playerSpriteSheet, 1, 6, 6, 3));
         maps.get(3).getActor().add(npcs.get(8));
 
@@ -516,8 +526,6 @@ public class Game implements State, Serializable {
         maps.get(2).getActor().add(luke);
         luke.addDialogue(new String[]{"Lets get going!"});
         luke.addCompanion(Luke);
-
-
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
         maps.get(16).getActor().add(simon);
@@ -568,45 +576,44 @@ public class Game implements State, Serializable {
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
 
-        addPort(6,7,8,0,7,8); //Path to first dungeon
-        addPort(6,7,9,0,8,8); //Path to first dungeon
-        addPort(7,6,7,9,8,1); //Path from first dungeon
-        addPort(7,6,8,9,9,1); //Path from first dungeon
-        addPort(7,8,7,4,7,1); //First dungeon drop
-        addPort(8,9,1,3,8,3); //First dungeon escape room (stairs)
-        addPort(9,8,10,3,3,3); //Return to main dungeon (stairs)
-        addPort(8,10,16,3,2,4); //First dungeon treasury/boss room (stairs)
-        addPort(9,7,8,1,7,6); //First dungeon escape ladder (ladder)
-        addPort(10,8,1,3,14,3); //Treasury room escape stairs to main (stairs)
-        addPort(6,11,17,8,1,8); //Left peek to middle peek (sand area)
-        addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
-        addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
-        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
-        addPort(22,23,4,4,8,8); //Cave stairs
-        addPort(22,23,4,5,8,8); //Cave stairs
-        addPort(23,22,8,0,6,4); //Cave escape ladder
+        addPort(6, 7, 8, 0, 7, 8); //Path to first dungeon
+        addPort(6, 7, 9, 0, 8, 8); //Path to first dungeon
+        addPort(7, 6, 7, 9, 8, 1); //Path from first dungeon
+        addPort(7, 6, 8, 9, 9, 1); //Path from first dungeon
+        addPort(7, 8, 7, 4, 7, 1); //First dungeon drop
+        addPort(8, 9, 1, 3, 8, 3); //First dungeon escape room (stairs)
+        addPort(9, 8, 10, 3, 3, 3); //Return to main dungeon (stairs)
+        addPort(8, 10, 16, 3, 2, 4); //First dungeon treasury/boss room (stairs)
+        addPort(9, 7, 8, 1, 7, 6); //First dungeon escape ladder (ladder)
+        addPort(10, 8, 1, 3, 14, 3); //Treasury room escape stairs to main (stairs)
+        addPort(6, 11, 17, 8, 1, 8); //Left peek to middle peek (sand area)
+        addPort(11, 6, 0, 8, 16, 8); //Middle peek to left peek (sand area)
+        addPort(11, 12, 17, 8, 1, 8); //Middle peek to right peek (sand area)
+        addPort(12, 11, 0, 8, 16, 8); //Right peek to middle peek (sand area)
+        addPort(22, 23, 4, 4, 8, 8); //Cave stairs
+        addPort(22, 23, 4, 5, 8, 8); //Cave stairs
+        addPort(23, 22, 8, 0, 6, 4); //Cave escape ladder
 
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
-        addExtPort(6,11,17,5,2,"y"); //Road to second forest map path
-        addExtPort(11,12,17,5,2,"y"); //Road to crossroads
-        addExtPort(12,13,8,9,3,"x"); //Crossroads to bridge
-        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads
-        addExtPort(13,14,8,9,3,"x"); //Path above bridge
-        addExtPort(13,14,1,9,4,"x"); //Sand area above bridge
-        addExtPort(15,14,17,1,5,"y"); //Bride to main fishing area
-        addExtPort(16,15,17,1,5,"y"); //Lower sand harbor to main fishing are
-        addExtPort(17,16,14,9,3,"x"); //Upper sand harbor to lower sand harbor
-        addExtPort(6,17,14,9,3,"x"); //Top peek from left sand harbor
-        addExtPort(18,13,17,1,9,"y"); //Sand house to right peek
-        addExtPort(18,15,1,9,17,"x"); //Sand house to Fishing area
-        addExtPort(17,18,17,1,8,"y"); //Left harbor to sand house
-        addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
-        addExtPort(20,12,8,9,3,"x"); //Path to main city from crossroads
-        addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
-        addExtPort(22,21,17,3,4,"y"); //Path to cave
-        addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
-
+        addExtPort(6, 11, 17, 5, 2, "y"); //Road to second forest map path
+        addExtPort(11, 12, 17, 5, 2, "y"); //Road to crossroads
+        addExtPort(12, 13, 8, 9, 3, "x"); //Crossroads to bridge
+        addExtPort(12, 13, 1, 9, 4, "x"); //Top peek from sand to crossroads
+        addExtPort(13, 14, 8, 9, 3, "x"); //Path above bridge
+        addExtPort(13, 14, 1, 9, 4, "x"); //Sand area above bridge
+        addExtPort(15, 14, 17, 1, 5, "y"); //Bride to main fishing area
+        addExtPort(16, 15, 17, 1, 5, "y"); //Lower sand harbor to main fishing are
+        addExtPort(17, 16, 14, 9, 3, "x"); //Upper sand harbor to lower sand harbor
+        addExtPort(6, 17, 14, 9, 3, "x"); //Top peek from left sand harbor
+        addExtPort(18, 13, 17, 1, 9, "y"); //Sand house to right peek
+        addExtPort(18, 15, 1, 9, 17, "x"); //Sand house to Fishing area
+        addExtPort(17, 18, 17, 1, 8, "y"); //Left harbor to sand house
+        addExtPort(11, 18, 1, 9, 9, "x"); //Top peek to sand house
+        addExtPort(20, 12, 8, 9, 3, "x"); //Path to main city from crossroads
+        addExtPort(21, 20, 8, 9, 3, "x"); //Path to cave and main city
+        addExtPort(22, 21, 17, 3, 4, "y"); //Path to cave
+        addExtPort(07, 22, 17, 3, 4, "y"); //Path to side peek from cave
 
     }
 
@@ -658,7 +665,8 @@ public class Game implements State, Serializable {
 //
 //            }
 //            if (!player1.movementLock && moveClock.getElapsedTime().asSeconds() > 0.1 ) {
-                moveClock.restart();
+            moveClock.restart();
+            if (player1.movementLock == false) {
                 if (Keyboard.isKeyPressed(Keyboard.Key.W)) {
                     player1.moveUp();
                     playFootsteps();
@@ -672,8 +680,9 @@ public class Game implements State, Serializable {
                     player1.moveRight();
                     playFootsteps();
                 }
-//            }
+            }
 
+//            }
             mainTheme.getStatus();
             if (window.isOpen()) {
                 // Clear the screen
@@ -724,9 +733,9 @@ public class Game implements State, Serializable {
             }
 
             if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
-             if (routeMessage != null) {
+                if (routeMessage != null) {
                     routeMessage.draw(window);
-             }
+                }
 
             }
             if (h != null) {
