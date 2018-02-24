@@ -135,6 +135,7 @@ public class Character extends Actor
     int armor = totalResistance(value);
     int deductby = value - armor;
     health = Math.max(health-deductby, 0);
+    isAlive = health > 0;
   }
 
   int totalDmg()
