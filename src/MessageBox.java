@@ -52,12 +52,12 @@ public class MessageBox {
         text = new Text(message, endor, (textSize));
         text.setColor(Color.BLACK);
 
-        this.x = x;
-        this.y = y;
+        this.x = x + StateMachine.xOffset;
+        this.y = y + StateMachine.yOffset;
 
-        background.setPosition(x, y);
+        background.setPosition(this.x, this.y);
         background.setScale(Game.SCALE / 1, Game.SCALE / 2);
-        text.setPosition(background.getGlobalBounds().left + (Game.SCALE * 8), background.getGlobalBounds().top + background.getGlobalBounds().height / 2 - ((text.getGlobalBounds().height / 4) * 3));
+        text.setPosition((background.getGlobalBounds().left + (Game.SCALE * 8)), (background.getGlobalBounds().top + background.getGlobalBounds().height / 2 - ((text.getGlobalBounds().height / 4) * 3))  );
         this.background = background;
         this.text = text;
     }

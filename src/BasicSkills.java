@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -28,7 +29,8 @@ import org.xml.sax.SAXException;
  *
  * @author valka
  */
-public class BasicSkills {
+public class BasicSkills implements Serializable {
+    static final long serialVersionUID = 42L;
 
     /**
      * this holds all the lambda expressions that relate to ways of paying for
@@ -37,7 +39,7 @@ public class BasicSkills {
     private final static HashMap<String, Skills.myBiConsumer<Character, Integer>> SKILLMAP = new HashMap<>();
 
     //fill in the skillmap
-    static {
+    static  {
         SKILLMAP.put("heal", (character, value) -> {
         });
 
@@ -215,7 +217,7 @@ public class BasicSkills {
         return skillslist;
     }
 
-    public static void main(String[] args) {
+    public static void main (String[] args)  {
         try {
             BasicSkills bsk = new BasicSkills("skills.xml");
             Skills fireball = bsk.getNewSkillInstance("fireball");

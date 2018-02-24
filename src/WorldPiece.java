@@ -28,7 +28,7 @@ public class WorldPiece {
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
 
         img = new Sprite(imgTexture, piece);
-        img.setPosition(x * Game.tileSize, y * Game.tileSize); // Sets position
+        img.setPosition(x * Game.tileSize + StateMachine.xOffset, y * Game.tileSize + StateMachine.yOffset); // Sets position
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
     }
 

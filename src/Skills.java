@@ -1,9 +1,14 @@
 
+import java.io.Serializable;
+
+
 /**
  *
  * @author LBals
  */
-public class Skills {
+public class Skills implements Serializable {
+    
+    static final long serialVersionUID = 42L;
 
     public static int ALL = 0;
     public static int FRIENDLY = 1;

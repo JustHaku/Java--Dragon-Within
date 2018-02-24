@@ -40,8 +40,8 @@ public class Trader extends Actor {
         this.g = g;
         this.playerInv = playerInv;
         this.traderInv = traderInv;
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         trade = new Trade(w, Game.SCALE, this.playerInv, this.traderInv);
 

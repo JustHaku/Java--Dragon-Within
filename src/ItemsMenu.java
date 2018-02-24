@@ -53,31 +53,31 @@ public class ItemsMenu extends Menu implements State {
 
         menuRect = new RectangleShape(new Vector2f((screenWidth / 4) * 3, screenHeight - 10));
         menuRect.setFillColor(new Color(11, 2, 138));
-        menuRect.setPosition(5, 5);
+        menuRect.setPosition(5 + StateMachine.xOffset, 5+ StateMachine.yOffset);
 
         playerRect = new RectangleShape(new Vector2f((screenWidth / 4) - 15, screenHeight - 10));
         playerRect.setFillColor(new Color(11, 2, 138));
-        playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
+        playerRect.setPosition(((screenWidth / 4) * 3) + 10+ StateMachine.xOffset, 5+ StateMachine.yOffset);
 
         text[0] = new Text("consumables", text_font, screenHeight / 15);
         bounds = text[0].getLocalBounds();
         text[0].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
+        text[0].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 + StateMachine.yOffset);
 
         text[1] = new Text("weapons", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 3);
+        text[1].setPosition((screenWidth / 8) * 7+ StateMachine.xOffset, screenHeight / 20 * 3 + StateMachine.yOffset);
 
         text[2] = new Text("trinkets", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[2].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 5);
+        text[2].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 5 + StateMachine.yOffset);
 
         text[3] = new Text("keyItems", text_font, screenHeight / 15);
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
+        text[3].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 7 + StateMachine.yOffset);
     }
 
     /*
@@ -98,10 +98,10 @@ public class ItemsMenu extends Menu implements State {
         for (int i = 0; i < items.size(); i++) {
             itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
             (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-            (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+            (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
             itemText.add(new Text(((Item) items.get(i)).name, text_font, screenHeight / 15));
-            (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+            (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
         }
 
         showSelection(text, option);
@@ -167,11 +167,11 @@ public class ItemsMenu extends Menu implements State {
                                 boolean breakOut2 = false; // used to escape second loop.
                                 ArrayList<Text> teamText = new ArrayList<>();
                                 
-                                for (int i = 0; i < team.size(); i++) {
-                                  teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+                                for (int i = 0; i < StateMachine.team.size(); i++) {
+                                  teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
                                   bounds = teamText.get(i).getLocalBounds();
                                   teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
-                                  teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
+                                  teamText.get(i).setPosition((screenWidth / 8) * 7+ StateMachine.xOffset, screenHeight / 20 * (i*2+1) + StateMachine.yOffset);
                                 } 
                                 
                                 itemRect = new ArrayList<>();
@@ -179,10 +179,10 @@ public class ItemsMenu extends Menu implements State {
                                 for (int i = 0; i < items.size(); i++) {
                                     itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
                                     (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                                    (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+                                    (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
                                     itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                                    (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                                    (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
                                 }
 
                                 while (breakOut2 == false) {                                  
@@ -201,7 +201,7 @@ public class ItemsMenu extends Menu implements State {
                                             menuSound.play();
                                             selected --;                                            
                                         } else if (keyEvents2.key == Keyboard.Key.valueOf("E")) {
-                                          ((Consumable)items.get(hover)).use(team.get(selected));
+                                          ((Consumable)items.get(hover)).use(StateMachine.team.get(selected));
                                           items.remove(hover);
                                           breakOut2 = true;
                                           breakOut = true;
@@ -210,8 +210,8 @@ public class ItemsMenu extends Menu implements State {
                                         }
                                     }
                                   }
-                                  if (selected >= team.size()) {
-                                      selected = team.size() - 1;
+                                  if (selected >= StateMachine.team.size()) {
+                                      selected = StateMachine.team.size() - 1;
                                   }
                                   else if (selected <= 0) {
                                       selected = 0;
@@ -219,7 +219,7 @@ public class ItemsMenu extends Menu implements State {
                                   window.clear(Color.BLACK);
                                   window.draw(menuRect);
                                   window.draw(playerRect);
-                                  for (int i = 0; i < team.size(); i++) {              
+                                  for (int i = 0; i < StateMachine.team.size(); i++) {              
                                     teamText.get(i).setColor(Color.WHITE);
                                     teamText.get(selected).setColor(Color.BLACK);
                                     window.draw(teamText.get(i));
@@ -238,10 +238,10 @@ public class ItemsMenu extends Menu implements State {
                                 for (int i = 0; i < items.size(); i++) {
                                     itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
                                     (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                                    (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+                                    (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
                                     itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                                    (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                                    (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
                                 }
                               } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
                                   breakOut = true;
@@ -280,10 +280,10 @@ public class ItemsMenu extends Menu implements State {
                       for (int i = 0; i < items.size(); i++) {
                           itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
                           (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                          (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+                          (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
                           itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                          (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                          (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
                       }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
                         paused = true;
@@ -302,10 +302,10 @@ public class ItemsMenu extends Menu implements State {
                     for (int i = 0; i < items.size(); i++) {
                         itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
                         (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                        (itemRect.get(i)).setPosition(10, 10 + ((screenHeight / 10 - 2) * i));
+                        (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
                         itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                        (itemText.get(i)).setPosition(15, 5 + ((screenHeight / 10 - 2) * i));
+                        (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
                     }
                 }
                 showSelection(text, option);

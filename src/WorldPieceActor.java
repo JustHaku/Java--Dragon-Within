@@ -38,8 +38,8 @@ public class WorldPieceActor extends Actor {
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         obj = img;
         setPosition = img::setPosition;
@@ -54,8 +54,8 @@ public class WorldPieceActor extends Actor {
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         obj = img;
         setPosition = img::setPosition;

@@ -64,7 +64,7 @@ public class Player extends Character {
 
     void moveLeft() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             x -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -74,7 +74,7 @@ public class Player extends Character {
 
     void moveRight() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -84,7 +84,7 @@ public class Player extends Character {
 
     void moveUp() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             y -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
 
@@ -95,7 +95,7 @@ public class Player extends Character {
 
     void moveDown() {
         //if (footstepsTimer.getElapsedTime().asMilliseconds() > speed) {
-        if (!movementLock) {
+        if (movementLock == false) {
             y += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
@@ -177,7 +177,15 @@ public class Player extends Character {
             }
             return a;
         }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
-            a.activate();
+            if(movementLock == false){
+                a.activate();
+                try {
+                    Thread.sleep(25);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            
         });
     }
 }

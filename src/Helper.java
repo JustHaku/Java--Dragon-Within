@@ -36,7 +36,7 @@ public class Helper {
                 Text t = new Text(Integer.toString(i) + ", " + Integer.toString(j), endor, 4 * Game.SCALE);
                 overlay.add(t);
                 t.setColor(Color.MAGENTA);
-                t.setPosition(i * Game.tileSize, j * Game.tileSize);
+                t.setPosition(i * Game.tileSize + StateMachine.xOffset, j * Game.tileSize + StateMachine.yOffset);
 
             }
         }
