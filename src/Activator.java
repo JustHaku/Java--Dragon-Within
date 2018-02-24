@@ -40,8 +40,8 @@ public class Activator extends Actor implements Serializable {
         img = new Sprite(imgTexture, thing);
         img.setScale(Game.SCALE, Game.SCALE);
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;

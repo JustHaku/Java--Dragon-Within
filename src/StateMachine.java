@@ -24,6 +24,8 @@ public class StateMachine {
     private static boolean locked = false;
     public static int state = 0;
     public static Game gameWorld;
+    public static int xOffset = 0;
+    public static int yOffset = 0;
     private int scale;
 
     public static void toggleLock() {
@@ -37,7 +39,19 @@ public class StateMachine {
 
         int screenWidth = 288;
         int screenHeight = 160;
-        scale = VideoMode.getDesktopMode().height / 160;
+        
+        if(VideoMode.getDesktopMode().width/screenWidth > VideoMode.getDesktopMode().height/screenHeight){
+            scale = VideoMode.getDesktopMode().height / screenHeight;
+            
+        }else{
+            scale = VideoMode.getDesktopMode().width / screenWidth;            
+        }
+        
+        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
+        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
+        
+                
+        
 
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
@@ -46,6 +60,8 @@ public class StateMachine {
         Image icon = new Image();
         icon.loadFromFile(Paths.get("src/graphics/dragon_icon.png"));
         window.setIcon(icon);
+        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
+        window.setVerticalSyncEnabled(true);
 
         gameWorld = new Game(window, scale);
         Save s;

@@ -41,28 +41,28 @@ public class MainMenu extends Menu implements State {
 
         this.mainBGsp = getBGSprite(mainBG);
         mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
-        mainBGsp.setPosition(screenWidth / 2, screenHeight / 2);
+        mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 2 + StateMachine.yOffset);
         mainBGsp.setScale(Game.SCALE/5, Game.SCALE/5);
 
         text[0] = new Text("New Game", text_font, screenHeight / 10);
         bounds = text[0].getLocalBounds();
         text[0].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[0].setPosition(screenWidth / 2, screenHeight / 4);
+        text[0].setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 4 + StateMachine.yOffset);
 
         text[1] = new Text("Continue", text_font, screenHeight / 10);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition(screenWidth / 2, screenHeight / 4 + screenHeight / 10);
+        text[1].setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 4 + screenHeight / 10 + StateMachine.yOffset);
 
         text[2] = new Text("Credits", text_font, screenHeight / 10);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[2].setPosition(screenWidth / 2, screenHeight / 4 + screenHeight / 5);
+        text[2].setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 4 + screenHeight / 5 + StateMachine.yOffset);
 
         text[3] = new Text("Quit", text_font, screenHeight / 10);
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[3].setPosition(screenWidth / 2, screenHeight / 4 + screenHeight / 5 + screenHeight / 5);
+        text[3].setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 4 + screenHeight / 5 + screenHeight / 5 + StateMachine.yOffset);
 
         menuSound = new Sound();
         menuSound.setBuffer(soundBuffer);
@@ -80,7 +80,7 @@ public class MainMenu extends Menu implements State {
         Game.mainTheme.pause();
 
         while (window.isOpen() && paused == false) {
-            window.clear(Color.WHITE);
+            window.clear(Color.BLACK);
             window.draw(mainBGsp);
             drawText(text);
             window.display();

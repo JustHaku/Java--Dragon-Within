@@ -52,8 +52,8 @@ public class TalkNPC extends Actor {
         img = new Sprite(imgTexture, state);
         img.setScale(Game.SCALE / ps, Game.SCALE / ps);
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;

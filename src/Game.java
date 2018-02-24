@@ -265,7 +265,7 @@ public class Game implements State, Serializable {
     private void addActivator(int m, int x, int y, Weapon c, Music f, int x2, int y2) {
         AddItem d = null;
         for (Actor a : maps.get(m).getActor()) {
-            if (a.x == x * Game.tileSize && a.y == y * Game.tileSize && a.getClass() == WorldPieceActor.class) {
+            if (a.x == x * Game.tileSize + StateMachine.xOffset && a.y == y * Game.tileSize + StateMachine.yOffset && a.getClass() == WorldPieceActor.class) {
                 d = new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f, (WorldPieceActor) a);
             }
         }
@@ -273,7 +273,7 @@ public class Game implements State, Serializable {
             maps.get(m).getActor().add(d);
             d.addAlt(x2, y2);
         } else {
-            throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
+            //throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
         }
 
         //System.out.println(x + " " + y);
@@ -282,7 +282,7 @@ public class Game implements State, Serializable {
     private void addActivator(int m, int x, int y, Consumable c, Music f, int x2, int y2) {
         AddItem d = null;
         for (Actor a : maps.get(m).getActor()) {
-            if (a.x == x * Game.tileSize && a.y == y * Game.tileSize && a.getClass() == WorldPieceActor.class) {
+            if (a.x == x * Game.tileSize + StateMachine.xOffset && a.y == y * Game.tileSize + StateMachine.yOffset && a.getClass() == WorldPieceActor.class) {
                 d = new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(), c), playerInv, f, (WorldPieceActor) a);
             }
         }
@@ -290,7 +290,7 @@ public class Game implements State, Serializable {
             maps.get(m).getActor().add(d);
             d.addAlt(x2, y2);
         } else {
-            throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
+            //throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
         }
 
         //System.out.println(x + " " + y);
@@ -528,7 +528,11 @@ public class Game implements State, Serializable {
 
         luke = new ScriptedNPC(playerSpriteSheet, 1, 8, 7, 4);
         maps.get(2).getActor().add(luke);
-        luke.addDialogue(new String[]{"Lets get going!"});
+        luke.addDialogue(new String[]{"Hello, my name is Leuthard.",
+            "You have been assigned as my apprentice",
+            "Let's get going"
+                
+                                       });
         luke.addCompanion(Luke);
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
@@ -690,7 +694,7 @@ public class Game implements State, Serializable {
             mainTheme.getStatus();
             if (window.isOpen()) {
                 // Clear the screen
-                window.clear(Color.WHITE);
+                window.clear(Color.BLACK);
             }
 
             // Starts a battle every 10 steps.
@@ -717,7 +721,7 @@ public class Game implements State, Serializable {
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
             for (Actor actor : maps.get(worldNum).getActor()) {
-                actor.calcMove(0, 0, screenWidth, screenHeight);
+                actor.calcMove(0  + StateMachine.xOffset, 0 + StateMachine.yOffset, screenWidth + StateMachine.xOffset, screenHeight + StateMachine.yOffset);
                 actor.performMove();
                 actor.draw(window);
             }

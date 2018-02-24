@@ -45,8 +45,8 @@ public class Portal extends Actor {
         // Draws rectange around selected piece
         this.actors = actors;
         this.w = w;
-        this.p1 = p1 * Game.tileSize;
-        this.p2 = p2 * Game.tileSize;
+        this.p1 = p1 * Game.tileSize + StateMachine.xOffset;
+        this.p2 = p2 * Game.tileSize + StateMachine.yOffset;
         this.player1 = player1;
         this.m = m;
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
@@ -54,8 +54,8 @@ public class Portal extends Actor {
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         setPosition = img::setPosition;
 
@@ -65,8 +65,8 @@ public class Portal extends Actor {
         // Draws rectange around selected piece
         this.actors = actors;
         this.w = w;
-        this.p1 = p1 * Game.tileSize;
-        this.p2 = p2 * Game.tileSize;
+        this.p1 = p1 * Game.tileSize + StateMachine.xOffset;
+        this.p2 = p2 * Game.tileSize + StateMachine.yOffset;
         this.player1 = player1;
         this.m = m;
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
@@ -74,8 +74,8 @@ public class Portal extends Actor {
         img = new Sprite(imgTexture, piece);
         img.setScale(Game.SCALE, Game.SCALE); // Sets scale
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         setPosition = img::setPosition;
 
