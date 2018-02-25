@@ -104,7 +104,7 @@ public class Player extends Character {
     }
 
     public void setTilePosition(int x, int y) {
-        this.setPosition(x * Game.tileSize, y * Game.tileSize);
+        this.setPosition(x * Game.tileSize + StateMachine.xOffset, y * Game.tileSize + StateMachine.yOffset);
     }
 
     public int getX() {
