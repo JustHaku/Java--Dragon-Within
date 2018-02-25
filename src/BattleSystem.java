@@ -15,10 +15,11 @@ import org.jsfml.audio.*;
  */
 public class BattleSystem extends Menu implements State {
 
+    private Drawable[] obj;
     private Character[] battle_participants;
+    private Text[] attack_menu, items_menu;
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
     private int exp_gain, temp, characters_num, team_size, textWidth, textHeight, textSpace;
-    private Text[] attack_menu, items_menu;
     private ArrayList<Runnable> revertibles;
     private Animation anim;
 
@@ -38,19 +39,17 @@ public class BattleSystem extends Menu implements State {
         System.out.println("SCREENHEIGHT IS: "+ screenHeight+"\nSCREENWIDTH IS: "+ screenWidth);
         attack_menu = newText(4 + 1);
         //items_menu = newText(number of items in inventory);
-        anim = new Animation();
-        anim.loadTextures(Game.playerSpriteSheet);
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
 
-        text[0] = new Text("Attack", text_font, screenHeight / 22);
-        text[1] = new Text("Items", text_font, screenHeight / 22);
-        text[2] = new Text("Escape", text_font, screenHeight / 22);
+        text[0] = new Text("Attack", text_font, screenHeight / 25);
+        text[1] = new Text("Items", text_font, screenHeight / 25);
+        text[2] = new Text("Escape", text_font, screenHeight / 25);
 
         //set the position of options on screen
         textWidth = screenWidth/36 - screenWidth/42;
-        textHeight = screenHeight/12*9+50;
+        textHeight = (screenHeight/11*9) + screenHeight/20;
         textSpace = screenHeight/18;
         for(int i=0; i<options_num; i++)
         {
@@ -78,30 +77,115 @@ public class BattleSystem extends Menu implements State {
         }
         //exp_gain is initially set to 0
         exp_gain = 0;
+        anim = new Animation(2);
+        obj = anim.loadTextures();
     }
 
+    /**
+    *Inner class of Battle System, to be used for animation during battle
+    */
     protected class Animation extends Actor
     {
-      @Override
-      void calcMove(int a, int b, int c, int d){}
+      Drawable[] objects;
+      int team_size;
 
-      void loadTextures(Texture enemy_sheet) throws IOException
+      /**
+      *Constructor of Animation class
+      *@param team_size the number of characters that will be drawn for each team
+      */
+      public Animation(int team_size)
       {
-        int scale = VideoMode.getDesktopMode().height/160;
-        int x = 160*scale;
-        int y = 288*scale;
-        c1 = 1;
-        c2 = 3;
-        //enemy_sheet = new Texture();
-        //enemy_sheet.loadFromFile(Paths.get("src/graphics/world/roguelikeChar_transparent.png"));
-        state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
-        img = new Sprite(enemy_sheet, state);
-        img.setScale(Game.SCALE / ps, Game.SCALE / ps); // Changes player scale to 2/3 of tile size.
-        img.setPosition(700, 700);
-
-        obj = img; // Sets img as collision object.
-        setPosition = img::setPosition;
+        objects = new Drawable[team_size*2];
+        this.team_size = team_size;
       }
+
+      @Override
+      void calcMove(int a, int b, int c, int d){
+
+      }
+      /**
+      *This method will generate the a sprite with the correct size and set its
+      *position information for drawing it on the window
+      *@param posX the sprite's X position on window
+      *@param posY the sprite's Y position on window
+      *@param spriteX the sprite's X location on the spritesheet
+      *@param spriteY the sprite's Y location on the spritesheet
+      *@param img_selection the number indicating the spritesheet to use, from path
+      *@return the generated sprite
+      */
+      Sprite generateSprite(int posX, int posY, int spriteX, int spriteY, int img_selection) throws IOException
+      {
+        Texture sprites = new Texture();
+        sprites.loadFromFile(Paths.get("src/graphics/world/Spritesheet/sheet"+img_selection+".png"));
+        this.state = new IntRect(((spriteX * 64) + spriteX), ((spriteY * 64) + spriteY), 64, 64);
+        Sprite img = new Sprite(sprites, state);
+        img.setPosition(posX, posY);
+
+        return img;
+      }
+
+
+      /**
+      *This method will initialize the sprites, their dimensions, as well
+      *as their location on the window.
+      *@return an array of Drawables, so they can be drawn on the window
+      */
+      Drawable[] loadTextures() throws IOException
+      {
+        Random random = new Random();
+        int scale = VideoMode.getDesktopMode().height/160;
+
+        x = (288*scale);
+        y = (160*scale);
+
+        int spriteX = 0;  //STARTS FROM 0
+        int spriteY = 0;  // STARTS FROM 1
+
+
+        int enemyPosX = x - x/15;
+        int enemyPosY = y/20;
+        int playerPosX = x/20;
+        int playerPosY = y/2;
+
+        for(int i = 0; i < objects.length; i++)
+        {
+          System.out.println("i is ->"+i);
+          if (i<team_size)
+          {
+            r = 1;
+            if (r == 1)
+            {
+              spriteX = 6;
+              spriteY = 11;
+            }
+            this.img = generateSprite(playerPosX, playerPosY, spriteX, spriteY, r);
+            playerPosX += x/9;
+          }
+
+          else if( i >= team_size)
+          {
+            r = random.nextInt(3) + 4;
+            if (r == 4 || r == 5)
+            {
+              spriteX = 1;
+              spriteY = 14;
+            }
+            else if (r == 6)
+            {
+              spriteX = 2;
+              spriteY = 8;
+            }
+            this.img = generateSprite(enemyPosX, enemyPosY, spriteX, spriteY, r);
+            enemyPosX -= x/9;
+          }
+
+          img.setScale(Game.SCALE / 3, Game.SCALE / 3); // Changes player scale to 2/3 of tile size.
+          objects[i] = img;
+          setPosition = img::setPosition;
+        }
+        return objects;
+      }
+
     }
 
   /**
@@ -316,9 +400,24 @@ public class BattleSystem extends Menu implements State {
           //TEMP //colour is gray, so options can be visible while white
             window.clear(new Color(192, 192, 192, 200));
             drawText(text);
-            window.draw(anim.obj);
+            for(Drawable o : obj)
+              window.draw(o);
             window.display();
 
+/*This snippet is how to make enemy blink when selected
+            try
+            {
+              Thread.sleep(1500);
+              window.clear(new Color(192, 192, 192, 200));
+              drawText(text);
+
+              window.display();
+              Thread.sleep(1500);
+            }
+            catch (InterruptedException e){
+              e.printStackTrace();
+            }
+*/
             //event loop that has an aim to capture user input, in this case the
             //else if statement focuses on the keys: ESC, S, W, E
             for (Event event : window.pollEvents()) {
