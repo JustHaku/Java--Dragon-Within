@@ -22,6 +22,8 @@ public class BattleSystem extends Menu implements State {
     private int exp_gain, temp, characters_num, team_size, textWidth, textHeight, textSpace;
     private ArrayList<Runnable> revertibles;
     private Animation anim;
+    private Texture mainBG;
+    private Sprite mainBGsp;
 
 
     /**
@@ -77,12 +79,18 @@ public class BattleSystem extends Menu implements State {
         }
         //exp_gain is initially set to 0
         exp_gain = 0;
-        anim = new Animation(2);
+
+        this.mainBG = getBackground("src/graphics/world/Spritesheet/battle_bg.png");
+        this.mainBGsp = getBGSprite(mainBG);
+        this.mainBGsp.setScale(Game.SCALE, Game.SCALE);
+        //this.mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight/2 - screenHeight/2);
+
+        anim = new Animation(3);
         obj = anim.loadTextures();
     }
 
     /**
-    *Inner class of Battle System, to be used for animation during battle
+    *Inner class of Battle System, to be used for animation drawing during battle
     */
     protected class Animation extends Actor
     {
@@ -101,8 +109,19 @@ public class BattleSystem extends Menu implements State {
 
       @Override
       void calcMove(int a, int b, int c, int d){
-
       }
+
+      /**
+      *Method for drawing all drawable objects on screen, in a drawable array
+      *@param obj is the array containing all drawable objects
+      */
+      void draw(Drawable[] obj)
+      {
+        for(Drawable o : obj)
+          window.draw(o);
+      }
+
+
       /**
       *This method will generate the a sprite with the correct size and set its
       *position information for drawing it on the window
@@ -142,10 +161,10 @@ public class BattleSystem extends Menu implements State {
         int spriteY = 0;  // STARTS FROM 1
 
 
-        int enemyPosX = x - x/15;
-        int enemyPosY = y/20;
-        int playerPosX = x/20;
-        int playerPosY = y/2;
+        int enemyPosX = x - (x/4 +x/7);
+        int enemyPosY = y/2+y/8;
+        int playerPosX = x/4+x/7;
+        int playerPosY = y/2+y/8;
 
         for(int i = 0; i < objects.length; i++)
         {
@@ -159,24 +178,27 @@ public class BattleSystem extends Menu implements State {
               spriteY = 11;
             }
             this.img = generateSprite(playerPosX, playerPosY, spriteX, spriteY, r);
-            playerPosX += x/9;
+            playerPosX -= x/12;
+            playerPosY -= y/14;
           }
 
           else if( i >= team_size)
           {
             r = random.nextInt(3) + 4;
+
             if (r == 4 || r == 5)
             {
               spriteX = 1;
-              spriteY = 14;
+              spriteY = 13;
             }
             else if (r == 6)
             {
-              spriteX = 2;
-              spriteY = 8;
+              spriteX = 0;
+              spriteY = 5;
             }
             this.img = generateSprite(enemyPosX, enemyPosY, spriteX, spriteY, r);
-            enemyPosX -= x/9;
+            enemyPosX += x/12;
+            enemyPosY -= y/14;
           }
 
           img.setScale(Game.SCALE / 3, Game.SCALE / 3); // Changes player scale to 2/3 of tile size.
@@ -399,9 +421,9 @@ public class BattleSystem extends Menu implements State {
         while (window.isOpen() && end == false) {
           //TEMP //colour is gray, so options can be visible while white
             window.clear(new Color(192, 192, 192, 200));
+            window.draw(mainBGsp);
             drawText(text);
-            for(Drawable o : obj)
-              window.draw(o);
+            anim.draw(obj);
             window.display();
 
 /*This snippet is how to make enemy blink when selected
