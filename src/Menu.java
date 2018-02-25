@@ -49,8 +49,11 @@ public class Menu {
      *
      * @return a new Texture object to be used as background
      */
-    Texture getBackground() {
-        return mainBG = new Texture();
+    Texture getBackground(String bg_image_path) throws IOException{
+        Texture mainBG = new Texture();
+        mainBG.loadFromFile(Paths.get(bg_image_path));
+        mainBG.setSmooth(true);
+        return mainBG;
     }
 
     /**
@@ -60,8 +63,12 @@ public class Menu {
      * constructed
      * @return a new Sprite object to be used as a background
      */
-    Sprite getBGSprite(Texture texture) {
-        return mainBGsp = new Sprite(texture);
+    Sprite getBGSprite(Texture img) throws IOException{
+        Sprite mainBGsp = new Sprite(img);
+        mainBGsp.setOrigin(Vector2f.div(new Vector2f(img.getSize()), 2));
+        mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 2 + StateMachine.yOffset);
+        mainBGsp.setScale(Game.SCALE/5, Game.SCALE/5);
+        return mainBGsp;
     }
 
     /**

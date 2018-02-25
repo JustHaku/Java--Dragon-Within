@@ -35,14 +35,9 @@ public class MainMenu extends Menu implements State {
         menuMusic.setLoop(true);
         menuMusic.openFromFile(Paths.get("src/audio/Menu/Soliloquy.wav"));
 
-        this.mainBG = getBackground();
-        mainBG.loadFromFile(Paths.get("src/graphics/Menu/main_m.jpg"));
-        mainBG.setSmooth(true);
+        this.mainBG = getBackground("src/graphics/Menu/main_m.jpg");
 
         this.mainBGsp = getBGSprite(mainBG);
-        mainBGsp.setOrigin(Vector2f.div(new Vector2f(mainBG.getSize()), 2));
-        mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 2 + StateMachine.yOffset);
-        mainBGsp.setScale(Game.SCALE/5, Game.SCALE/5);
 
         text[0] = new Text("New Game", text_font, screenHeight / 10);
         bounds = text[0].getLocalBounds();
@@ -128,7 +123,7 @@ public class MainMenu extends Menu implements State {
                             } catch (IOException ex) {
                                 Logger.getLogger(MainMenu.class.getName()).log(Level.SEVERE, null, ex);
                             }
-                            
+
                             option = 1; // game world.
                         } else if (option == 3) {
                             Credits.returnTo = 0; // tells the inv menu where you returned from.
