@@ -649,7 +649,7 @@ public class Game implements State, Serializable {
         referencePlayer();
 
         h = new Helper();
-        h.toggleHidden();
+        //h.toggleHidden();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {

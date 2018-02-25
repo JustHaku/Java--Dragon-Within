@@ -26,6 +26,8 @@ public class StateMachine {
     public static Game gameWorld;
     public static int xOffset = 0;
     public static int yOffset = 0;
+    public static int resX = 0;
+    public static int resY = 0;
     private int scale;
 
     public static void toggleLock() {
@@ -40,6 +42,8 @@ public class StateMachine {
         int screenWidth = 288;
         int screenHeight = 160;
         
+        resX = VideoMode.getDesktopMode().width;
+        resY = VideoMode.getDesktopMode().height;
         if(VideoMode.getDesktopMode().width/screenWidth > VideoMode.getDesktopMode().height/screenHeight){
             scale = VideoMode.getDesktopMode().height / screenHeight;
             
@@ -84,6 +88,7 @@ public class StateMachine {
         State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv, team);
         State skillsMenu = new SkillsMenu(window, scale, 0, team);
         State magicMenu = new MagicMenu(window, scale, 0, team);
+        Intro intro = new Intro(window);
         states[0] = mainMenu;
         states[1] = gameWorld;
         states[2] = battleSystem;
@@ -92,10 +97,10 @@ public class StateMachine {
         states[5] = itemsMenu;
         states[6] = skillsMenu;
         states[7] = magicMenu;
+        states[10] = intro;
 
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);
-
         while (window.isOpen()) {
             if (state == 2) {
                 states[state] = new BattleSystem(window, scale, 3, team);
@@ -109,7 +114,7 @@ public class StateMachine {
             }
 
             //FileManager.save("src/saves/save000", (Game)gameWorld);
-            if (state == 99) {
+            if (state == 98){
                 team.clear();
                 Activator.activators.clear();
                 ScriptedNPC.scriptedNPCs.clear();
@@ -118,7 +123,9 @@ public class StateMachine {
                 states[1] = gameWorld;
                 
                 team.add(Game.player1);
-
+                
+                Game.player1.name = intro.name;
+                
                 try {
                     Files.delete(Paths.get("src/saves/save000"));
 
@@ -137,6 +144,13 @@ public class StateMachine {
                 //window.setSize(new Vector2i(100,100));
                 //System.out.println(window.getSize());
                 state = 1;
+            }
+            if (state == 99) {
+                intro = new Intro(window);
+                states[10] = intro;
+                
+                state = 10;
+                
             }
             if (state > 100) {
                 scale = state - 100;
