@@ -29,7 +29,7 @@ public class ScriptedNPC extends Actor {
     private Thread t1;
     private Runnable r;
     private final float ps = (float) 1;
-    private Music m = new Music();
+    public static Music m = new Music();
     private ArrayList<MessageBox> preOption = null;
     private ArrayList<MessageBox> dialogue = null;
     private ArrayList<MessageBox> yesOption = null;
@@ -64,8 +64,8 @@ public class ScriptedNPC extends Actor {
         img = new Sprite(imgTexture, state);
         img.setScale(Game.SCALE / ps, Game.SCALE / ps);
 
-        this.x = x * Game.tileSize;
-        this.y = y * Game.tileSize;
+        this.x = x * Game.tileSize + StateMachine.xOffset;
+        this.y = y * Game.tileSize + StateMachine.yOffset;
 
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;
@@ -316,8 +316,8 @@ public class ScriptedNPC extends Actor {
 
     public void addTeleport(int x, int y, int w) {
         nullify();
-        teleX = x;
-        teleY = y;
+        teleX = x + StateMachine.xOffset;
+        teleY = y + StateMachine.yOffset;
         wNum = w;
     }
 

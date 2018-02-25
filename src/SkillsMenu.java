@@ -51,26 +51,26 @@ public class SkillsMenu extends Menu implements State {
 
         menuRect = new RectangleShape(new Vector2f((screenWidth / 4) * 3, screenHeight - 10));
         menuRect.setFillColor(new Color(11, 2, 138));
-        menuRect.setPosition(5, 5);
+        menuRect.setPosition(5 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         playerRect = new RectangleShape(new Vector2f((screenWidth / 4) - 15, screenHeight - 10));
         playerRect.setFillColor(new Color(11, 2, 138));
-        playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
+        playerRect.setPosition(((screenWidth / 4) * 3) + 10 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         for (int i = 0; i < 4; i++) {
             skillsRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 4 - 10)));
             (skillsRect.get(i)).setFillColor(new Color(50, 45, 138));
-            (skillsRect.get(i)).setPosition(10, 10 + ((screenHeight / 4 - 2) * i));
+            (skillsRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
 
             skillsText.add(new Text("" + i, text_font, screenHeight / 15));
-            (skillsText.get(i)).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
+            (skillsText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
         }
 
-        for (int i = 0; i < team.size(); i++) {
-            teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+        for (int i = 0; i < StateMachine.team.size(); i++) {
+            teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
             bounds = teamText.get(i).getLocalBounds();
             teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
-            teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
+            teamText.get(i).setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * (i*2+1) + StateMachine.yOffset);
         }
     }
 
@@ -82,14 +82,17 @@ public class SkillsMenu extends Menu implements State {
         returnTo = true;
         paused = false;
         selected = 0;
-        teamText.get(selected).setColor(Color.BLACK);
+        if(!teamText.isEmpty()){
+            teamText.get(selected).setColor(Color.BLACK);            
+        }
+        
 
         teamText = new ArrayList<>();
-        for (int i = 0; i < team.size(); i++) {
-          teamText.add(new Text(team.get(i).name, text_font, screenHeight / 15));
+        for (int i = 0; i < StateMachine.team.size(); i++) {
+          teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
           bounds = teamText.get(i).getLocalBounds();
           teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
-          teamText.get(i).setPosition((screenWidth / 8) * 7, screenHeight / 20 * (i*2+1));
+          teamText.get(i).setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * (i*2+1) + StateMachine.yOffset);
         }
 
         while (window.isOpen() && paused == false) {
@@ -97,20 +100,20 @@ public class SkillsMenu extends Menu implements State {
             window.draw(menuRect);
             window.draw(playerRect);
             skillsText = new ArrayList<>();
-            skills = team.get(selected).skills;
+            skills = StateMachine.team.get(selected).skills;
 
             // Uncoment when skills are implimented.
             for (int i = 0; i < 4; i++) {
               if(skills[i] != null)
               {
                 skillsText.add(new Text(skills[i].getName()+"\n"+skills[i].getDescription(), text_font, screenHeight / 15));
-                skillsText.get(i).setPosition(15, 5 + ((screenHeight / 4 - 2) * i));
+                skillsText.get(i).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
                 window.draw(skillsRect.get(i));
                 window.draw(skillsText.get(i));
               }
             }
 
-            for (int i = 0; i < team.size(); i++) {
+            for (int i = 0; i < StateMachine.team.size(); i++) {
               teamText.get(i).setColor(Color.WHITE);
               teamText.get(selected).setColor(Color.BLACK);
               window.draw(teamText.get(i));
@@ -128,8 +131,8 @@ public class SkillsMenu extends Menu implements State {
                     } else if (keyEvent.key == Keyboard.Key.valueOf("S")) {
                         menuSound.play();
                         selected++;
-                        if (selected >= team.size()-1) {
-                            selected = team.size()-1;
+                        if (selected >= StateMachine.team.size()-1) {
+                            selected = StateMachine.team.size()-1;
                         }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("W")) {
                       menuSound.play();

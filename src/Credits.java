@@ -46,7 +46,7 @@ public class Credits implements State {
       {
         FloatRect bounds = text[i].getLocalBounds();
         text[i].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[i].setPosition(screenWidth / 2, (screenHeight) * (i+1));
+        text[i].setPosition(screenWidth / 2 + StateMachine.xOffset, (screenHeight) * (i+1) + StateMachine.yOffset);
         text[i].setColor(Color.BLACK);
       }
       text[0].setColor(Color.WHITE);
@@ -63,7 +63,7 @@ public class Credits implements State {
             window.clear(new Color(104, 89, 183));
             for (int i=0; i < text.length; i++)
             {
-              text[i].setPosition(screenWidth / 2, ((screenHeight / 10) * (i+1)) + offset);   
+              text[i].setPosition(screenWidth / 2 + StateMachine.xOffset, ((screenHeight / 10) * (i+1)) + offset + StateMachine.yOffset);   
               window.draw(text[i]);
             }
             window.display();           

@@ -38,57 +38,57 @@ public class InventoryMenu extends Menu implements State {
 
         menuRect = new RectangleShape(new Vector2f((screenWidth / 4) * 3, screenHeight - 10));
         menuRect.setFillColor(new Color(11, 2, 138));
-        menuRect.setPosition(5, 5);
+        menuRect.setPosition(5 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         playerRect = new RectangleShape(new Vector2f((screenWidth / 4) - 15, screenHeight - 10));
         playerRect.setFillColor(new Color(11, 2, 138));
-        playerRect.setPosition(((screenWidth / 4) * 3) + 10, 5);
+        playerRect.setPosition(((screenWidth / 4) * 3) + 10 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         // Sets the amount of rectangles and text to go in them.
-        for (int i = 0; i < team.size(); i++) {
+        for (int i = 0; i < StateMachine.team.size(); i++) {
             teamRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 6 - 10)));
             (teamRect.get(i)).setFillColor(new Color(50, 45, 138));
-            (teamRect.get(i)).setPosition(10, 10 + ((screenHeight / 6 - 2) * i));
-            teamText.add(new Text((team.get(i)).name + "     LV: " + (team.get(i)).level + "\nHP:"
-                    + (team.get(i)).health + " / " + (team.get(i)).max_health + "     MP:"
-                    + (team.get(i)).mana + " / " + (team.get(i)).max_mana, text_font, screenHeight / 15));
-            (teamText.get(i)).setPosition(15, 5 + ((screenHeight / 6 - 2) * i));
+            (teamRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 6 - 2) * i) + StateMachine.yOffset);
+            teamText.add(new Text((StateMachine.team.get(i)).name + "     LV: " + (StateMachine.team.get(i)).level + "\nHP:"
+                    + (StateMachine.team.get(i)).health + " / " + (StateMachine.team.get(i)).max_health + "     MP:"
+                    + (StateMachine.team.get(i)).mana + " / " + (StateMachine.team.get(i)).max_mana, text_font, screenHeight / 15));
+            (teamText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 6 - 2) * i) + StateMachine.yOffset);
         }
 
         text[0] = new Text("Loadout", text_font, screenHeight / 15);
         bounds = text[0].getLocalBounds();
         text[0].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[0].setPosition((screenWidth / 8) * 7, screenHeight / 20);
+        text[0].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 + StateMachine.yOffset);
 
         text[1] = new Text("Items", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 3);
+        text[1].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 3 + StateMachine.yOffset);
 
         text[2] = new Text("Skills", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();
         text[2].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[2].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 5);
+        text[2].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 5 + StateMachine.yOffset);
 
         text[3] = new Text("Magic", text_font, screenHeight / 15);
         bounds = text[3].getLocalBounds();
         text[3].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[3].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 7);
+        text[3].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 7 + StateMachine.yOffset);
 
         text[4] = new Text("Credits", text_font, screenHeight / 15);
         bounds = text[4].getLocalBounds();
         text[4].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[4].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 13);
+        text[4].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 13 + StateMachine.yOffset);
 
         text[5] = new Text("Main Menu", text_font, screenHeight / 15);
         bounds = text[5].getLocalBounds();
         text[5].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[5].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 15);
+        text[5].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 15 + StateMachine.yOffset);
 
         text[6] = new Text("Quit", text_font, screenHeight / 15);
         bounds = text[6].getLocalBounds();
         text[6].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[6].setPosition((screenWidth / 8) * 7, screenHeight / 20 * 17);
+        text[6].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 17 + StateMachine.yOffset);
     }
 
     /*

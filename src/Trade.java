@@ -57,6 +57,7 @@ public class Trade extends Menu implements State {
         } catch (IOException ex) {
             Logger.getLogger(Trade.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
 
         menuSound = new Sound();
         menuSound.setBuffer(soundBuffer);
@@ -74,14 +75,21 @@ public class Trade extends Menu implements State {
 
     void drawText(ArrayList<Text> textArray) {
         for (Text t : textArray) {
-            window.draw(t);
+            if(t.getGlobalBounds().top + t.getLocalBounds().height < Game.screenHeight + StateMachine.yOffset && t.getGlobalBounds().top > StateMachine.yOffset  ){
+                System.out.println(t.getGlobalBounds().top + t.getGlobalBounds().height);
+                window.draw(t);                
+            }
         }
     }
 
     @Override
     void drawText(Text[] textArray) {
+        
         for (Text t : textArray) {
-            window.draw(t);
+            if(t.getGlobalBounds().top + t.getLocalBounds().height < Game.screenHeight*scale){
+                window.draw(t);                
+            }
+            
         }
     }
 
@@ -119,40 +127,40 @@ public class Trade extends Menu implements State {
         count = 0;
         for (Consumable c : StateMachine.gameWorld.playerInv.getConsumables()) {
             playerText.add(new Text(c.getName()/* + " [" + c.value + "]"*/, text_font, screenHeight / 20));
-            playerText.get(count).setPosition((screenWidth / 4) + (2 * scale), (scale * 3) + (13 * scale * count));
+            playerText.get(count).setPosition((screenWidth / 4) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * count) + StateMachine.yOffset);
             count++;
         }
 
         count = 0;
         for (Consumable c : traderInventory.getConsumables()) {
             traderText.add(new Text(c.getName() /*+ " [" + c.value + "]"*/, text_font, screenHeight / 20));
-            traderText.get(count).setPosition((float) (screenWidth / 1.333), (scale * 3) + (13 * scale * count));
+            traderText.get(count).setPosition((float) (screenWidth / 1.333) + StateMachine.xOffset, (scale * 3) + (13 * scale * count)+ StateMachine.yOffset);
             count++;
         }
 
         gold = new Text("Gold: " + Integer.toString(StateMachine.gameWorld.playerInv.getGold()), text_font, screenHeight / 20);
         gold.setColor(Color.YELLOW);
-        gold.setPosition(2 * scale, (scale * 3) + (13 * scale * 1));
+        gold.setPosition(2 * scale + StateMachine.xOffset, (scale * 3) + (13 * scale * 1) + StateMachine.yOffset);
 
         goldTrader = new Text("Gold: ∞", text_font, screenHeight / 20);
         goldTrader.setColor(Color.YELLOW);
-        goldTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 1));
+        goldTrader.setPosition((screenWidth / 2) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 1) + StateMachine.yOffset);
 
         pi = new Text("Player Inventory: ", text_font, screenHeight / 20);
-        pi.setPosition((2 * scale), (scale * 3) + (13 * scale * 0));
+        pi.setPosition((2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 0) + StateMachine.yOffset);
         pi.setColor(Color.BLACK);
 
         ti = new Text("Trader Inventory: ", text_font, screenHeight / 20);
-        ti.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 0));
+        ti.setPosition((screenWidth / 2) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 0)+ StateMachine.yOffset);
         ti.setColor(Color.BLACK);
 
         traderBackground = new RectangleShape(new Vector2f((screenWidth / 2), screenHeight));
         traderBackground.setFillColor(new Color(204, 204, 255));
-        traderBackground.setPosition((screenWidth / 2), 0);
+        traderBackground.setPosition((screenWidth / 2)+ StateMachine.xOffset, + StateMachine.yOffset);
 
         playerBackground = new RectangleShape(new Vector2f((screenWidth / 2), screenHeight));
         playerBackground.setFillColor(new Color(204, 204, 255));
-        playerBackground.setPosition(0, 0);
+        playerBackground.setPosition(+ StateMachine.xOffset, 0 + StateMachine.yOffset);
 
     }
 
@@ -162,11 +170,11 @@ public class Trade extends Menu implements State {
             if (subState == 1) {
                 value.setString("Value: ");
             }
-            value.setPosition((2 * scale), (scale * 3) + (13 * scale * 2));
+            value.setPosition((2 * scale) +  StateMachine.xOffset, (scale * 3) + (13 * scale * 2) + StateMachine.yOffset);
             value.setColor(Color.BLACK);
         } catch (IndexOutOfBoundsException e) {
             value = new Text("Value: ", text_font, screenHeight / 20);
-            value.setPosition((2 * scale), (scale * 3) + (13 * scale * 2));
+            value.setPosition((2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 2) + StateMachine.yOffset);
             value.setColor(Color.BLACK);
 
         } catch (NullPointerException e) {
@@ -177,22 +185,22 @@ public class Trade extends Menu implements State {
             if (subState == 0) {
                 valueTrader.setString("Value: ");
             }
-            valueTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 2));
+            valueTrader.setPosition((screenWidth / 2) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 2) + StateMachine.yOffset);
             valueTrader.setColor(Color.BLACK);
 
         } catch (IndexOutOfBoundsException e) {
             valueTrader = new Text("Value: ", text_font, screenHeight / 20);
-            valueTrader.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 2));
+            valueTrader.setPosition((screenWidth / 2) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 2) + StateMachine.yOffset);
             valueTrader.setColor(Color.BLACK);
 
         }
 
         buy = new Text("Buy", text_font, screenHeight / 20);
-        buy.setPosition((screenWidth / 2) + (2 * scale), (scale * 3) + (13 * scale * 3));
+        buy.setPosition((screenWidth / 2) + (2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 3) + StateMachine.yOffset);
         buy.setColor(Color.BLACK);
 
         sell = new Text("Sell", text_font, screenHeight / 20);
-        sell.setPosition((2 * scale), (scale * 3) + (13 * scale * 3));
+        sell.setPosition((2 * scale) + StateMachine.xOffset, (scale * 3) + (13 * scale * 3) + StateMachine.yOffset);
         sell.setColor(Color.BLACK);
 
     }
@@ -220,7 +228,7 @@ public class Trade extends Menu implements State {
                 playerBackground.setFillColor(new Color(204, 204, 255));
             }
 
-            window.clear(Color.BLUE);
+            window.clear(Color.BLACK);
             window.draw(traderBackground);
             window.draw(playerBackground);
             //showSelection(text, 0);
@@ -244,9 +252,9 @@ public class Trade extends Menu implements State {
                 showSelection(playerText, option);
                 if (!playerText.isEmpty()) {
                     //System.out.println(screenHeight);
-                    System.out.println(playerText.get(option - 1).getGlobalBounds().top);
+                    //System.out.println(playerText.get(option - 1).getGlobalBounds().top);
                     if (playerText.get(option - 1).getGlobalBounds().top >= screenHeight - screenHeight / 20) {
-                        System.out.println("This is greater");
+                        //System.out.println("This is greater");
                         for (Text t : playerText) {
                             t.move(0, -((scale * 3) + (13 * scale * count)));
                         }
@@ -255,7 +263,7 @@ public class Trade extends Menu implements State {
 
                 if (!playerText.isEmpty()) {
                     //System.out.println(screenHeight);
-                    System.out.println(playerText.get(option - 1).getGlobalBounds().top);
+                    //System.out.println(playerText.get(option - 1).getGlobalBounds().top);
                     if (playerText.get(option - 1).getGlobalBounds().top <= 0) {
                         System.out.println("This is greater");
                         for (Text t : playerText) {
