@@ -30,6 +30,7 @@ import org.xml.sax.SAXException;
  * @author valka
  */
 public class BasicSkills implements Serializable {
+
     static final long serialVersionUID = 42L;
 
     /**
@@ -39,29 +40,35 @@ public class BasicSkills implements Serializable {
     private final static HashMap<String, Skills.myBiConsumer<Character, Integer>> SKILLMAP = new HashMap<>();
 
     //fill in the skillmap
-    static  {
+    static {
+        //method for healing 
         SKILLMAP.put("heal", (character, value) -> {
+            character.heal(value);
         });
-
+        //method for gaining mana
         SKILLMAP.put("manareg", (character, value) -> {
+            character.regen(value);
         });
-
+        //method for gaining deffecne points
         SKILLMAP.put("deffbuff", (character, value) -> {
+            character.defence = Math.max(0, character.defence + value);
         });
-
+        //method for gaining speed points
         SKILLMAP.put("speedbuff", (character, value) -> {
+            character.speed += value;
         });
 
+        //method for paying with mana   
         SKILLMAP.put("mana", (character, value) -> {
-
             if (character.mana - value < 0) {
                 throw new Skills.SkillExeption("insufficient mana to cast");
             }
             character.mana -= value;
         });
 
-        SKILLMAP.put("action", (character, value) -> {
-        });
+//        SKILLMAP.put("action", (character, value) -> {
+//            
+//        });
     }
 
     /**
@@ -166,9 +173,9 @@ public class BasicSkills implements Serializable {
         // create a skill depending on if it's unary        
         Skills skl;
         if (unary) {
-            skl = new Skills(stitle, cost, damage, wayofpaying, wayofpaying, revertable);
+            skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, revertable);
         } else {
-            // get the number of affected and the sype of affected       
+            // get the number of affected and the type of affected(fiendly/enemy)       
             int affected = Integer.parseInt(skill.getAttribute("affected"));
             String affect = skill.getAttribute("affect");
 
@@ -185,7 +192,7 @@ public class BasicSkills implements Serializable {
                     aff = Skills.ENEMY;
                     break;
             }
-            skl = new Skills(stitle, cost, aff, wayofpaying, wayofpaying, affected, affected, revertable);
+            skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, aff, affected, revertable);
         }
         //add descriptions
         skl.setDescription(descString);
@@ -229,29 +236,35 @@ public class BasicSkills implements Serializable {
         return skillslist;
     }
 
-    public static void main (String[] args)  {
+    public static void main(String[] args) {
         try {
             BasicSkills bsk = new BasicSkills("skills.xml");
-            Skills fireball = bsk.getNewSkillInstance("fireball");
+            Skills fireball = bsk.getNewSkillInstance("speedup");
             System.out.println(fireball.getName());
 
             Character fr = new Character();
+            fr.name = "Gred";
             fr.mana = 100;
             fr.health = 100;
             fr.attack = 60;
+            fr.speed = 30;
             fr.defence = 30;
 
             Character en = new Character();
+            en.name = "Bread";
             en.mana = 50;
             en.health = 100;
             en.attack = 60;
+            en.speed = 20;
             en.defence = 30;
 
             Skills sk = fireball;
             sk.teachTo(fr);
             sk.addTarget(en);
+            System.out.println(en.speed);
             sk.executeSkill();
             System.out.println(sk.getPostEffectText());
+            System.out.println(en.speed);
             Runnable r = sk.getReverted();
             r.run();
         } catch (Skills.SkillExeption | IOException ex) {
