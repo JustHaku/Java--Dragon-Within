@@ -395,19 +395,22 @@ public class Game implements State, Serializable {
         maps.get(19).setWorldName("Trader's Inn");
         maps.get(20).setWorldName("Windy Crossing 1");
         maps.get(21).setWorldName("Windy Crossing 2");
-        maps.get(21).setWorldName("The Withered forest");
+        maps.get(22).setWorldName("The Withered forest");
+        maps.get(23).setWorldName("Paradise?");
+        maps.get(24).setWorldName("Windy Crossing 3");
+        maps.get(25).setWorldName("City's Gaze");
 
-        maps.get(6).setHostile();
-        maps.get(7).setHostile();
-        maps.get(8).setHostile();
-        maps.get(9).setHostile();
-        maps.get(10).setHostile();
-        maps.get(11).setHostile();
-        maps.get(12).setHostile();
-        maps.get(13).setHostile();
-        maps.get(17).setHostile();
-        maps.get(20).setHostile();
-        maps.get(21).setHostile();
+       // maps.get(6).setHostile();
+      //  maps.get(7).setHostile();
+      //  maps.get(8).setHostile();
+      //  maps.get(9).setHostile();
+      //  maps.get(10).setHostile();
+      //  maps.get(11).setHostile();
+       // maps.get(12).setHostile();
+       // maps.get(13).setHostile();
+       // maps.get(17).setHostile();
+      //  maps.get(20).setHostile();
+        //maps.get(21).setHostile();
 
     }
 
@@ -568,11 +571,11 @@ public class Game implements State, Serializable {
     }
 
     private void loadPortals() throws IOException {
-        addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
-        addPort(18, 19, 12, 7, 8, 8, openDoor); //Door to Trader's Inn
-        addPort(18, 19, 13, 7, 8, 8, openDoor); //Door to Trader's Inn
-        addPort(19, 18, 8, 9, 12, 8, closeDoor); //Door from Trader's Inn
-        addPort(19, 18, 9, 9, 13, 8, closeDoor); //Door from Trader's Inn
+       addPort(0, 2, 8, 4, 37, 2, 8, 8, openDoor); //Door to Orphanage
+        addPort(18, 19, 12, 6, 8, 8, openDoor); //Door to Trader's Inn
+        addPort(18, 19, 13, 6, 8, 8, openDoor); //Door to Trader's Inn
+        addPort(19, 18, 8, 9, 12, 7, closeDoor); //Door from Trader's Inn
+        addPort(19, 18, 9, 9, 13, 7, closeDoor); //Door from Trader's Inn
         addPort(2, 0, 8, 9, 8, 6, closeDoor); //Orphanage exit
         addPort(2, 0, 9, 9, 8, 6, closeDoor); //Orphanage exit
         addPort(2, 3, 0, 2, 35, 18, 1, 5, stairs); //Orphanage left stairs to 1st floor
@@ -584,44 +587,50 @@ public class Game implements State, Serializable {
         addPort(4, 3, 8, 9, 0, 5, 2, 3, 2, 1, closeDoor); //Orphanage left bedroom to hall
         addPort(5, 3, 8, 9, 0, 5, 12, 3, 2, 1, closeDoor); //Orphanage right bedroom to hall
 
-        addPort(6, 7, 8, 0, 7, 8); //Path to first dungeon
-        addPort(6, 7, 9, 0, 8, 8); //Path to first dungeon
-        addPort(7, 6, 7, 9, 8, 1); //Path from first dungeon
-        addPort(7, 6, 8, 9, 9, 1); //Path from first dungeon
-        addPort(7, 8, 7, 4, 7, 1); //First dungeon drop
-        addPort(8, 9, 1, 3, 8, 3); //First dungeon escape room (stairs)
-        addPort(9, 8, 10, 3, 3, 3); //Return to main dungeon (stairs)
-        addPort(8, 10, 16, 3, 2, 4); //First dungeon treasury/boss room (stairs)
-        addPort(9, 7, 8, 1, 7, 6); //First dungeon escape ladder (ladder)
-        addPort(10, 8, 1, 3, 14, 3); //Treasury room escape stairs to main (stairs)
-        addPort(6, 11, 17, 8, 1, 8); //Left peek to middle peek (sand area)
-        addPort(11, 6, 0, 8, 16, 8); //Middle peek to left peek (sand area)
-        addPort(11, 12, 17, 8, 1, 8); //Middle peek to right peek (sand area)
-        addPort(12, 11, 0, 8, 16, 8); //Right peek to middle peek (sand area)
-        addPort(22, 23, 4, 4, 8, 8); //Cave stairs
-        addPort(22, 23, 4, 5, 8, 8); //Cave stairs
-        addPort(23, 22, 8, 0, 6, 4); //Cave escape ladder
-
+        addPort(6,7,8,0,7,8); //Path to first dungeon
+        addPort(6,7,9,0,8,8); //Path to first dungeon
+        addPort(7,6,7,9,8,1); //Path from first dungeon
+        addPort(7,6,8,9,9,1); //Path from first dungeon
+        addPort(7,8,7,4,7,1); //First dungeon drop
+        addPort(8,9,1,3,8,3); //First dungeon escape room (stairs)
+        addPort(9,8,10,3,3,3); //Return to main dungeon (stairs)
+        addPort(8,10,16,3,2,4); //First dungeon treasury/boss room (stairs)
+        addPort(9,7,8,1,7,6); //First dungeon escape ladder (ladder)
+        addPort(10,8,1,3,14,3); //Treasury room escape stairs to main (stairs)
+        addPort(6,11,17,8,1,8); //Left peek to middle peek (sand area)
+        addPort(11,6,0,8,16,8); //Middle peek to left peek (sand area)
+        addPort(11,12,17,8,1,8); //Middle peek to right peek (sand area)
+        addPort(12,11,0,8,16,8); //Right peek to middle peek (sand area)
+        addPort(22,23,4,4,8,8); //Cave stairs
+        addPort(22,23,4,5,8,8); //Cave stairs
+        addPort(23,22,8,0,6,4); //Cave escape ladder
+        addPort(24,25,17,1,1,1); //City bridge upper entrance
+        addPort(24,25,17,3,1,3); //City bridge lower entrance
+        addPort(25,24,0,1,16,1); //City bridge upper exit
+        addPort(25,24,0,3,16,3); //City bridge lower exit
+       
         addExtPort(0, 1, 4, 9, 4, "x"); //Path to the fishing and back
         addExtPort(0, 6, 17, 5, 2, "y"); //Path to the forest and back
-        addExtPort(6, 11, 17, 5, 2, "y"); //Road to second forest map path
-        addExtPort(11, 12, 17, 5, 2, "y"); //Road to crossroads
-        addExtPort(12, 13, 8, 9, 3, "x"); //Crossroads to bridge
-        addExtPort(12, 13, 1, 9, 4, "x"); //Top peek from sand to crossroads
-        addExtPort(13, 14, 8, 9, 3, "x"); //Path above bridge
-        addExtPort(13, 14, 1, 9, 4, "x"); //Sand area above bridge
-        addExtPort(15, 14, 17, 1, 5, "y"); //Bride to main fishing area
-        addExtPort(16, 15, 17, 1, 5, "y"); //Lower sand harbor to main fishing are
-        addExtPort(17, 16, 14, 9, 3, "x"); //Upper sand harbor to lower sand harbor
-        addExtPort(6, 17, 14, 9, 3, "x"); //Top peek from left sand harbor
-        addExtPort(18, 13, 17, 1, 9, "y"); //Sand house to right peek
-        addExtPort(18, 15, 1, 9, 17, "x"); //Sand house to Fishing area
-        addExtPort(17, 18, 17, 1, 8, "y"); //Left harbor to sand house
-        addExtPort(11, 18, 1, 9, 9, "x"); //Top peek to sand house
-        addExtPort(20, 12, 8, 9, 3, "x"); //Path to main city from crossroads
-        addExtPort(21, 20, 8, 9, 3, "x"); //Path to cave and main city
-        addExtPort(22, 21, 17, 3, 4, "y"); //Path to cave
-        addExtPort(07, 22, 17, 3, 4, "y"); //Path to side peek from cave
+        addExtPort(6,11,17,5,2,"y"); //Road to second forest map path
+        addExtPort(11,12,17,5,2,"y"); //Road to crossroads
+        addExtPort(12,13,8,9,3,"x"); //Crossroads to bridge
+        addExtPort(12,13,1,9,4,"x"); //Top peek from sand to crossroads
+        addExtPort(13,14,8,9,3,"x"); //Path above bridge
+        addExtPort(13,14,1,9,4,"x"); //Sand area above bridge
+        addExtPort(15,14,17,1,5,"y"); //Bride to main fishing area
+        addExtPort(16,15,17,1,5,"y"); //Lower sand harbor to main fishing are
+        addExtPort(17,16,14,9,3,"x"); //Upper sand harbor to lower sand harbor
+        addExtPort(6,17,14,9,3,"x"); //Top peek from left sand harbor
+        addExtPort(18,13,17,1,9,"y"); //Sand house to right peek
+        addExtPort(18,15,1,9,17,"x"); //Sand house to Fishing area
+        addExtPort(17,18,17,1,8,"y"); //Left harbor to sand house
+        addExtPort(11,18,1,9,9,"x"); //Top peek to sand house
+        addExtPort(20,12,8,9,3,"x"); //Path to main city from crossroads
+        addExtPort(21,20,8,9,3,"x"); //Path to cave and main city
+        addExtPort(22,21,17,3,4,"y"); //Path to cave
+        addExtPort(7,22,17,3,4,"y"); //Path to side peek from cave
+        addExtPort(24,21,8,9,3,"x"); //Path to main city
+        addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
 
     }
 
