@@ -18,7 +18,7 @@ public class Credits implements State {
     private RenderWindow window;
     private int scale;
     private Font text_font;
-    private Text[] text = new Text[6];
+    private Text[] text = new Text[18];
     private int screenHeight;
     private int screenWidth;
     private boolean paused = false;
@@ -40,6 +40,18 @@ public class Credits implements State {
       text[3] = new Text("Luke Balshaw", text_font, screenHeight / 15);
       text[4] = new Text("Nathaniel Vanderpuye", text_font, screenHeight / 15);
       text[5] = new Text("Petros Soutzis", text_font, screenHeight / 15);
+      text[6] = new Text(" ", text_font, screenHeight / 15);
+      text[7] = new Text("Main Menu Music", text_font, screenHeight / 15);
+      text[8] = new Text("Soliloquy", text_font, screenHeight / 15);
+      text[9] = new Text("https://opengameart.org/content/soliloquy", text_font, screenHeight / 15);
+      text[10] = new Text(" ", text_font, screenHeight / 15);
+      text[11] = new Text("Menu Sound Effect", text_font, screenHeight / 15);
+      text[12] = new Text("David McKee (ViRiX)", text_font, screenHeight / 15);
+      text[13] = new Text("https://opengameart.org/content/ui-sound-effects-pack", text_font, screenHeight / 15);
+      text[14] = new Text(" ", text_font, screenHeight / 15);
+      text[15] = new Text("Main Menu Background", text_font, screenHeight / 15);
+      text[16] = new Text("Anonymous", text_font, screenHeight / 15);
+      text[17] = new Text("https://www.imgbase.info", text_font, screenHeight / 15);
       
       
       for (int i=0; i < text.length; i++)
