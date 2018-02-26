@@ -29,6 +29,7 @@ public class StateMachine {
     public static int yOffset = 0;
     public static int resX = 0;
     public static int resY = 0;
+    public static Intro intro;
     private int scale;
 
     public static void toggleLock() {
@@ -76,7 +77,7 @@ public class StateMachine {
         }
 
         State mainMenu = new MainMenu(window, scale, 4);
-
+        intro = new Intro(window);
         //team.add(Game.Petros);
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
@@ -84,7 +85,6 @@ public class StateMachine {
         State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv, team);
         State skillsMenu = new SkillsMenu(window, scale, 0, team);
         State magicMenu = new MagicMenu(window, scale, 0, team);
-        Intro intro = new Intro(window);
         states[0] = mainMenu;
         states[1] = gameWorld;
         states[2] = battleSystem;
@@ -97,6 +97,7 @@ public class StateMachine {
 
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);
+
         while (window.isOpen()) {
             if (state == 2) {
                 states[state] = new BattleSystem(window, scale, 3, team);

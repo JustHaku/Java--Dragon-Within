@@ -24,7 +24,7 @@ import org.jsfml.system.Clock;
  */
 public class Game implements State, Serializable {
 
-    public static final int spd = 1; //The speed in which the player moves at.
+    public static final int spd = 4; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
     public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
     public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
@@ -83,7 +83,6 @@ public class Game implements State, Serializable {
     private ScriptedNPC paul;
     private ScriptedNPC simon;
     private ScriptedNPC luke;
-    private ScriptedNPC ezzy;
 
     public static int state = 1;
 
@@ -640,17 +639,6 @@ public class Game implements State, Serializable {
 
         });
         luke.addCompanion(Luke);
-        
-        ezzy = new ScriptedNPC(playerSpriteSheet, 0, 9, 7, 0);
-        maps.get(10).getActor().add(ezzy);
-        ezzy.addDialogue(new String[]{"Hello, my name is Ezrae.",
-            "I've been holding of monsters for hours!",
-            "I... ",
-            "I remember you from the orphanage!"
-
-        });
-        ezzy.addOptional(new String[]{"Have you come to rescue me? (Y/N)"}, new String[]{"Yay!"}, new String[]{"Thanks. Just leave me to die."});
-        ezzy.addCompanion(ezrae);
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
         maps.get(16).getActor().add(simon);
