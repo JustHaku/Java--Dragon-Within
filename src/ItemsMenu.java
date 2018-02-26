@@ -146,6 +146,9 @@ public class ItemsMenu extends Menu implements State {
                         }                        
                     } else if (keyEvent.key == Keyboard.Key.valueOf("E") && option == 1 && items.size() != 0) {
                       int hover = 0;
+                      int top = 0;
+                      int bottom = 9;
+                      int offset = 0;
                       boolean breakOut = false; // used to escape second loop.
                       
                       itemRect = new ArrayList<>();
@@ -188,10 +191,30 @@ public class ItemsMenu extends Menu implements State {
                           } else if (events.type == Event.Type.KEY_PRESSED) {
                               if (keyEvents.key == Keyboard.Key.valueOf("S")) {
                                   menuSound.play();
-                                  hover++;                                  
+                                  hover++;
+                                  if (hover > bottom && !(hover > items.size()-1)) 
+                                  {
+                                    bottom++;
+                                    top++;
+                                    offset--;
+                                    for (int i = 0; i < items.size(); i++) {
+                                      (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
+                                      (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
+                                    }
+                                  }
                               } else if (keyEvents.key == Keyboard.Key.valueOf("W")) {
                                   menuSound.play();
-                                  hover--;                                  
+                                  hover--;  
+                                  if (hover < top && !(hover < 0))                                    
+                                  {
+                                    top--;
+                                    bottom--;
+                                    offset++;
+                                    for (int i = 0; i < items.size(); i++) {
+                                      (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
+                                      (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
+                                    }
+                                  }
                               } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
                                 int selected = 0;
                                 boolean breakOut2 = false; // used to escape second loop.
@@ -237,6 +260,7 @@ public class ItemsMenu extends Menu implements State {
                                           breakOut = true;
                                         } else if (keyEvents2.key == Keyboard.Key.valueOf("ESCAPE")) {
                                           breakOut2 = true;
+                                          hover = 0;
                                         }
                                     }
                                   }
