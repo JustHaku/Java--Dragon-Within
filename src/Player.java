@@ -20,6 +20,7 @@ public class Player extends Character {
     private boolean moving = false;
     public boolean movementLock = false;
     private final Clock footstepsTimer = new Clock();
+     private final Clock animationTimer = new Clock();
     private int c1 = 1; // Both c1 and c2 represent the hardcoded co-ordinates for character sprite from the sheet.
     private int c2 = 2;
     Texture playerTexture;
@@ -34,6 +35,7 @@ public class Player extends Character {
     public Player(Texture imgTexture, ArrayList<WorldMap> m, Game g) {
         this.g = g;
         this.m = m;
+        
         playerTexture = imgTexture;
 
         name = "Main Player";
@@ -67,7 +69,16 @@ public class Player extends Character {
             x -= (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
-
+        if (animationTimer.getElapsedTime ().asMilliseconds() > 40){
+            if(getC1() < 8){
+                c1++;
+            }
+            else{
+                c1 = 0;
+            }
+            animationTimer.restart();
+        }
+        this.updateImg(c1,9);
         //}
     }
 
@@ -77,8 +88,16 @@ public class Player extends Character {
             x += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
-        
-        this.updateImg(1,10);
+        if (animationTimer.getElapsedTime ().asMilliseconds() > 40){
+            if(getC1() < 8){
+                c1++;
+            }
+            else{
+                c1 = 0;
+            }
+            animationTimer.restart();
+        }
+        this.updateImg(c1,11);
         //}
     }
 
@@ -89,6 +108,16 @@ public class Player extends Character {
             footstepsTimer.restart();
 
         }
+        if (animationTimer.getElapsedTime ().asMilliseconds() > 40){
+            if(getC1() < 8){
+                c1++;
+            }
+            else{
+                c1 = 0;
+            }
+            animationTimer.restart();
+        }
+        this.updateImg(c1,8);
 
         //}
     }
@@ -99,7 +128,16 @@ public class Player extends Character {
             y += (Game.spd * Game.SCALE);
             footstepsTimer.restart();
         }
-
+        if (animationTimer.getElapsedTime ().asMilliseconds() > 40){
+            if(getC1() < 8){
+                c1++;
+            }
+            else{
+                c1 = 0;
+            }
+            animationTimer.restart();
+        }
+        this.updateImg(c1,10);
         //}
     }
 
@@ -114,14 +152,14 @@ public class Player extends Character {
     public int getY() {
         return y;
     }
-    
-    public void setX(int i){
-        c1 = i;
+    public int getC1() {
+        return c1;
     }
     
-    public void setY(int i){
-        c2 = i;
+    public int getC2() {
+        return c2;
     }
+    
     
     public void updateImg(int i , int j){
         
@@ -130,7 +168,7 @@ public class Player extends Character {
         
         state = new IntRect(((c1 * 64) + c1), ((c2 * 64) + c2), 64, 64); // Creates the rectangle for the spritesheet.
 
-        img = new Sprite(playerTexture, state);
+        img.setTextureRect(state);
     }
     
 
@@ -199,7 +237,7 @@ public class Player extends Character {
                 if (movementLock == false) {
                     a.activate();
                     try {
-                        Thread.sleep(25);
+                        Thread.sleep(40);
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
                     }
