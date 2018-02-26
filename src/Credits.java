@@ -18,7 +18,7 @@ public class Credits implements State {
     private RenderWindow window;
     private int scale;
     private Font text_font;
-    private Text[] text = new Text[18];
+    private Text[] text = new Text[21];
     private int screenHeight;
     private int screenWidth;
     private boolean paused = false;
@@ -52,6 +52,10 @@ public class Credits implements State {
       text[15] = new Text("Main Menu Background", text_font, screenHeight / 15);
       text[16] = new Text("Anonymous", text_font, screenHeight / 15);
       text[17] = new Text("https://www.imgbase.info", text_font, screenHeight / 15);
+      text[18] = new Text(" ", text_font, screenHeight / 15);
+      text[19] = new Text("Open world spritesheets and sound FX", text_font, screenHeight / 15);
+      text[20] = new Text("kenney.nl", text_font, screenHeight / 15);
+      
       
       
       for (int i=0; i < text.length; i++)
