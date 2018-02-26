@@ -51,9 +51,10 @@ public class Player extends Character {
         isFriendly = true;
         x = 0; // Default position.
         y = 0;
-        state = new IntRect(((c1 * 64) + c1), ((c2 * 64) + c2), 64, 64); // Creates the rectangle for the spritesheet.
+        state = new IntRect(((c1 * 64)), ((c2 * 64)), 64, 64); // Creates the rectangle for the spritesheet.
         //left off here
         img = new Sprite(playerTexture, state);
+        
         img.setScale((Game.SCALE / ps) / 4, (Game.SCALE / ps) / 4); // Changes player scale to 2/3 of tile size.
         obj = img; // Sets img as collision object.
         setPosition = img::setPosition;    
@@ -165,7 +166,7 @@ public class Player extends Character {
         c1 = i;
         c2 = j;
         
-        state = new IntRect(((c1 * 64) + c1), ((c2 * 64) + c2), 64, 64); // Creates the rectangle for the spritesheet.
+        state = new IntRect(((c1 * 64)), ((c2 * 64)) , 64, 64); // Creates the rectangle for the spritesheet.
 
         img.setTextureRect(state);
     }

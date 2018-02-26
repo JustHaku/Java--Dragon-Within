@@ -319,8 +319,8 @@ public class ScriptedNPC extends Actor {
 
     public void addTeleport(int x, int y, int w) {
         nullify();
-        teleX = x + StateMachine.xOffset;
-        teleY = y + StateMachine.yOffset;
+        teleX = x;
+        teleY = y;
         wNum = w;
     }
 
