@@ -26,6 +26,7 @@ public class WorldPiece {
     public WorldPiece(Texture imgTexture, int x, int y, int c1, int c2) {
         // Draws rectange around selected piece
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
+        
 
         img = new Sprite(imgTexture, piece);
         img.setPosition(x * Game.tileSize + StateMachine.xOffset, y * Game.tileSize + StateMachine.yOffset); // Sets position

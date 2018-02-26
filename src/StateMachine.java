@@ -1,3 +1,4 @@
+
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -41,22 +42,18 @@ public class StateMachine {
 
         int screenWidth = 288;
         int screenHeight = 160;
-        
+
         resX = VideoMode.getDesktopMode().width;
         resY = VideoMode.getDesktopMode().height;
-        if(VideoMode.getDesktopMode().width/screenWidth > VideoMode.getDesktopMode().height/screenHeight){
+        if (VideoMode.getDesktopMode().width / screenWidth > VideoMode.getDesktopMode().height / screenHeight) {
             scale = VideoMode.getDesktopMode().height / screenHeight;
-            
-        }else{
-            scale = VideoMode.getDesktopMode().width / screenWidth;            
-        }
-        
-//        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
-//        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
-        
-                
-        
 
+        } else {
+            scale = VideoMode.getDesktopMode().width / screenWidth;
+        }
+
+        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
+        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
         window.setFramerateLimit(60); // Limit the framerate to 60.
@@ -64,8 +61,8 @@ public class StateMachine {
         Image icon = new Image();
         icon.loadFromFile(Paths.get("src/graphics/dragon_icon.png"));
         window.setIcon(icon);
-//        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
-//        window.setVerticalSyncEnabled(true);
+        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
+        window.setVerticalSyncEnabled(true);
 
         gameWorld = new Game(window, scale);
         Save s;
@@ -77,7 +74,6 @@ public class StateMachine {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
 
         State mainMenu = new MainMenu(window, scale, 4);
 
@@ -114,18 +110,18 @@ public class StateMachine {
             }
 
             //FileManager.save("src/saves/save000", (Game)gameWorld);
-            if (state == 98){
+            if (state == 98) {
                 team.clear();
                 Activator.activators.clear();
                 ScriptedNPC.scriptedNPCs.clear();
 
                 gameWorld = new Game(window, scale);
                 states[1] = gameWorld;
-                
+
                 team.add(Game.player1);
-                
+
                 Game.player1.name = intro.name;
-                
+
                 try {
                     Files.delete(Paths.get("src/saves/save000"));
 
@@ -148,9 +144,9 @@ public class StateMachine {
             if (state == 99) {
                 intro = new Intro(window);
                 states[10] = intro;
-                
+
                 state = 10;
-                
+
             }
             if (state > 100) {
                 scale = state - 100;
