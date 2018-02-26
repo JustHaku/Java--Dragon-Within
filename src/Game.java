@@ -23,7 +23,7 @@ import org.jsfml.system.Clock;
  */
 public class Game implements State, Serializable {
 
-    public static final int spd = 2; //The speed in which the player moves at.
+    public static final int spd = 4; //The speed in which the player moves at.
     public static int SCALE; //The scale of the game. This is changed when you want the game screen to change.
     public static int screenWidth; //Width of the game screen. Must be a multiple of 288.
     public static int screenHeight; //Height of the game screen. Must be a multiple of 160.
@@ -63,6 +63,7 @@ public class Game implements State, Serializable {
     //private Event event;
     // Textures for the game.
     public static final Texture playerSpriteSheet = new Texture();
+    public static final Texture mainSpriteSheet = new Texture();
     public final Texture worldSpriteSheet = new Texture();
     public final Texture barrierTexture = new Texture();
     public final Texture uiTexture = new Texture();
@@ -425,9 +426,9 @@ public class Game implements State, Serializable {
     }
 
     private void initPlayer() throws IOException {
-        player1 = new Player(playerSpriteSheet, maps, this);
+        player1 = new Player(mainSpriteSheet, maps, this);
         player1.setTilePosition(1, 4);
-        worldNum = 5;
+        worldNum = 28; //Spawn World
         trader = new Trader("Trader",
                 new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)),
                         "Psssst. Wanna buy a potion?",
@@ -567,6 +568,7 @@ public class Game implements State, Serializable {
     private void loadTextures() throws IOException {
         worldSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeSheet_transparent.png"));
         playerSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/roguelikeChar_transparent.png"));
+        mainSpriteSheet.loadFromFile(Paths.get("src/graphics/world/Spritesheet/mainChar.png"));
         barrierTexture.loadFromFile(Paths.get("src/graphics/world/Spritesheet/barrier.png"));
     }
 
@@ -631,6 +633,18 @@ public class Game implements State, Serializable {
         addExtPort(7,22,17,3,4,"y"); //Path to side peek from cave
         addExtPort(24,21,8,9,3,"x"); //Path to main city
         addExtPort(07,22,17,3,4,"y"); //Path to side peek from cave
+        addExtPort(26,25,1,9,16,"x"); //City bottom to middle
+        addExtPort(26,27,17,1,8,"y"); //City left middle to right middle
+        addExtPort(27,28,17,1,7,"y"); //City right middle to leuthard's shop
+        addExtPort(29,24,15,9,2,"x"); //City bridge to lower left peek
+        addExtPort(29,26,17,1,8,"y"); //City left peek to middle
+        addExtPort(25,30,17,1,3,"y"); //City lower left peek to middle
+        addExtPort(27,30,1,9,16,"x"); //City lower middle peek to middle
+        addExtPort(28,31,1,9,12,"x"); //Leuthard's house to city right peek
+        addExtPort(30,31,17,1,3,"y"); //City middle peak to right peek
+        addExtPort(32,26,1,9,2,"x"); //City lower left to upper left
+        addExtPort(32,26,15,9,2,"x"); //City lower left to upper left
+        addExtPort(32,26,8,9,2,"x"); //City lower left to upper left
 
     }
 
@@ -677,9 +691,8 @@ public class Game implements State, Serializable {
 
         mainTheme.setVolume(80);
         while (window.isOpen() && state == 1) {
-
 //            if(subState = 2){
-//
+//          
 //            }
 //            if (!player1.movementLock && moveClock.getElapsedTime().asSeconds() > 0.1 ) {
             moveClock.restart();
@@ -723,7 +736,7 @@ public class Game implements State, Serializable {
                 ul.draw(window);
             }
 
-            //Draws the backsground and main tiles.
+            //Draws the background and main tiles.
             for (WorldPiece wp : maps.get(worldNum).getOver()) {
                 wp.draw(window);
             }

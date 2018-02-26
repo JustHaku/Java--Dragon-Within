@@ -60,7 +60,7 @@ public class StateMachine {
         Image icon = new Image();
         icon.loadFromFile(Paths.get("src/graphics/dragon_icon.png"));
         window.setIcon(icon);
-        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
+        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within");
         window.setVerticalSyncEnabled(true);
 
         gameWorld = new Game(window, scale);
