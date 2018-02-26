@@ -53,8 +53,8 @@ public class StateMachine {
             scale = VideoMode.getDesktopMode().width / screenWidth;
         }
 
-        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
-        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
+        xOffset = (VideoMode.getDesktopMode().width - (screenWidth * scale)) / 2;
+        yOffset = (VideoMode.getDesktopMode().height - (screenHeight * scale)) / 2;
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
         window.setFramerateLimit(60); // Limit the framerate to 60.
@@ -70,10 +70,9 @@ public class StateMachine {
         try {
             s = Save.load("src/saves/save000");
             gameWorld.load(s);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            state = 99;
+
         }
 
         State mainMenu = new MainMenu(window, scale, 4);
@@ -106,10 +105,6 @@ public class StateMachine {
             }
 
             // Change state if no new class is required.
-            if (!locked) {
-                state = states[state].run();
-            }
-
             //FileManager.save("src/saves/save000", (Game)gameWorld);
             if (state == 98) {
                 team.clear();
@@ -135,6 +130,7 @@ public class StateMachine {
                     s = new Save(gameWorld.playerInv, Game.player1, gameWorld, Activator.activators, ScriptedNPC.scriptedNPCs, StateMachine.team);
                     Save.save("src/saves/save000", s);
                 } catch (IOException ex) {
+                    //state = 99;
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -153,6 +149,9 @@ public class StateMachine {
                 scale = state - 100;
                 state = 0;
                 window.close();
+            }
+            if (!locked) {
+                state = states[state].run();
             }
         }
         return scale;
