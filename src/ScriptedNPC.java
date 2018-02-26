@@ -91,41 +91,46 @@ public class ScriptedNPC extends Actor {
 
         if (yesOption != null && noOption != null && preOption != null) {
             System.out.println("Not null");
-            for (MessageBox d : preOption) {
-                d.showHide();
-                m.play();
-                sleepy();
+            try {
+                for (MessageBox d : preOption) {
+                    d.showHide();
+                    m.play();
+                    sleepy();
 
-                if (preOption.indexOf(d) == preOption.size() - 1) {
-                    while (true) {
-                        if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
-                            d.showHide();
-                            sleepy();
-                            if (cost != null) {
-                                if (StateMachine.gameWorld.playerInv.getGold() - cost < 0) {
+                    if (preOption.indexOf(d) == preOption.size() - 1) {
+                        while (true) {
+                            if (Keyboard.isKeyPressed(Keyboard.Key.Y)) {
+                                d.showHide();
+                                sleepy();
+                                if (cost != null) {
+                                    if (StateMachine.gameWorld.playerInv.getGold() - cost < 0) {
 
+                                    } else {
+                                        cycleOption(yesOption);
+                                    }
                                 } else {
                                     cycleOption(yesOption);
-                                }
-                            } else {
-                                cycleOption(yesOption);
 
+                                }
+                                tele();
+                                items();
+                                gold();
+                                companion();
+                                break;
+                            } else if (Keyboard.isKeyPressed(Keyboard.Key.N)) {
+                                d.showHide();
+                                sleepy();
+                                cycleOption(noOption);
+                                break;
                             }
-                            tele();
-                            items();
-                            gold();
-                            companion();
-                            break;
-                        } else if (Keyboard.isKeyPressed(Keyboard.Key.N)) {
-                            d.showHide();
-                            sleepy();
-                            cycleOption(noOption);
-                            break;
                         }
+                    } else {
+                        waitE(d);
                     }
-                } else {
-                    waitE(d);
                 }
+
+            }catch (Exception e){
+                
             }
 
         } else {
@@ -239,9 +244,9 @@ public class ScriptedNPC extends Actor {
 
         }
     }
-    
-    private void companion(){
-        if(addPlayer != null && addingPlayer != null){
+
+    private void companion() {
+        if (addPlayer != null && addingPlayer != null) {
             if (!hadItems) {
                 hadItems = true;
                 m.play();
@@ -252,27 +257,26 @@ public class ScriptedNPC extends Actor {
                 if (preOption != null) {
                     preOption.clear();
                 }
-                
+
                 dialogue.add(new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "I'm already in your group.", Color.BLACK));
 
             }
             hadItems = true;
-            
+
         }
-        
+
     }
 
     public void addCompanion(NPC p) {
         nullify();
-        
+
         addPlayer = p;
-        
+
         addingPlayer = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), p.name + " joined your party!", Color.BLACK);
-        
-        
+
     }
-    
-    private void nullify(){
+
+    private void nullify() {
         teleX = null;
         teleY = null;
         wNum = null;
@@ -282,7 +286,7 @@ public class ScriptedNPC extends Actor {
         receivedGold = null;
         addPlayer = null;
         addingPlayer = null;
-        
+
     }
 
     public void addGold(int g) {
@@ -295,7 +299,6 @@ public class ScriptedNPC extends Actor {
     public void addItems(ArrayList<Item> i) {
         nullify();
 
-        
         itemMessages = new ArrayList<>();
         items = new ArrayList<>();
         for (Item a : i) {
@@ -353,29 +356,27 @@ public class ScriptedNPC extends Actor {
         if (preOption != null) {
             preOption.clear();
         }
-        if(addPlayer != null){
+        if (addPlayer != null) {
             boolean dontAdd = false;
-            for(Character a: StateMachine.team){
-                if(a.name == addPlayer.name){
+            for (Character a : StateMachine.team) {
+                if (a.name == addPlayer.name) {
                     dontAdd = true;
                     break;
-                                        
+
                 }
-                
+
             }
-            if(dontAdd == false){
+            if (dontAdd == false) {
                 StateMachine.team.add(addPlayer);
-                
+
             }
-            
+
             dialogue.add(new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "I'm already in your group.", Color.BLACK));
-            
-        }else{
+
+        } else {
             dialogue.add(new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "It appears you have taken everything.", Color.BLACK));
-            
+
         }
-        
-        
 
     }
 
@@ -455,7 +456,7 @@ public class ScriptedNPC extends Actor {
                 receivedGold.draw(w);
             }
         }
-        
+
         if (addingPlayer != null) {
             if (!addingPlayer.hidden) {
                 addingPlayer.draw(w);
