@@ -147,6 +147,36 @@ public class ItemsMenu extends Menu implements State {
                     } else if (keyEvent.key == Keyboard.Key.valueOf("E") && option == 1 && items.size() != 0) {
                       int hover = 0;
                       boolean breakOut = false; // used to escape second loop.
+                      
+                      itemRect = new ArrayList<>();
+                      itemText = new ArrayList<>();
+
+                      for (int i = 0; i < items.size(); i++) {
+                        itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                        (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                        (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+
+                        itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                        (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                      }
+                      
+                      window.clear(Color.BLACK);
+                      window.draw(menuRect);
+                      window.draw(playerRect);
+                      drawText(text);
+                      
+                      // resets items menu.
+                      for (int i = 0; i < itemRect.size(); i++) {
+                          if (hover == i) {
+                              (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
+                          } else {
+                              (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                          }
+                          window.draw(itemRect.get(i));
+                          window.draw(itemText.get(i));
+                      }
+
+                      window.display();
 
                       while (breakOut == false) {
                         for (Event events : window.pollEvents()) {
