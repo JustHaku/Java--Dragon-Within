@@ -34,7 +34,7 @@ public class ItemsMenu extends Menu implements State {
 
     public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv, ArrayList<Character> team) throws IOException {
         menuWindow(window, scale, options_num);
-        this.team = team; 
+        this.team = team;
         /*this.window = window;
         this.scale = scale;
         screenHeight = 160 * scale;
@@ -53,11 +53,11 @@ public class ItemsMenu extends Menu implements State {
 
         menuRect = new RectangleShape(new Vector2f((screenWidth / 4) * 3, screenHeight - 10));
         menuRect.setFillColor(new Color(11, 2, 138));
-        menuRect.setPosition(5 + StateMachine.xOffset, 5+ StateMachine.yOffset);
+        menuRect.setPosition(5 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         playerRect = new RectangleShape(new Vector2f((screenWidth / 4) - 15, screenHeight - 10));
         playerRect.setFillColor(new Color(11, 2, 138));
-        playerRect.setPosition(((screenWidth / 4) * 3) + 10+ StateMachine.xOffset, 5+ StateMachine.yOffset);
+        playerRect.setPosition(((screenWidth / 4) * 3) + 10 + StateMachine.xOffset, 5 + StateMachine.yOffset);
 
         text[0] = new Text("consumables", text_font, screenHeight / 15);
         bounds = text[0].getLocalBounds();
@@ -67,7 +67,7 @@ public class ItemsMenu extends Menu implements State {
         text[1] = new Text("weapons", text_font, screenHeight / 15);
         bounds = text[1].getLocalBounds();
         text[1].setOrigin(bounds.width / 2, bounds.height / 2);
-        text[1].setPosition((screenWidth / 8) * 7+ StateMachine.xOffset, screenHeight / 20 * 3 + StateMachine.yOffset);
+        text[1].setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * 3 + StateMachine.yOffset);
 
         text[2] = new Text("trinkets", text_font, screenHeight / 15);
         bounds = text[2].getLocalBounds();
@@ -92,7 +92,7 @@ public class ItemsMenu extends Menu implements State {
         items = StateMachine.gameWorld.playerInv.getConsumables(); // gets first inventory.
         boolean closeReq = false;
         itemRect = new ArrayList<>();
-        itemText = new ArrayList<>(); 
+        itemText = new ArrayList<>();
 
         // sets up rectangles and text for items.
         for (int i = 0; i < items.size(); i++) {
@@ -113,8 +113,12 @@ public class ItemsMenu extends Menu implements State {
             drawText(text);
 
             for (int i = 0; i < items.size(); i++) {
-                window.draw(itemRect.get(i));
-                window.draw(itemText.get(i));
+                if (itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getLocalBounds().height < Game.screenHeight + StateMachine.yOffset && itemRect.get(i).getGlobalBounds().top > StateMachine.yOffset) {
+                    System.out.println(itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getGlobalBounds().height);
+                    window.draw(itemRect.get(i));
+                    window.draw(itemText.get(i));
+                }
+
             }
 
             window.display();
@@ -143,202 +147,207 @@ public class ItemsMenu extends Menu implements State {
                         option--;
                         if (option <= 1) {
                             option = 1;
-                        }                        
+                        }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("E") && option == 1 && items.size() != 0) {
-                      int hover = 0;
-                      int top = 0;
-                      int bottom = 9;
-                      int offset = 0;
-                      boolean breakOut = false; // used to escape second loop.
-                      
-                      itemRect = new ArrayList<>();
-                      itemText = new ArrayList<>();
+                        int hover = 0;
+                        int top = 0;
+                        int bottom = 9;
+                        int offset = 0;
+                        boolean breakOut = false; // used to escape second loop.
 
-                      for (int i = 0; i < items.size(); i++) {
-                        itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
-                        (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                        (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                        itemRect = new ArrayList<>();
+                        itemText = new ArrayList<>();
 
-                        itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                        (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
-                      }
-                      
-                      window.clear(Color.BLACK);
-                      window.draw(menuRect);
-                      window.draw(playerRect);
-                      drawText(text);
-                      
-                      // resets items menu.
-                      for (int i = 0; i < itemRect.size(); i++) {
-                          if (hover == i) {
-                              (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
-                          } else {
-                              (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                          }
-                          window.draw(itemRect.get(i));
-                          window.draw(itemText.get(i));
-                      }
+                        for (int i = 0; i < items.size(); i++) {
+                            itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                            (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                            (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
-                      window.display();
+                            itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                            (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                        }
 
-                      while (breakOut == false) {
-                        for (Event events : window.pollEvents()) {
-                          KeyEvent keyEvents = events.asKeyEvent();
+                        window.clear(Color.BLACK);
+                        window.draw(menuRect);
+                        window.draw(playerRect);
+                        drawText(text);
 
-                          if (events.type == Event.Type.CLOSED) {
-                              closeReq = true;
-                              breakOut = true;
-                          } else if (events.type == Event.Type.KEY_PRESSED) {
-                              if (keyEvents.key == Keyboard.Key.valueOf("S")) {
-                                  menuSound.play();
-                                  hover++;
-                                  if (hover > bottom && !(hover > items.size()-1)) 
-                                  {
-                                    bottom++;
-                                    top++;
-                                    offset--;
-                                    for (int i = 0; i < items.size(); i++) {
-                                      (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
-                                      (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
-                                    }
-                                  }
-                              } else if (keyEvents.key == Keyboard.Key.valueOf("W")) {
-                                  menuSound.play();
-                                  hover--;  
-                                  if (hover < top && !(hover < 0))                                    
-                                  {
-                                    top--;
-                                    bottom--;
-                                    offset++;
-                                    for (int i = 0; i < items.size(); i++) {
-                                      (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
-                                      (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2)*offset));
-                                    }
-                                  }
-                              } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
-                                int selected = 0;
-                                boolean breakOut2 = false; // used to escape second loop.
-                                ArrayList<Text> teamText = new ArrayList<>();
-                                
-                                for (int i = 0; i < StateMachine.team.size(); i++) {
-                                  teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
-                                  bounds = teamText.get(i).getLocalBounds();
-                                  teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
-                                  teamText.get(i).setPosition((screenWidth / 8) * 7+ StateMachine.xOffset, screenHeight / 20 * (i*2+1) + StateMachine.yOffset);
-                                } 
-                                
-                                itemRect = new ArrayList<>();
-                                itemText = new ArrayList<>(); 
-                                for (int i = 0; i < items.size(); i++) {
-                                    itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
-                                    (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                                    (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                        // resets items menu.
+                        for (int i = 0; i < itemRect.size(); i++) {
+                            if (hover == i) {
+                                (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
+                            } else {
+                                (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                            }
+                            if (itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getLocalBounds().height < Game.screenHeight + StateMachine.yOffset && itemRect.get(i).getGlobalBounds().top > StateMachine.yOffset) {
+                                System.out.println(itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getGlobalBounds().height);
+                                window.draw(itemRect.get(i));
+                                window.draw(itemText.get(i));
+                            }
+                        }
 
-                                    itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                                    (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
-                                }
+                        window.display();
 
-                                while (breakOut2 == false) {                                  
-                                  for (Event events2 : window.pollEvents()) {
-                                    KeyEvent keyEvents2 = events2.asKeyEvent();
+                        while (breakOut == false) {
+                            for (Event events : window.pollEvents()) {
+                                KeyEvent keyEvents = events.asKeyEvent();
 
-                                    if (events2.type == Event.Type.CLOSED) {
-                                        closeReq = true;
+                                if (events.type == Event.Type.CLOSED) {
+                                    closeReq = true;
+                                    breakOut = true;
+                                } else if (events.type == Event.Type.KEY_PRESSED) {
+                                    if (keyEvents.key == Keyboard.Key.valueOf("S")) {
+                                        menuSound.play();
+                                        hover++;
+                                        if (hover > bottom && !(hover > items.size() - 1)) {
+                                            bottom++;
+                                            top++;
+                                            offset--;
+                                            for (int i = 0; i < items.size(); i++) {
+                                                (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2) * offset));
+                                                (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2) * offset));
+                                            }
+                                        }
+                                    } else if (keyEvents.key == Keyboard.Key.valueOf("W")) {
+                                        menuSound.play();
+                                        hover--;
+                                        if (hover < top && !(hover < 0)) {
+                                            top--;
+                                            bottom--;
+                                            offset++;
+                                            for (int i = 0; i < items.size(); i++) {
+                                                (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2) * offset));
+                                                (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset + ((screenHeight / 10 - 2) * offset));
+                                            }
+                                        }
+                                    } else if (keyEvents.key == Keyboard.Key.valueOf("E")) {
+                                        int selected = 0;
+                                        boolean breakOut2 = false; // used to escape second loop.
+                                        ArrayList<Text> teamText = new ArrayList<>();
+
+                                        for (int i = 0; i < StateMachine.team.size(); i++) {
+                                            teamText.add(new Text(StateMachine.team.get(i).name, text_font, screenHeight / 15));
+                                            bounds = teamText.get(i).getLocalBounds();
+                                            teamText.get(i).setOrigin(bounds.width / 2, bounds.height / 2);
+                                            teamText.get(i).setPosition((screenWidth / 8) * 7 + StateMachine.xOffset, screenHeight / 20 * (i * 2 + 1) + StateMachine.yOffset);
+                                        }
+
+                                        itemRect = new ArrayList<>();
+                                        itemText = new ArrayList<>();
+                                        for (int i = 0; i < items.size(); i++) {
+                                            itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                                            (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                            (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+
+                                            itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                                            (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                                        }
+
+                                        while (breakOut2 == false) {
+                                            for (Event events2 : window.pollEvents()) {
+                                                KeyEvent keyEvents2 = events2.asKeyEvent();
+
+                                                if (events2.type == Event.Type.CLOSED) {
+                                                    closeReq = true;
+                                                    breakOut = true;
+                                                    breakOut2 = true;
+                                                } else if (events2.type == Event.Type.KEY_PRESSED) {
+                                                    if (keyEvents2.key == Keyboard.Key.valueOf("S")) {
+                                                        menuSound.play();
+                                                        selected++;
+                                                    } else if (keyEvents2.key == Keyboard.Key.valueOf("W")) {
+                                                        menuSound.play();
+                                                        selected--;
+                                                    } else if (keyEvents2.key == Keyboard.Key.valueOf("E")) {
+                                                        ((Consumable) items.get(hover)).use(StateMachine.team.get(selected));
+                                                        items.remove(hover);
+                                                        breakOut2 = true;
+                                                        breakOut = true;
+                                                    } else if (keyEvents2.key == Keyboard.Key.valueOf("ESCAPE")) {
+                                                        breakOut2 = true;
+                                                        hover = 0;
+                                                    }
+                                                }
+                                            }
+                                            if (selected >= StateMachine.team.size()) {
+                                                selected = StateMachine.team.size() - 1;
+                                            } else if (selected <= 0) {
+                                                selected = 0;
+                                            }
+                                            window.clear(Color.BLACK);
+                                            window.draw(menuRect);
+                                            window.draw(playerRect);
+                                            for (int i = 0; i < StateMachine.team.size(); i++) {
+                                                teamText.get(i).setColor(Color.WHITE);
+                                                teamText.get(selected).setColor(Color.BLACK);
+                                                window.draw(teamText.get(i));
+                                            }
+
+                                            // resets items menu.
+                                            for (int i = 0; i < itemRect.size(); i++) {
+                                                if (itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getLocalBounds().height < Game.screenHeight + StateMachine.yOffset && itemRect.get(i).getGlobalBounds().top > StateMachine.yOffset) {
+                                                    System.out.println(itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getGlobalBounds().height);
+                                                    window.draw(itemRect.get(i));
+                                                    window.draw(itemText.get(i));
+                                                }
+                                            }
+
+                                            window.display();
+                                        }
+                                        itemRect = new ArrayList<>();
+                                        itemText = new ArrayList<>();
+                                        for (int i = 0; i < items.size(); i++) {
+                                            itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                                            (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                            (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+
+                                            itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                                            (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                                        }
+                                    } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
                                         breakOut = true;
-                                        breakOut2 = true;
-                                    } else if (events2.type == Event.Type.KEY_PRESSED) {
-                                        if (keyEvents2.key == Keyboard.Key.valueOf("S")) {
-                                            menuSound.play();
-                                            selected ++;                                            
-                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("W")) {
-                                            menuSound.play();
-                                            selected --;                                            
-                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("E")) {
-                                          ((Consumable)items.get(hover)).use(StateMachine.team.get(selected));
-                                          items.remove(hover);
-                                          breakOut2 = true;
-                                          breakOut = true;
-                                        } else if (keyEvents2.key == Keyboard.Key.valueOf("ESCAPE")) {
-                                          breakOut2 = true;
-                                          hover = 0;
+                                        for (int i = 0; i < itemRect.size(); i++) {
+                                            (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
                                         }
                                     }
-                                  }
-                                  if (selected >= StateMachine.team.size()) {
-                                      selected = StateMachine.team.size() - 1;
-                                  }
-                                  else if (selected <= 0) {
-                                      selected = 0;
-                                  }
-                                  window.clear(Color.BLACK);
-                                  window.draw(menuRect);
-                                  window.draw(playerRect);
-                                  for (int i = 0; i < StateMachine.team.size(); i++) {              
-                                    teamText.get(i).setColor(Color.WHITE);
-                                    teamText.get(selected).setColor(Color.BLACK);
-                                    window.draw(teamText.get(i));
-                                  }
-                                  
-                                  // resets items menu.
-                                  for (int i = 0; i < itemRect.size(); i++) {
-                                      window.draw(itemRect.get(i));
-                                      window.draw(itemText.get(i));
-                                  }
-
-                                  window.display();
                                 }
-                                itemRect = new ArrayList<>();
-                                itemText = new ArrayList<>(); 
-                                for (int i = 0; i < items.size(); i++) {
-                                    itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
-                                    (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                                    (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
-
-                                    itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                                    (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                                if (hover >= items.size()) {
+                                    hover = items.size() - 1;
+                                } else if (hover <= 0) {
+                                    hover = 0;
                                 }
-                              } else if (keyEvents.key == Keyboard.Key.valueOf("ESCAPE")) {
-                                  breakOut = true;
-                                  for (int i = 0; i < itemRect.size(); i++) {
-                                      (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                                  }
-                              }
-                          }
-                          if (hover >= items.size()) {
-                              hover = items.size() - 1;
-                          }
-                          else if (hover <= 0) {
-                              hover = 0;
-                          }
-                          window.clear(Color.BLACK);
-                          window.draw(menuRect);
-                          window.draw(playerRect);
-                          drawText(text);
-                          
-                          // resets items menu.
-                          for (int i = 0; i < itemRect.size(); i++) {
-                              if (hover == i) {
-                                  (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
-                              } else {
-                                  (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                              }
-                              window.draw(itemRect.get(i));
-                              window.draw(itemText.get(i));
-                          }
+                                window.clear(Color.BLACK);
+                                window.draw(menuRect);
+                                window.draw(playerRect);
+                                drawText(text);
 
-                          window.display();
+                                // resets items menu.
+                                for (int i = 0; i < itemRect.size(); i++) {
+                                    if (hover == i) {
+                                        (itemRect.get(i)).setFillColor(new Color(104, 89, 183));
+                                    } else {
+                                        (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                                    }
+                                    if (itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getLocalBounds().height < Game.screenHeight + StateMachine.yOffset && itemRect.get(i).getGlobalBounds().top > StateMachine.yOffset) {
+                                        System.out.println(itemRect.get(i).getGlobalBounds().top + itemRect.get(i).getGlobalBounds().height);
+                                        window.draw(itemRect.get(i));
+                                        window.draw(itemText.get(i));
+                                    }
+                                }
+
+                                window.display();
+                            }
                         }
-                      }
-                      itemRect = new ArrayList<>();
-                      itemText = new ArrayList<>(); 
-                      for (int i = 0; i < items.size(); i++) {
-                          itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
-                          (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
-                          (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                        itemRect = new ArrayList<>();
+                        itemText = new ArrayList<>();
+                        for (int i = 0; i < items.size(); i++) {
+                            itemRect.add(new RectangleShape(new Vector2f((screenWidth / 4) * 3 - 10, screenHeight / 10 - 10)));
+                            (itemRect.get(i)).setFillColor(new Color(50, 45, 138));
+                            (itemRect.get(i)).setPosition(10 + StateMachine.xOffset, 10 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
 
-                          itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
-                          (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
-                      }
+                            itemText.add(new Text(((Item) items.get(i)).getName(), text_font, screenHeight / 15));
+                            (itemText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 10 - 2) * i) + StateMachine.yOffset);
+                        }
                     } else if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
                         paused = true;
                     }
