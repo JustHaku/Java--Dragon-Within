@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.*;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.jsfml.audio.Music;
@@ -75,6 +76,7 @@ public class Game implements State, Serializable {
     private final Music openDoor = new Music();
     private final Music closeDoor = new Music();
     private final Music stairs = new Music();
+    private final Music coinspurse = new Music();
     private ArrayList<TalkNPC> npcs = new ArrayList<>();
     private ScriptedNPC paul;
     private ScriptedNPC simon;
@@ -107,15 +109,17 @@ public class Game implements State, Serializable {
     Consumable superPotion = new Consumable(3, "Super Potion", 50, 0, 300);
     Consumable superEther = new Consumable(4, "Super Ether", 0, 50, 400);
     Consumable recover = new Consumable(5, "Super Ether", 50, 50, 850);
-    Consumable freshFish = new Consumable(2, "\"Fresh Fish\"", -20, 0, 5);
+    Consumable freshFish = new Consumable(6, "\"Fresh Fish\"", -20, 0, 5);
+    Consumable beer = new Consumable(7, "Beer", -10, 20 , 5);
 
     TalkNPC pete;
 
     Weapon dagger = new Weapon(1, "Dagger", 60);
     Weapon cleaver = new Weapon(2, "Cleaver", 100);
     Weapon shortsword = new Weapon(3, "Short Sword", 120);
+    Weapon scimitar = new Weapon(6, "Scimitar", 180);
     Weapon bow = new Weapon(4, "Wooden Bow", 150);
-    Weapon excalibur = new Weapon(5, "Excalibur", 150);
+    Weapon excalibur = new Weapon(5, "Excalibur", 250);
 
     public int worldNum = 0;
 
@@ -199,15 +203,14 @@ public class Game implements State, Serializable {
         worldNum = s.getWorld();
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
-        
-        
-        for(ArrayList<Object> a: s.stats){
-            try{
-                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);                 
-            }catch(IndexOutOfBoundsException e){
+
+        for (ArrayList<Object> a : s.stats) {
+            try {
+                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);
+            } catch (IndexOutOfBoundsException e) {
                 System.out.println("Too many");
             }
-            
+
         }
 
         System.out.println("Loaded");
@@ -262,16 +265,24 @@ public class Game implements State, Serializable {
         maps.get(m).getActor().add(new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f));
     }
 
-    private void addActivator(int m, int x, int y, Weapon c, Music f, int x2, int y2) {
+    private void addActivator(int m, int x, int y, Weapon c, Music f, int x2, int y2, boolean addalt) {
         AddItem d = null;
+        int c1 = 0;
+        int c2 = 0;
         for (Actor a : maps.get(m).getActor()) {
             if (a.x == x * Game.tileSize + StateMachine.xOffset && a.y == y * Game.tileSize + StateMachine.yOffset && a.getClass() == WorldPieceActor.class) {
                 d = new AddItem(worldSpriteSheet, "", x, y, new Weapon(c.getId(), c.getName(), c.dmg), playerInv, f, (WorldPieceActor) a);
+                c1 = a.c1;
+                c2 = a.c2;
             }
         }
         if (d != null) {
-            maps.get(m).getActor().add(d);
-            d.addAlt(x2, y2);
+             maps.get(m).getActor().add(d);
+            if (addalt) {
+                d.addAlt(x2, y2);
+            } else {
+                d.addAlt(c1, c2);
+            }
         } else {
             //throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
         }
@@ -279,16 +290,52 @@ public class Game implements State, Serializable {
         //System.out.println(x + " " + y);
     }
 
-    private void addActivator(int m, int x, int y, Consumable c, Music f, int x2, int y2) {
+    private void addActivator(int m, int x, int y, Consumable c, Music f, int x2, int y2, boolean addalt) {
         AddItem d = null;
+        int c1 = 0;
+        int c2 = 5;
         for (Actor a : maps.get(m).getActor()) {
             if (a.x == x * Game.tileSize + StateMachine.xOffset && a.y == y * Game.tileSize + StateMachine.yOffset && a.getClass() == WorldPieceActor.class) {
                 d = new AddItem(worldSpriteSheet, "", x, y, new Consumable(c.getId(), c.getName(), c), playerInv, f, (WorldPieceActor) a);
+                c1 = a.c1;
+                c2 = a.c2;
             }
         }
         if (d != null) {
             maps.get(m).getActor().add(d);
-            d.addAlt(x2, y2);
+            if (addalt) {
+                d.addAlt(x2, y2);
+            } else {
+                d.addAlt(c1, c2);
+            }
+        } else {
+            //throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
+        }
+
+        //System.out.println(x + " " + y);
+    }
+    
+    
+
+    private void addActivator(int m, int x, int y, int gold, Music f, int x2, int y2, boolean addalt) {
+        AddItem d = null;
+        int c1 = 0;
+        int c2 = 5;
+        for (Actor a : maps.get(m).getActor()) {
+            if (a.x == x * Game.tileSize + StateMachine.xOffset && a.y == y * Game.tileSize + StateMachine.yOffset && a.getClass() == WorldPieceActor.class) {
+                d = new AddItem(worldSpriteSheet, "", x, y, gold, playerInv, f, (WorldPieceActor) a, !addalt, m);
+                c1 = a.c1;
+                c2 = a.c2;
+            }
+        }
+        if (d != null) {
+            maps.get(m).getActor().add(d);
+            if (addalt) {
+                d.addAlt(x2, y2);
+            } else {
+                d.addAlt(c1, c2);
+            }
+
         } else {
             //throw new java.lang.NullPointerException("No WorldPieceActor at given coordinates");
         }
@@ -412,11 +459,29 @@ public class Game implements State, Serializable {
     }
 
     private void initActivators() {
-        addActivator(5, 4, 3, potion, openChest, 24, 5);
-        addActivator(5, 13, 3, ether, openChest, 24, 5);
-        addActivator(1, 5, 6, dagger, openChest, 38, 11);
-        addActivator(4, 8, 3, cleaver, openChest, 38, 11);
-//        addActivator(4, 8, 3, cleaver, openChest, 38, 11);
+        addActivator(5, 4, 3, potion, openChest, 24, 5, true);
+        addActivator(5, 13, 3, ether, openChest, 24, 5, true);
+        addActivator(1, 5, 6, dagger, openChest, 38, 11, true);
+        addActivator(4, 8, 3, cleaver, openChest, 38, 11, true);
+        addActivator(8, 8, 8, bow, openChest, 38, 11, true);
+        addActivator(8, 7, 8, 500, openChest, 38, 11, true);
+        addActivator(10, 7, 7, 250, coinspurse, 38, 11, false);
+        addActivator(10, 8, 7, 1000, coinspurse, 38, 11, false);
+        addActivator(10, 9, 7, 100, coinspurse, 38, 11, false);
+        addActivator(10, 10, 7, 50, coinspurse, 38, 11, false);
+        addActivator(10, 7, 8, 1, openChest, 38, 11, true);
+        addActivator(10, 8, 8, excalibur, openChest, 38, 11, true);
+        addActivator(10, 9, 8, superPotion, openChest, 38, 11, true);
+        addActivator(10, 10, 8, superEther, openChest, 38, 11, true);
+        addActivator(23, 7, 2, superPotion, openChest, 38, 11, true);
+        addActivator(23, 8, 2, superEther, openChest, 38, 11, true);
+        addActivator(23, 9, 2, scimitar, openChest, 38, 11, true);
+        addActivator(22, 2, 4, potion, openChest, 38, 11, true);
+        addActivator(19, 0, 2, superPotion, openChest, 38, 11, true);
+        addActivator(19, 17, 2, beer, openChest, 38, 11, false);
+        addActivator(19, 2, 0, beer, openChest, 38, 11, false);
+        addActivator(19, 3, 0, beer, openChest, 38, 11, false);
+        addActivator(15, 2, 2, freshFish, openChest, 38, 11, true);
         //addActivator();
 
     }
@@ -517,6 +582,41 @@ public class Game implements State, Serializable {
         };
         npcs.add(new TalkNPC("Pete", constructMessage(s10), playerSpriteSheet, 1, 6, 14, 5));
         maps.get(2).getActor().add(npcs.get(9));
+        
+        String[] s11 = {
+            "WARNING:",
+            "Death inevitable",
+
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s11), worldSpriteSheet, 19, 0, 6, 4));
+        maps.get(7).getActor().add(npcs.get(10));
+        
+        String[] s12 = {
+            "WARNING:",
+            "Unsafe area ahead.",
+            "Enemies may attack"
+
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s12), worldSpriteSheet, 21, 0, 15, 5));
+        maps.get(0).getActor().add(npcs.get(11));
+        
+        String[] s13 = {
+            "NORTH: Withered Forest",
+            "SOUTH: Trader's Bay",
+            "WEST: Initium"
+
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s13), worldSpriteSheet, 20, 0, 10, 6));
+        maps.get(12).getActor().add(npcs.get(12));
+        
+        String[] s14 = {
+            "NORTH: ???",
+            "EAST: Withered Forest",
+            "WEST: Initium"
+
+        };
+        npcs.add(new TalkNPC("Pete", constructMessage(s14), worldSpriteSheet, 16, 5, 9, 4));
+        maps.get(6).getActor().add(npcs.get(13));
 
         paul = new ScriptedNPC(playerSpriteSheet, 1, 8, 6, 5);
         maps.get(0).getActor().add(paul);
@@ -531,8 +631,8 @@ public class Game implements State, Serializable {
         luke.addDialogue(new String[]{"Hello, my name is Leuthard.",
             "You have been assigned as my apprentice",
             "Let's get going"
-                
-                                       });
+
+        });
         luke.addCompanion(Luke);
 
         simon = new ScriptedNPC(playerSpriteSheet, 1, 8, 10, 4);
@@ -554,6 +654,7 @@ public class Game implements State, Serializable {
         openDoor.openFromFile(Paths.get("src/audio/rpg/doorOpen_1.ogg"));
         closeDoor.openFromFile(Paths.get("src/audio/rpg/doorClose_4.ogg"));
         stairs.openFromFile(Paths.get("src/audio/rpg/stairs.ogg"));
+        coinspurse.openFromFile(Paths.get("src/audio/rpg/handleCoins.ogg"));
 
         mainTheme.openFromFile(Paths.get("src/audio/rpg/main_theme.ogg"));
         mainTheme.setLoop(true);
@@ -649,7 +750,7 @@ public class Game implements State, Serializable {
         referencePlayer();
 
         h = new Helper();
-        //h.toggleHidden();
+        h.toggleHidden();
 
         // Check whether we're running from a JDK or JRE install ...and set FontPath appropriately.
         if ((new File(JreFontPath)).exists()) {
@@ -720,10 +821,15 @@ public class Game implements State, Serializable {
             }
 
             //Draws the "Foreground" objects to interact with including: player, barriers and npc.
-            for (Actor actor : maps.get(worldNum).getActor()) {
-                actor.calcMove(0  + StateMachine.xOffset, 0 + StateMachine.yOffset, screenWidth + StateMachine.xOffset, screenHeight + StateMachine.yOffset);
-                actor.performMove();
-                actor.draw(window);
+            try {
+                for (Actor actor : maps.get(worldNum).getActor()) {
+                    actor.calcMove(0 + StateMachine.xOffset, 0 + StateMachine.yOffset, screenWidth + StateMachine.xOffset, screenHeight + StateMachine.yOffset);
+                    actor.performMove();
+                    actor.draw(window);
+                }
+
+            } catch (ConcurrentModificationException e) {
+
             }
 
             for (MessageBox m : AddItem.messages) {
@@ -740,12 +846,12 @@ public class Game implements State, Serializable {
                 trader2.drawMessage(window);
             }
 
-            if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
-                if (routeMessage != null) {
-                    routeMessage.draw(window);
-                }
-
+//            if (routeMessage != null && routeClock.getElapsedTime().asSeconds() <= 1.6) {
+            if (routeMessage != null) {
+                routeMessage.draw(window);
             }
+
+//            }
             if (h != null) {
                 h.Draw(window);
             }

@@ -143,49 +143,54 @@ public class Player extends Character {
                 y -= Game.spd * Game.SCALE;
             }
         }
+        try {
+            m.get(g.worldNum).getActor().stream().map((a) -> {
+                if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
+                    if (x > a.x) {
+                        moveRight();
+                    }
+                    if (x < a.x) {
+                        moveLeft();
+                    }
 
-        m.get(g.worldNum).getActor().stream().map((a) -> {
-            if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
-                if (x > a.x) {
-                    moveRight();
+                    if (y > a.y) {
+                        moveDown();
+                    }
+                    if (y < a.y) {
+                        moveUp();
+                    }
+                } else if (a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true) {
+                    if (x > a.x) {
+                        moveRight();
+                    }
+                    if (x < a.x) {
+                        moveLeft();
+                    }
+
+                    if (y > a.y) {
+                        moveDown();
+                    }
+                    if (y < a.y) {
+                        moveUp();
+                    }
+
                 }
-                if (x < a.x) {
-                    moveLeft();
+                return a;
+            }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
+                if (movementLock == false) {
+                    a.activate();
+                    try {
+                        Thread.sleep(25);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
-                if (y > a.y) {
-                    moveDown();
-                }
-                if (y < a.y) {
-                    moveUp();
-                }
-            } else if (a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true) {
-                if (x > a.x) {
-                    moveRight();
-                }
-                if (x < a.x) {
-                    moveLeft();
-                }
+            });
 
-                if (y > a.y) {
-                    moveDown();
-                }
-                if (y < a.y) {
-                    moveUp();
-                }
-
-            }
-            return a;
-        }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
-            if(movementLock == false){
-                a.activate();
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        }catch(NullPointerException e){
             
-        });
+        }
+
     }
 }

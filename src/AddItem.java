@@ -21,9 +21,12 @@ public class AddItem extends Activator {
     public static ArrayList<MessageBox> messages = new ArrayList<>();
     private MessageBox p;
     private Inventory inventory;
-    private Item item;
+    private Item item = null;
+    private Integer gold = null;
     private Music m = null;
     private WorldPieceActor wp = null;
+    private boolean remove = false;
+    private int wn = 0;
 
     public AddItem(Texture imgTexture, String text, int x, int y, Item item, Inventory inventory) {
         super(imgTexture, text, x, y);
@@ -58,6 +61,20 @@ public class AddItem extends Activator {
 
     }
 
+    public AddItem(Texture imgTexture, String text, int x, int y, int gold, Inventory inventory, Music m, WorldPieceActor wp, boolean remove, int wn) {
+        super(imgTexture, text, x, y);
+        this.remove = remove;
+        this.wn = wn;
+        p = new MessageBox(0, Game.screenHeight - (49 * (Game.SCALE / 2)), "You received: " + gold + " gold", Color.BLACK);
+
+        this.inventory = inventory;
+        this.gold = gold;
+
+        this.m = m;
+        this.wp = wp;
+
+    }
+
     public void addAlt(int c1, int c2) {
         if (wp != null) {
             wp.addAlt(c1, c2);
@@ -70,7 +87,18 @@ public class AddItem extends Activator {
 
         if (wp != null) {
             wp.setAlt();
+            if(remove == true){
+                try{
+                    StateMachine.gameWorld.maps.get(wn).getActor().remove(wp);
+                    
+                }catch(NullPointerException e){
+                    
+                }
+                
+            }
         }
+        
+        
 
     }
 
@@ -80,9 +108,26 @@ public class AddItem extends Activator {
         if (activated == false) {
             activated = true;
             //activatedList.add(id);
-            System.out.print("You received: ");
-            System.out.println(item.getName());
-            StateMachine.gameWorld.playerInv.addItem(item);
+
+            if (item != null) {
+                System.out.print("You received: ");
+                System.out.println(item.getName());
+                StateMachine.gameWorld.playerInv.addItem(item);
+
+            }
+            if (gold != null) {
+                StateMachine.gameWorld.playerInv.setGold(gold);
+            }
+            
+            if(remove == true){
+                try{
+                    StateMachine.gameWorld.maps.get(wn).getActor().remove(wp);                    
+                }catch (NullPointerException e){
+                    
+                }
+                
+            }
+
             messages.add(p);
             boolean done = true;
             while (true) {
@@ -99,6 +144,10 @@ public class AddItem extends Activator {
             if (wp != null) {
                 wp.setAlt();
             }
+//            if (remove == true) {
+//                StateMachine.gameWorld.maps.get(wn).getActor().remove(wp);
+//
+//            }
 
             Thread t1 = new Thread(new Runnable() {
                 public void run() {
@@ -108,7 +157,7 @@ public class AddItem extends Activator {
                     if (m != null) {
                         m.play();
                     }
-                    
+
                     try {
                         Thread.sleep(350);
                     } catch (InterruptedException ex) {
@@ -126,7 +175,7 @@ public class AddItem extends Activator {
                             break;
                         }
                     }
-                    
+
                     Game.player1.movementLock = false;
 
                 }

@@ -51,8 +51,8 @@ public class StateMachine {
             scale = VideoMode.getDesktopMode().width / screenWidth;            
         }
         
-        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
-        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
+//        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
+//        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
         
                 
         
@@ -64,8 +64,8 @@ public class StateMachine {
         Image icon = new Image();
         icon.loadFromFile(Paths.get("src/graphics/dragon_icon.png"));
         window.setIcon(icon);
-        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
-        window.setVerticalSyncEnabled(true);
+//        window.create(new VideoMode(VideoMode.getDesktopMode().width, VideoMode.getDesktopMode().height), "The Dragon Within", WindowStyle.FULLSCREEN);
+//        window.setVerticalSyncEnabled(true);
 
         gameWorld = new Game(window, scale);
         Save s;
