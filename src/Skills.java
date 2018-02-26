@@ -1,13 +1,12 @@
 
 import java.io.Serializable;
 
-
 /**
  *
  * @author LBals
  */
 public class Skills implements Serializable {
-    
+
     static final long serialVersionUID = 42L;
 
     public static int ALL = 0;
@@ -120,7 +119,7 @@ public class Skills implements Serializable {
         StringBuilder bul = new StringBuilder();
 
         for (Character c : targets) {
-            String temp = posteffect.replaceFirst("!", Integer.toString(value));
+            String temp = posteffect.replaceFirst("!", Integer.toString(Math.abs(value)));
             bul.append(c.name).append(temp).append("\n");
         }
 
@@ -292,6 +291,7 @@ public class Skills implements Serializable {
      * targets for the skill to be cast
      */
     public static class SkillExeption extends Exception {
+
         public SkillExeption(String s) {
             super(s);
         }

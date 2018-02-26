@@ -37,6 +37,21 @@ public class Menu {
     }
 
     /**
+    *Creates a new Text object
+    *@param text the String that will be parsed in Text()
+    *@return a new Text object, positioned at the left bottom corner
+    *with its color set as red.
+    */
+    Text createText(String text)
+    {
+      Text txt = new Text(text, text_font, screenHeight/25);
+      txt.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/25));
+      txt.setColor(Color.RED);
+
+      return txt;
+    }
+
+    /**
      * @param options_num the number of options available
      * @return a new Text array with a size equal to the number of options
      */
