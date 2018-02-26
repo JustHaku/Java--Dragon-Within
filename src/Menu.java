@@ -37,6 +37,21 @@ public class Menu {
     }
 
     /**
+    *Creates a new Text object
+    *@param text the String that will be parsed in Text()
+    *@return a new Text object, positioned at the left bottom corner
+    *with its color set as red.
+    */
+    Text createText(String text)
+    {
+      Text txt = new Text(text, text_font, screenHeight/25);
+      txt.setPosition(30, (screenHeight/2 + screenHeight/4 + screenHeight/8 + screenHeight/25));
+      txt.setColor(Color.RED);
+
+      return txt;
+    }
+
+    /**
      * @param options_num the number of options available
      * @return a new Text array with a size equal to the number of options
      */
@@ -49,8 +64,11 @@ public class Menu {
      *
      * @return a new Texture object to be used as background
      */
-    Texture getBackground() {
-        return mainBG = new Texture();
+    Texture getBackground(String bg_image_path) throws IOException{
+        Texture mainBG = new Texture();
+        mainBG.loadFromFile(Paths.get(bg_image_path));
+        mainBG.setSmooth(true);
+        return mainBG;
     }
 
     /**
@@ -60,8 +78,12 @@ public class Menu {
      * constructed
      * @return a new Sprite object to be used as a background
      */
-    Sprite getBGSprite(Texture texture) {
-        return mainBGsp = new Sprite(texture);
+    Sprite getBGSprite(Texture img) throws IOException{
+        Sprite mainBGsp = new Sprite(img);
+        mainBGsp.setOrigin(Vector2f.div(new Vector2f(img.getSize()), 2));
+        mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight / 2 + StateMachine.yOffset);
+        mainBGsp.setScale(Game.SCALE/5, Game.SCALE/5);
+        return mainBGsp;
     }
 
     /**

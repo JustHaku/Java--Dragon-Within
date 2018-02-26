@@ -1,7 +1,27 @@
 <skills>
-    <skill name="fireball" cost="0" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="true">
+    <skill name="fireball" cost="0" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
         <name>Fire Ball</name>
         <description>Hurl a ball of fire into an enemy's face dealing dunk magic.</description>
         <post> has taken ! damage</post>
+    </skill>
+    <skill name="heal" cost="30" payment="mana" value="50" type="nature" affway="heal" affect="friendly" affected="1" unary="false" revertable ="fasle">
+        <name>Heal</name>
+        <description>Heal a friendly character</description>
+        <post> has been healed for ! hp</post>
+    </skill>
+    <skill name="storm" cost="90" payment="mana" value="150" type="electric" affway="damage" affect="all" affected="6" unary="false" revertable ="false">
+        <name>Great Storm</name>
+        <description>Summons a huricane cloud that deals damage to all characters</description>
+        <post> has taken ! damage</post>
+    </skill>
+    <skill name="speedup" cost="10" payment="action" value="30" affway="speedbuff" unary="true" revertable="true">
+        <name>Greater Speed</name>
+        <description>Increases the speed of the caster</description>
+        <post> has increased his speed by ! points</post>
+    </skill>
+    <skill name="armorp" cost="40" payment="action" value="-20" affway="deffbuff" affect="enemy" affected="1" unary="false" revertable="true">
+        <name>Rusting Armor</name>
+        <description>Causes the armor of an enemy to rust reducing its deffence point</description>
+        <post> has lost ! deffese points</post>
     </skill>
 </skills>

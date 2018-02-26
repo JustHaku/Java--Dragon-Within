@@ -78,9 +78,7 @@ public class Player extends Character {
             footstepsTimer.restart();
         }
         
-        setX(1);
-        setY(10);
-        updateImg();
+        this.updateImg(1,10);
         //}
     }
 
@@ -106,7 +104,7 @@ public class Player extends Character {
     }
 
     public void setTilePosition(int x, int y) {
-        this.setPosition(x * Game.tileSize, y * Game.tileSize);
+        this.setPosition(x * Game.tileSize + StateMachine.xOffset, y * Game.tileSize + StateMachine.yOffset);
     }
 
     public int getX() {
@@ -125,7 +123,11 @@ public class Player extends Character {
         c2 = i;
     }
     
-    public void updateImg(){
+    public void updateImg(int i , int j){
+        
+        c1 = i;
+        c2 = j;
+        
         state = new IntRect(((c1 * 64) + c1), ((c2 * 64) + c2), 64, 64); // Creates the rectangle for the spritesheet.
 
         img = new Sprite(playerTexture, state);
@@ -160,49 +162,54 @@ public class Player extends Character {
                 y -= Game.spd * Game.SCALE;
             }
         }
+        try {
+            m.get(g.worldNum).getActor().stream().map((a) -> {
+                if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
+                    if (x > a.x) {
+                        moveRight();
+                    }
+                    if (x < a.x) {
+                        moveLeft();
+                    }
 
-        m.get(g.worldNum).getActor().stream().map((a) -> {
-            if (a.obj != obj && a.within(x, y) && a.isInteractive() == false) {
-                if (x > a.x) {
-                    moveRight();
+                    if (y > a.y) {
+                        moveDown();
+                    }
+                    if (y < a.y) {
+                        moveUp();
+                    }
+                } else if (a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true) {
+                    if (x > a.x) {
+                        moveRight();
+                    }
+                    if (x < a.x) {
+                        moveLeft();
+                    }
+
+                    if (y > a.y) {
+                        moveDown();
+                    }
+                    if (y < a.y) {
+                        moveUp();
+                    }
+
                 }
-                if (x < a.x) {
-                    moveLeft();
+                return a;
+            }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
+                if (movementLock == false) {
+                    a.activate();
+                    try {
+                        Thread.sleep(25);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
 
-                if (y > a.y) {
-                    moveDown();
-                }
-                if (y < a.y) {
-                    moveUp();
-                }
-            } else if (a.obj != obj && a.withinInteractive(x, y) && a.isInteractive() == true) {
-                if (x > a.x) {
-                    moveRight();
-                }
-                if (x < a.x) {
-                    moveLeft();
-                }
+            });
 
-                if (y > a.y) {
-                    moveDown();
-                }
-                if (y < a.y) {
-                    moveUp();
-                }
-
-            }
-            return a;
-        }).filter((a) -> (a.isInteractive() == true && a.within(x, y) && Keyboard.isKeyPressed(Keyboard.Key.E))).forEachOrdered((a) -> {
-            if(movementLock == false){
-                a.activate();
-                try {
-                    Thread.sleep(25);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+        }catch(NullPointerException e){
             
-        });
+        }
+
     }
 }
