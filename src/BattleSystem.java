@@ -17,39 +17,13 @@ public class BattleSystem extends Menu implements State {
 
     private Drawable[] obj;
     private Character[] battle_participants;
-    private Text[] attack_menu, items_menu;
+    private Text[] attack_menu, items_menu, stat_texts;
     private int[] turn_state; //move turn_state array's elements in accordance to speed_array
     private int exp_gain, temp, characters_num, team_size, textWidth, textHeight, textSpace;
     private ArrayList<Runnable> revertibles;
     private Animation anim;
     private Texture mainBG;
     private Sprite mainBGsp;
-
-
-    Runnable blink(Animation anim)
-    {
-      return () ->
-      {
-        try
-        {
-          window.clear(new Color(192, 192, 192, 200));
-          window.draw(mainBGsp);
-          drawText(attack_menu);
-          anim.draw(obj, battle_participants);
-          window.display();
-          Thread.sleep(1500);
-          window.clear(new Color(192, 192, 192, 200));
-          window.draw(mainBGsp);
-          drawText(attack_menu);
-          window.display();
-          Thread.sleep(1500);
-        }
-        catch (InterruptedException e)
-        {
-          e.printStackTrace();
-        }
-      };
-    }
 
     /**
     *Initiates a battle between the player's party and random generated
@@ -63,7 +37,6 @@ public class BattleSystem extends Menu implements State {
     public BattleSystem(RenderWindow window, int scale, int options_num, ArrayList<Character> team) throws IOException
     {
         menuWindow(window, scale, options_num);
-        System.out.println("SCREENHEIGHT IS: "+ screenHeight+"\nSCREENWIDTH IS: "+ screenWidth);
         attack_menu = newText(4 + 1);
         //items_menu = newText(number of items in inventory);
 
@@ -93,6 +66,12 @@ public class BattleSystem extends Menu implements State {
         characters_num = team_size * 2;
         battle_participants = new Character[characters_num];
         turn_state = new int[characters_num];
+
+        stat_texts = newText(characters_num);
+
+        anim = new Animation(team_size);
+        obj = anim.loadTextures();
+
         //copies the Character objects in team into battle_participants array
         //and generates as much NPC(lvl) objects to the other half of the array
         for (int i = 0; i < characters_num; i++)
@@ -101,6 +80,12 @@ public class BattleSystem extends Menu implements State {
             battle_participants[i] = team.get(i);
           else
             battle_participants[i] = new NPC(battle_participants[0].level); //SETS THE NPC TO BE THE SAME LEVEL AS PLAYER AT POSITION 1
+          Character c = battle_participants[i];
+          stat_texts[i] = new Text(c.name+" LvL "+c.level+"\n"+c.health+"/"+c.max_health+"HP", text_font, screenHeight/40);
+          stat_texts[i].setStyle(TextStyle.BOLD);
+          stat_texts[i].setPosition(((Sprite)obj[i]).getPosition());
+          stat_texts[i].setColor(Color.BLACK);
+          stat_texts[i].move(-20,-110);
         }
         //exp_gain is initially set to 0
         exp_gain = 0;
@@ -108,10 +93,6 @@ public class BattleSystem extends Menu implements State {
         this.mainBG = getBackground("src/graphics/world/Spritesheet/battle_bg.png");
         this.mainBGsp = getBGSprite(mainBG);
         this.mainBGsp.setScale(Game.SCALE, Game.SCALE);
-        //this.mainBGsp.setPosition(screenWidth / 2 + StateMachine.xOffset, screenHeight/2 - screenHeight/2);
-
-        anim = new Animation(team_size);
-        obj = anim.loadTextures();
     }
 
     /**
@@ -140,19 +121,21 @@ public class BattleSystem extends Menu implements State {
       *Method for drawing all drawable objects on screen, in a drawable array
       *@param obj is the array containing all drawable objects
       */
-      void draw(Drawable[] obj, Character[] chars)
+      void draw(Drawable[] obj, Character[] chars, Text[] stat_texts)
       {
-        /*for(Drawable o : obj)
-          window.draw(o);*/
           for(int i = 0; i<obj.length; i++)
           {
             if (chars[i].isAlive)
             {
               window.draw(obj[i]);
+              window.draw(stat_texts[i]);
+            }
+            else if(!chars[i].isAlive)
+            {
+              sleepThread(1);
             }
           }
       }
-
 
       /**
       *This method will generate the a sprite with the correct size and set its
@@ -174,7 +157,6 @@ public class BattleSystem extends Menu implements State {
 
         return img;
       }
-
 
       /**
       *This method will initialize the sprites, their dimensions, as well
@@ -222,7 +204,7 @@ public class BattleSystem extends Menu implements State {
             }
 
             this.img = generateSprite(playerPosX, playerPosY, spriteX, spriteY, r);
-            playerPosX -= x/12;
+            playerPosX -= x/10;
             playerPosY -= y/14;
           }
 
@@ -241,17 +223,44 @@ public class BattleSystem extends Menu implements State {
               spriteY = 5;
             }
             this.img = generateSprite(enemyPosX, enemyPosY, spriteX, spriteY, r);
-            enemyPosX += x/12;
+            enemyPosX += x/10;
             enemyPosY -= y/14;
           }
 
-          img.setScale(Game.SCALE / 3, Game.SCALE / 3); // Changes player scale to 2/3 of tile size.
+          img.setScale(Game.SCALE/2, Game.SCALE/2); // Changes player scale to 2/3 of tile size.
           objects[i] = img;
           setPosition = img::setPosition;
         }
         return objects;
       }
 
+    }
+
+    /**
+    *Method to make selected character blink, until the player chooses a
+    *character to use a skill at
+    *@param mainBGsp the background
+    *@param attack_menu the menu options of attacks that the character has
+    *@param obj the character drawables
+    *@param char_selected the currently selected character
+    */
+    void blink(Sprite mainBGsp, Text[] attack_menu,Text[] stat_texts, Drawable[] obj, Character char_selected)
+    {
+      draw(mainBGsp, attack_menu, stat_texts, obj);
+      sleepThread(200);
+      window.clear();
+      window.draw(mainBGsp);
+      for(int i = 0; i<obj.length; i++)
+      {
+        if (battle_participants[i] != char_selected && battle_participants[i].isAlive)
+        {
+          window.draw(obj[i]);
+          window.draw(stat_texts[i]);
+        }
+      }
+      drawText(attack_menu);
+      window.display();
+      sleepThread(60);
     }
 
     /**
@@ -345,14 +354,16 @@ public class BattleSystem extends Menu implements State {
         int height = textHeight - (textHeight/10 * 3);
 
         for (int i = 0; i < length; i++) {
-            if (i == 4) {
+            if (i == 4)
+            {
                 height += textSpace/3;
                 attack_menu[i] = new Text("Cancel", text_font, screenHeight / 29);
-            } else if (attacker.skills[i] != null) {
-                attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 29);
-            } else {
-                attack_menu[i] = new Text("-", text_font, screenHeight / 29);
             }
+            else if (attacker.skills[i] != null)
+                attack_menu[i] = new Text(attacker.skills[i].getName(), text_font, screenHeight / 29);
+            else
+                attack_menu[i] = new Text("-", text_font, screenHeight / 29);
+
             attack_menu[i].setPosition(width, height);
             height += textSpace;
         }
@@ -372,30 +383,57 @@ public class BattleSystem extends Menu implements State {
     *(friendly or hostile) are dead, it will it to ender an infinite loop.
     *--->see first while loop in method.
     */
-    void enemyTurn(Character enemy, Character[] player, int range)
+    void enemyTurn(Character enemy, Character[] player)
     {
         Random rand = new Random();
-        int randInt = rand.nextInt(range);
+        Text after_attack;
+        int randInt;
+        Character victim;
+        Skills skill;
+        ArrayList<Character> char_selected = new ArrayList<>(Arrays.asList(player));
 
-        //Check if you're attacking a dead man
-        while (player[randInt].isAlive == false) {
-            randInt = rand.nextInt(range);
-        }
-        //reduce player's health
-        player[randInt].health -= enemy.attack;
+        randInt = rand.nextInt(4);
+        skill = enemy.skills[randInt];
 
-        if (player[randInt].health <= 0)
+        char_selected.removeIf((Character c) -> !c.isAlive);
+        if(!skill.doesitAffect(Skills.ENEMY))
         {
-            player[randInt].health = 0;
-            player[randInt].isAlive = false;
-            System.out.println(player[randInt].name + " has died.");
+          char_selected.removeIf((Character c) -> c.isFriendly);
         }
-        else
+        else if(!skill.doesitAffect(Skills.FRIENDLY))
         {
-            System.out.println(player[randInt].name + " took " + enemy.attack
-                    + " amount of damage.\n" + player[randInt].name
-                    + " has " + player[randInt].health + " / "
-                    + player[randInt].max_health + " HP");
+          char_selected.removeIf((Character c) -> !c.isFriendly);
+        }
+
+        do
+        {
+          randInt = rand.nextInt(char_selected.size());
+          victim = char_selected.remove(randInt);
+          skill.addTarget(victim);
+        } while (skill.needsMoreTargets());
+
+        try
+        {
+          skill.executeSkill();
+          if(skill.revertable)
+            revertibles.add(skill.getReverted());
+          after_attack = createText(skill.getPostEffectText());
+          draw(mainBGsp,after_attack,stat_texts,obj);
+          sleepThread(1000);
+        }
+        catch(Exception e)
+        {
+          e.printStackTrace();
+        }
+        finally
+        {
+          skill.unBindAll();
+        }
+        if (!victim.isAlive)
+        {
+          after_attack = createText(victim.name+" has died..");
+          draw(mainBGsp, after_attack, stat_texts, obj);
+          sleepThread(1100);
         }
     }
 
@@ -436,6 +474,34 @@ public class BattleSystem extends Menu implements State {
         return BOTH_HAVE_ALIVE;
     }
 
+
+
+    Runnable drawBS(Sprite background, Text text, Text[] stat_texts, Drawable[] images)
+    {
+      return () ->
+      {
+        draw(background,text,stat_texts, images);
+      };
+    }
+
+    void draw(Sprite background, Text[] menu_options, Text[] stat_texts, Drawable[] images)
+    {
+      window.clear();
+      window.draw(background);
+      drawText(menu_options);
+      anim.draw(images, battle_participants, stat_texts);
+      window.display();
+    }
+
+    void draw(Sprite background, Text text, Text[] stat_texts, Drawable[] images)
+    {
+      window.clear();
+      window.draw(background);
+      window.draw(text);
+      anim.draw(images, battle_participants, stat_texts);
+      window.display();
+    }
+
     /**
     *This is the main fighting loop of the game. Here the player can fight an
     *enemy(ies), or try to escape and continue the story mode
@@ -443,25 +509,18 @@ public class BattleSystem extends Menu implements State {
     *when the battle is exited.
     *NOTE: Battle is exited only when all the members of a team are dead, or if
     *the player manages to successfully 'escape' the battle
-    FIXME after sellecting attack, player can choose cancel and the order of attacking
-    would reset. need a temporary buffer to hold who attacked and who didnt.
     FIXME maybe call garbage collector when fight is over ?
     */
     @Override
     public int run() {
         boolean end = false;
+        boolean escaped = false;
+        int paused_turn = 0;
+        int escape_chance = 0;
         option = 1;
 
         text[0].setColor(Color.BLACK);
         getTurns();
-
-        //TEMP ARRAY TO PRINT WHO ATTACKS, IN WHAT ORDER
-        for (int i = 0; i < turn_state.length; i++) {
-            System.out.println(battle_participants[(turn_state[i])].name + " at position " + turn_state[i] + " is number "
-                    + (i + 1) + " to attack with a " + battle_participants[(turn_state[i])].speed
-                    + " speed stat and is LVL: " + battle_participants[(turn_state[i])].level);
-        }
-        //(StateMachine.team).add(Game.Petros);
 
         try {
             soundBuffer = new SoundBuffer();
@@ -477,28 +536,9 @@ public class BattleSystem extends Menu implements State {
           TODO: MAKE ESCAPE NOT GUARANTEED
         */
         OuterLoop:
-        while (window.isOpen() && end == false) {
-          //TEMP //colour is gray, so options can be visible while white
-            window.clear(new Color(192, 192, 192, 200));
-            window.draw(mainBGsp);
-            drawText(text);
-            anim.draw(obj, battle_participants);
-            window.display();
-
-/*This snippet is how to make enemy blink when selected
-            try
-            {
-              Thread.sleep(1500);
-              window.clear(new Color(192, 192, 192, 200));
-              drawText(text);
-
-              window.display();
-              Thread.sleep(1500);
-            }
-            catch (InterruptedException e){
-              e.printStackTrace();
-            }
-*/
+        while (window.isOpen() && end == false)
+        {
+          draw(mainBGsp, text, stat_texts, obj);
             //event loop that has an aim to capture user input, in this case the
             //else if statement focuses on the keys: ESC, S, W, E
             for (Event event : window.pollEvents()) {
@@ -509,11 +549,7 @@ public class BattleSystem extends Menu implements State {
                 }
                 else if (event.type == Event.Type.KEY_PRESSED)
                 {
-                    if (keyEvent.key == Keyboard.Key.valueOf("ESCAPE")) {
-                        option = 0;
-                        end = true;
-                    }
-                    else if (keyEvent.key == Keyboard.Key.valueOf("S")) {
+                    if (keyEvent.key == Keyboard.Key.valueOf("S")) {
                         menuSound.play();
                         if (option != 3) {
                             option++;
@@ -536,7 +572,18 @@ public class BattleSystem extends Menu implements State {
                             {
                               for (int x = 0; x < characters_num; x++)
                               {
+                                if(escaped == true && battle_participants[(turn_state[x])].isFriendly)
+                                {
+                                  x = paused_turn;
+                                  escaped = false;
+                                }
                                 Character attacker = battle_participants[(turn_state[x])];
+                                for(int i = 0; i<stat_texts.length; i++)
+                                {
+                                  Character c = battle_participants[i];
+                                  stat_texts[i].setString(c.name+" LvL "+c.level+"\n"+c.health+"/"+c.max_health+"HP");
+                                }
+
                                   if (attacker.isFriendly && attacker.isAlive)
                                   {
                                     if (fight_end==false)
@@ -544,22 +591,13 @@ public class BattleSystem extends Menu implements State {
 
                                     playerTurn(attacker);
                                     int fight_option = 1;
-                                    int char_select;
                                     boolean pressed = false;
                                     boolean has_chosen = false;
-                                    System.out.println("It's " + attacker.name + "'s turn!\n");
-                                    System.out.println("fight option is "+fight_option);
-
                                     Text player_text = createText("It's "+attacker.name+"'s turn");
 
                                     if(fight_end == false)
                                     {
-                                      window.clear(new Color(192, 192, 192, 200));
-                                      window.draw(mainBGsp);
-                                      window.draw(player_text);
-                                      anim.draw(obj, battle_participants);
-                                      window.display();
-
+                                      draw(mainBGsp,player_text, stat_texts, obj);
                                       sleepThread(1500);
                                     }
 
@@ -570,12 +608,7 @@ public class BattleSystem extends Menu implements State {
                                     */
                                     while (window.isOpen() && turn_end == false)
                                     {
-                                      window.clear(new Color(192, 192, 192, 200));
-                                      window.draw(mainBGsp);
-                                      drawText(attack_menu);
-                                      anim.draw(obj, battle_participants);
-                                      window.display();
-
+                                      draw(mainBGsp,attack_menu,stat_texts, obj);
 
                                       for (Event battle : window.pollEvents()) {
                                         KeyEvent battleEvent = battle.asKeyEvent();
@@ -587,8 +620,6 @@ public class BattleSystem extends Menu implements State {
                                         }
                                         else if (battle.type == Event.Type.KEY_PRESSED)
                                         {
-
-
                                           if (battleEvent.key == Keyboard.Key.valueOf("S") && !pressed)
                                           {
                                             pressed = true;
@@ -610,10 +641,10 @@ public class BattleSystem extends Menu implements State {
                                         }
                                         else if (battleEvent.key == Keyboard.Key.valueOf("E") && !pressed)
                                         {
-                                          System.out.println("Chosen fight option is "+fight_option);
                                           pressed = true;
-                                          int range_low = 0;
-                                          int range_high = characters_num-1;
+                                          ArrayList<Character> char_selected = new ArrayList<>(Arrays.asList(battle_participants));
+                                          char_selected.removeIf((Character c) -> !c.isAlive);
+
 
                                           if (fight_option != 5 && !attack_menu[fight_option - 1].getString().equals("-"))
                                           {
@@ -624,78 +655,51 @@ public class BattleSystem extends Menu implements State {
                                               {
                                                 if(!skill.doesitAffect(Skills.ENEMY))
                                                 {
-                                                  range_high = team_size - 1;
+                                                  char_selected.removeIf((Character c) -> !c.isFriendly);
                                                 }
                                                 else if(!skill.doesitAffect(Skills.FRIENDLY))
                                                 {
-                                                  range_low = team_size;
+                                                  char_selected.removeIf((Character c) -> c.isFriendly);
                                                 }
                                               }
-                                              char_select = range_low;
-                                              /*
-                                              TODO FIND A WAY TO SKIP DEAD ENEMIES
-                                              */
-                                              /*
-                                              for(int i = char_select; i < range_high; i++)
-                                              {
-                                                if(!battle_participants[i].isAlive)
-                                                {
-
-                                                }
-                                              }
-                                              */
-
-                                              /*
-                                              This is the loop where the player makes the selection of
-                                              his/her target. If the skill chosen indicates that the player
-                                              should choose more than 1 target, then loop will re-enter
-                                              */
                                               while (skill.needsMoreTargets())
                                               {
                                                 has_chosen = false;
                                                 while(!has_chosen)
                                                 {
+                                                  blink(mainBGsp, attack_menu,stat_texts, obj, char_selected.get(0));
                                                   for (Event selectSomeone : window.pollEvents())
                                                   {
-                                                    KeyEvent select = selectSomeone.asKeyEvent();
 
+                                                    KeyEvent select = selectSomeone.asKeyEvent();
                                                     if (selectSomeone.type == Event.Type.CLOSED)
                                                     {
                                                       window.close(); //User closes window.
                                                       break OuterLoop;
                                                     }
+
                                                     else if (selectSomeone.type == Event.Type.KEY_PRESSED)
                                                     {
                                                       if (select.key == Keyboard.Key.valueOf("A"))
                                                       {
                                                         menuSound.play();
-                                                        if(char_select != range_low)
-                                                          char_select--;
-                                                        /*
-                                                        if(char_select < range_low)
-                                                          char_select = range_high;
-                                                        */
+                                                        char_selected.add(0,char_selected.remove(char_selected.size()-1));
                                                        }
                                                        else if(select.key == Keyboard.Key.valueOf("D"))
                                                        {
                                                          menuSound.play();
-                                                         if(char_select != range_high)
-                                                            char_select++;
-
-                                                          /*
-                                                          if(char_select > range_high)
-                                                            char_select = range_low;
-                                                          */
-
+                                                         char_selected.add(char_selected.remove(0));
                                                         }
                                                         else if(select.key == Keyboard.Key.valueOf("E"))
                                                         {
                                                           has_chosen = true;
                                                         }
                                                       }
+
                                                     }
                                                   }
-                                                  skill.addTarget(battle_participants[char_select]);
+
+                                                  skill.addTarget(char_selected.remove(0));
                                                 }
 
                                                 try
@@ -703,26 +707,28 @@ public class BattleSystem extends Menu implements State {
                                                   skill.executeSkill();
                                                   if(skill.revertable)
                                                     revertibles.add(skill.getReverted());
-                                                  //TODO gget the reversable from the skill and add it to a list
                                                 }
                                                 catch(Exception e)
                                                 {
                                                   e.printStackTrace();
                                                 }
-                                                Text post_effect = createText(attacker.name+" "+skill.getPostEffectText()+
-                                                                              " to enemy "+(char_select-(team_size-1)));
+                                                Text post_effect = createText(skill.getPostEffectText());
+                                                draw(mainBGsp,post_effect,stat_texts,obj);
+                                                sleepThread(1000);
                                                 skill.unBindAll();
                                                 turn_end = true;
                                               }
                                             }
                                             else if(attack_menu[fight_option - 1].getString().equals("-"))
                                             {
-                                              System.out.println("No skill assigned!");
+                                              //System.out.println("No skill assigned!");
                                             }
                                             else
                                             {
+                                              escaped = true;
                                               turn_end = true;
                                               fight_end = true;
+                                              paused_turn = x;
                                             }
                                           }
                                           showSelection(attack_menu, fight_option);
@@ -735,14 +741,8 @@ public class BattleSystem extends Menu implements State {
                                    fight_end == false && attacker.isFriendly == false)
                                 {
                                   Text enemyAttack = createText("Enemy "+(turn_state[x] - (team_size - 1))+" is attacking!");
-
-                                  window.clear(new Color(192, 192, 192, 200)); //colour is gray, so options can be visible while white
-                                  window.draw(mainBGsp);
-                                  window.draw(enemyAttack);
-                                  anim.draw(obj, battle_participants);
-                                  window.display();
-                                  enemyTurn(attacker, battle_participants, team_size);
-
+                                  draw(mainBGsp, enemyAttack, stat_texts, obj);
+                                  enemyTurn(attacker, battle_participants);
                                   sleepThread(1500);
                                 }
 
@@ -768,6 +768,7 @@ public class BattleSystem extends Menu implements State {
                                   option = 1;
                                 }
                             }
+
                           }
 
                         if (victory)
@@ -811,9 +812,11 @@ public class BattleSystem extends Menu implements State {
                     }
                     else if (option == 3)
                     {
-                            //go back to gameWorld
-                      option = 1;
-                      end = true;
+                      //if(escape_chance >= 5)
+                    //  {
+                        option = 1;
+                        end = true;
+                    //  }
                     }
                   }
                   showSelection(text, option);

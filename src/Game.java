@@ -143,6 +143,7 @@ public class Game implements State, Serializable {
         try {
             skill = BasicSkills.readSkills("./skills.xml");
             skill.get(0).teachTo(player1);
+            skill.get(1).teachTo(player1);
             skill.get(0).teachTo(Luke);
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,15 +200,15 @@ public class Game implements State, Serializable {
         worldNum = s.getWorld();
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
-        
-        
+
+
         for(ArrayList<Object> a: s.stats){
             try{
-                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);                 
+                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);
             }catch(IndexOutOfBoundsException e){
                 System.out.println("Too many");
             }
-            
+
         }
 
         System.out.println("Loaded");
@@ -531,7 +532,7 @@ public class Game implements State, Serializable {
         luke.addDialogue(new String[]{"Hello, my name is Leuthard.",
             "You have been assigned as my apprentice",
             "Let's get going"
-                
+
                                        });
         luke.addCompanion(Luke);
 

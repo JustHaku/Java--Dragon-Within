@@ -41,7 +41,7 @@ public class BasicSkills implements Serializable {
 
     //fill in the skillmap
     static {
-        //method for healing 
+        //method for healing
         SKILLMAP.put("heal", (character, value) -> {
             character.heal(value);
         });
@@ -58,7 +58,7 @@ public class BasicSkills implements Serializable {
             character.speed += value;
         });
 
-        //method for paying with mana   
+        //method for paying with mana
         SKILLMAP.put("mana", (character, value) -> {
             if (character.mana - value < 0) {
                 throw new Skills.SkillExeption("insufficient mana to cast");
@@ -67,7 +67,7 @@ public class BasicSkills implements Serializable {
         });
 
 //        SKILLMAP.put("action", (character, value) -> {
-//            
+//
 //        });
     }
 
@@ -142,7 +142,7 @@ public class BasicSkills implements Serializable {
         String payment = skill.getAttribute("payment");
         int damage = Integer.parseInt(skill.getAttribute("value"));
 
-        //get the way that it affects a target and the type of the target         
+        //get the way that it affects a target and the type of the target
         String affway = skill.getAttribute("affway");
 
         //get if tis unary and if it's revertable
@@ -155,11 +155,11 @@ public class BasicSkills implements Serializable {
         // get description
         child = (Element) skill.getElementsByTagName("description").item(0);
         String descString = child.getTextContent();
-        // getting post effect description        
+        // getting post effect description
         child = (Element) skill.getElementsByTagName("post").item(0);
         String post = child.getTextContent();
 
-        // getting the way that the skill is going to be payed for        
+        // getting the way that the skill is going to be payed for
         Skills.myBiConsumer<Character, Integer> wayofpaying = SKILLMAP.get(payment);
 
         // get the way of applying this skill
@@ -170,12 +170,12 @@ public class BasicSkills implements Serializable {
             wayofapp = SKILLMAP.get(affway);
         }
 
-        // create a skill depending on if it's unary        
+        // create a skill depending on if it's unary
         Skills skl;
         if (unary) {
             skl = new Skills(stitle, cost, damage, wayofpaying, wayofapp, revertable);
         } else {
-            // get the number of affected and the type of affected(fiendly/enemy)       
+            // get the number of affected and the type of affected(fiendly/enemy)
             int affected = Integer.parseInt(skill.getAttribute("affected"));
             String affect = skill.getAttribute("affect");
 

@@ -254,7 +254,7 @@ public class Skills implements Serializable {
             value = (applier.totalDmg() * value / 100) + applier.totalDmg();
         }
         try {
-            // apply the effect on each target  
+            // apply the effect on each target
             for (Character ap : targets) {
                 applying.accept(ap, value);
             }

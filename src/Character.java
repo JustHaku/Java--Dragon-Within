@@ -10,7 +10,7 @@ import org.jsfml.window.Keyboard;
 */
 public class Character extends Actor implements Serializable
 {
-    
+
   static final long serialVersionUID = 42L;
   protected String name;
   protected Skills[] skills = new Skills[4]; //The skills each player has
@@ -27,7 +27,7 @@ public class Character extends Actor implements Serializable
     ArrayList<Object> stats = new ArrayList<>();
 
     stats.add(name);
-    
+
     stats.add(held_items);
 //    stats.add(c1);
 //    stats.add(c2);
@@ -46,7 +46,7 @@ public class Character extends Actor implements Serializable
 
     return stats;
   }
-  
+
   public void distributeStats(ArrayList<Object> stats){
       name = (String)stats.get(0);
       held_items = (Item[])stats.get(1);

@@ -83,9 +83,9 @@ public class SkillsMenu extends Menu implements State {
         paused = false;
         selected = 0;
         if(!teamText.isEmpty()){
-            teamText.get(selected).setColor(Color.BLACK);            
+            teamText.get(selected).setColor(Color.BLACK);
         }
-        
+
 
         teamText = new ArrayList<>();
         for (int i = 0; i < StateMachine.team.size(); i++) {
@@ -106,7 +106,7 @@ public class SkillsMenu extends Menu implements State {
             for (int i = 0; i < 4; i++) {
               if(skills[i] != null)
               {
-                skillsText.add(new Text(skills[i].getName()+"\n"+skills[i].getDescription(), text_font, screenHeight / 15));
+                skillsText.add(new Text(skills[i].getName()+":\n"+skills[i].getDescription(), text_font, screenHeight / 15));
                 skillsText.get(i).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
                 window.draw(skillsRect.get(i));
                 window.draw(skillsText.get(i));

@@ -34,26 +34,6 @@ public class NPC extends Character {
         level = lvl;
         exp = exp_calc();
         this.isFriendly = isFriendly;
-
-        /**
-         * *THIS IS TEMPORARY, JUST FOR TESTING**
-         */
-        //skill_names[0] = "Dance";
-        //skill_names[1] = "Splash";
-        /*held_items[0] = item;
-    c1 = ?;
-    c2 = ?;
-    state = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16); // Creates the rectangle for the spritesheet.
-
-    img = new Sprite(imgTexture, state);
-    img.setScale(Game.SCALE / ps, Game.SCALE / ps); // Changes player scale to 2/3 of tile size.
-
-    x = 0; // Default position.
-    y = 0;
-
-    obj = img; // Sets img as collision object.
-    setPosition = img::setPosition;
-         */
     }
 
     /**
@@ -70,13 +50,15 @@ public class NPC extends Character {
 
         name = "Enemy";
         max_health = 80;
-        max_mana = 80;
+        max_mana = 100000;
         attack = 8;
         defence = 8;
         speed = 7;
-        for (int i = 0; i < stats.length; i++) {
+        for (int i = 0; i < stats.length; i++)
+        {
             stats[i] = 0;
-            for (int j = 0; j < lvl; j++) {
+            for (int j = 0; j < lvl; j++)
+            {
                 randomInt = rand.nextInt(5) + 1;
                 stats[i] += randomInt;
             }
@@ -90,6 +72,10 @@ public class NPC extends Character {
         mana = max_mana;
         level = lvl;
         isFriendly = false;
+        for(int i = 0; i<skills.length; i++)
+        {
+          Game.skill.get(i).teachTo(this);
+        }
     }
 
 }
