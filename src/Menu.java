@@ -100,7 +100,12 @@ public class Menu {
      */
     void drawText(Text[] textArray) {
         for (int i = 0; i < textArray.length; i++) {
-            window.draw(textArray[i]);
+            try{
+                window.draw(textArray[i]);                
+            }catch(Exception e){
+                
+            }
+            
         }
     }
 

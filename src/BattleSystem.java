@@ -31,6 +31,7 @@ public class BattleSystem extends Menu implements State {
     private ArrayList<Text> itemText;
     private ArrayList<RectangleShape> itemRect;
     private boolean returnTo = false;
+    private final Music theme;
 
     /**
     *Initiates a battle between the player's party and random generated
@@ -46,6 +47,11 @@ public class BattleSystem extends Menu implements State {
         menuWindow(window, scale, options_num);
         attack_menu = newText(4 + 1);
         //items_menu = newText(number of items in inventory);
+
+        theme = new Music();
+        theme.openFromFile(Paths.get("src/audio/battle2.wav"));
+        theme.setLoop(true);
+        theme.setVolume(80);
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
@@ -403,7 +409,7 @@ public class BattleSystem extends Menu implements State {
         Skills skill;
         ArrayList<Character> char_selected = new ArrayList<>(Arrays.asList(player));
 
-        randInt = rand.nextInt(4);
+        randInt = rand.nextInt(3);
         skill = enemy.skills[randInt];
 
         char_selected.removeIf((Character c) -> !c.isAlive);
@@ -428,9 +434,12 @@ public class BattleSystem extends Menu implements State {
           skill.executeSkill();
           if(skill.revertable)
             revertibles.add(skill.getReverted());
+          after_attack = createText("Enemy used "+skill.getName());
+          draw(mainBGsp,after_attack,stat_texts,obj);
+          sleepThread(1200);
           after_attack = createText(skill.getPostEffectText());
           draw(mainBGsp,after_attack,stat_texts,obj);
-          sleepThread(1000);
+          sleepThread(1200);
         }
         catch(Exception e)
         {
@@ -511,7 +520,6 @@ public class BattleSystem extends Menu implements State {
     *when the battle is exited.
     *NOTE: Battle is exited only when all the members of a team are dead, or if
     *the player manages to successfully 'escape' the battle
-    FIXME maybe call garbage collector when fight is over ?
     */
     @Override
     public int run() {
@@ -520,16 +528,19 @@ public class BattleSystem extends Menu implements State {
         int paused_turn = 0;
         int escape_chance = 0;
         option = 1;
+        theme.play();
 
         text[0].setColor(Color.BLACK);
         getTurns();
 
-        try {
+        try
+        {
             soundBuffer = new SoundBuffer();
             menuSound = new Sound();
             soundBuffer.loadFromFile(Paths.get("src/audio/Menu/Cursor_Move.wav"));
             menuSound.setBuffer(soundBuffer);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -710,9 +721,12 @@ public class BattleSystem extends Menu implements State {
                                                 {
                                                   e.printStackTrace();
                                                 }
-                                                Text post_effect = createText(skill.getPostEffectText());
+                                                Text post_effect = createText(attacker.name+" has used "+skill.getName());
                                                 draw(mainBGsp,post_effect,stat_texts,obj);
-                                                sleepThread(1000);
+                                                sleepThread(1200);
+                                                post_effect = createText(skill.getPostEffectText());
+                                                draw(mainBGsp,post_effect,stat_texts,obj);
+                                                sleepThread(1200);
                                                 skill.unBindAll();
                                                 turn_end = true;
                                               }
@@ -1094,17 +1108,16 @@ public class BattleSystem extends Menu implements State {
 
                     else if (option == 3)
                     {
-                      //if(escape_chance >= 5)
-                    //  {
-                        option = 1;
-                        end = true;
-                    //  }
+                      option = 1;
+                      end = true;
                     }
                   }
                   showSelection(text, option);
                 }
             }
         }
+
+        theme.stop();
         return option;
     }
 }
