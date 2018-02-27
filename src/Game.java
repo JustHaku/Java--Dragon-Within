@@ -208,18 +208,10 @@ public class Game implements State, Serializable {
         player1.setPosition(s.getX(), (s.getY()));
         playerInv = s.getInventory();
 
-<<<<<<< HEAD
-
-        for(ArrayList<Object> a: s.stats){
-            try{
-                StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);
-            }catch(IndexOutOfBoundsException e){
-=======
         for (ArrayList<Object> a : s.stats) {
             try {
                 StateMachine.team.get(s.stats.indexOf(a)).distributeStats(a);
             } catch (IndexOutOfBoundsException e) {
->>>>>>> origin/master
                 System.out.println("Too many");
             }
 
@@ -647,11 +639,9 @@ public class Game implements State, Serializable {
             "You have been assigned as my apprentice",
             "Let's get going"
 
-<<<<<<< HEAD
+
                                        });
-=======
-        });
->>>>>>> origin/master
+        
         luke.addCompanion(Luke);
 
         ezzy = new ScriptedNPC(playerSpriteSheet, 0, 9, 7, 0);
