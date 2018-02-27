@@ -1,10 +1,10 @@
 <skills>
-  <skill name="punch" cost="0" payment="action" value="-10" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable="false">
+  <skill name="punch" cost="0" payment="action" value="10" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable="false">
       <name>Punch</name>
       <description>Punches the target between the eyes</description>
       <post> has taken ! damage</post>
   </skill>
-    <skill name="fireball" cost="20" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
+    <skill name="fireball" cost="20" payment="mana" value="80" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
         <name>Fire Ball</name>
         <description>Hurl a ball of fire into an enemy's face
 dealing dunk magic.</description>
@@ -15,7 +15,7 @@ dealing dunk magic.</description>
         <description>Heal a friendly character</description>
         <post> has been healed for ! hp</post>
     </skill>
-    <skill name="storm" cost="50" payment="mana" value="150" type="electric" affway="damage" affect="all" affected="1" unary="false" revertable ="false">
+    <skill name="storm" cost="50" payment="mana" value="90" type="electric" affway="damage" affect="all" affected="1" unary="false" revertable ="false">
         <name>Great Storm</name>
         <description>Summons a huricane cloud that deals
 damage to all characters</description>
