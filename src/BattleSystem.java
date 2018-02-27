@@ -1116,7 +1116,15 @@ public class BattleSystem extends Menu implements State {
                 }
             }
         }
-
+        
+        Clock a = new Clock();
+        while(theme.getVolume() > 0){
+            if(a.getElapsedTime().asSeconds() >= 0.02){
+                theme.setVolume(theme.getVolume()-1);
+                a.restart();
+            }
+            
+        }
         theme.stop();
         return option;
     }

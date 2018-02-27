@@ -10,7 +10,7 @@ dealing dunk magic.</description>
         <description>Heal a friendly character</description>
         <post> has been healed for ! hp</post>
     </skill>
-    <skill name="storm" cost="50" payment="mana" value="90" type="electric" affway="damage" affect="all" affected="1" unary="false" revertable ="false">
+    <skill name="storm" cost="50" payment="mana" value="90" type="electric" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
         <name>Great Storm</name>
         <description>Summons a huricane cloud that deals
 damage to all characters</description>
