@@ -7,7 +7,6 @@ import org.jsfml.window.*;
 import org.jsfml.window.event.*;
 import org.jsfml.graphics.*;
 import org.jsfml.audio.*;
-import java.util.ArrayList;
 
 /**
  * The class that provides the items menu functionality.
@@ -16,12 +15,7 @@ import java.util.ArrayList;
  */
 public class ItemsMenu extends Menu implements State {
 
-    //private RenderWindow window;
-    //private int scale;
-    //private Font text_font;
     private boolean paused = false;
-    //private int screenHeight;
-    //private int screenWidth;
     private RectangleShape menuRect;
     private RectangleShape playerRect;
     private ArrayList items;
@@ -35,12 +29,7 @@ public class ItemsMenu extends Menu implements State {
     public ItemsMenu(RenderWindow window, int scale, int options_num, Inventory playInv, ArrayList<Character> team) throws IOException {
         menuWindow(window, scale, options_num);
         this.team = team;
-        /*this.window = window;
-        this.scale = scale;
-        screenHeight = 160 * scale;
-        screenWidth = 288 * scale;*/
         this.playInv = playInv;
-        //this.g = g;
 
         text_font = new Font();
         text_font.loadFromFile(Paths.get("src/graphics/Menu/CaviarDreams.ttf"));
