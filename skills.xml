@@ -6,7 +6,8 @@
   </skill>
     <skill name="fireball" cost="20" payment="mana" value="100" type="fire" affway="damage" affect="enemy" affected="1" unary="false" revertable ="false">
         <name>Fire Ball</name>
-        <description>Hurl a ball of fire into an enemy's face dealing dunk magic.</description>
+        <description>Hurl a ball of fire into an enemy's face
+dealing dunk magic.</description>
         <post> has taken ! damage</post>
     </skill>
     <skill name="heal" cost="10" payment="mana" value="50" type="nature" affway="heal" affect="friendly" affected="1" unary="false" revertable ="false">
@@ -16,7 +17,8 @@
     </skill>
     <skill name="storm" cost="50" payment="mana" value="150" type="electric" affway="damage" affect="all" affected="1" unary="false" revertable ="false">
         <name>Great Storm</name>
-        <description>Summons a huricane cloud that deals damage to all characters</description>
+        <description>Summons a huricane cloud that deals
+damage to all characters</description>
         <post> has taken ! damage</post>
     </skill>
     <skill name="armorp" cost="8" payment="action" value="-10" affway="deffbuff" affect="enemy" affected="1" unary="false" revertable="true">

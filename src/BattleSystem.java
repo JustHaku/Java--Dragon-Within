@@ -85,7 +85,7 @@ public class BattleSystem extends Menu implements State {
           stat_texts[i].setStyle(TextStyle.BOLD);
           stat_texts[i].setPosition(((Sprite)obj[i]).getPosition());
           stat_texts[i].setColor(Color.BLACK);
-          stat_texts[i].move(-20,-110);
+          stat_texts[i].move(-55,-110);
         }
         //exp_gain is initially set to 0
         exp_gain = 0;

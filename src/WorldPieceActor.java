@@ -32,6 +32,8 @@ public class WorldPieceActor extends Actor {
      */
     public WorldPieceActor(Texture imgTexture, int x, int y, int c1, int c2, ArrayList<Actor> actors) {
         this.actors = actors;
+        this.c1 = c1;
+        this.c2 = c2;
         // Draws rectange around selected piece
         piece = new IntRect(((c1 * 16) + c1), ((c2 * 16) + c2), 16, 16);
 

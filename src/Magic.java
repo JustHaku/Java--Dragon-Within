@@ -9,7 +9,7 @@
  * @author LBals
  */
 //public class Magic extends Skills {
-//    
+    
 //    public Magic(String name) {
 //        super(name);
 //    }  

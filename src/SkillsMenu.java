@@ -24,6 +24,7 @@ public class SkillsMenu extends Menu implements State {
     private RectangleShape menuRect;
     private RectangleShape playerRect;
     private ArrayList<Text> skillsText = new ArrayList<>();
+    private ArrayList<Text> descText = new ArrayList<>();
     private ArrayList<RectangleShape> skillsRect = new ArrayList<>();
     public static boolean returnTo = false;
     private ArrayList<Character> team;
@@ -64,6 +65,9 @@ public class SkillsMenu extends Menu implements State {
 
             skillsText.add(new Text("" + i, text_font, screenHeight / 15));
             (skillsText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
+            
+            descText.add(new Text("" + i, text_font, screenHeight / 15));
+            (descText.get(i)).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
         }
 
         for (int i = 0; i < StateMachine.team.size(); i++) {
@@ -100,6 +104,7 @@ public class SkillsMenu extends Menu implements State {
             window.draw(menuRect);
             window.draw(playerRect);
             skillsText = new ArrayList<>();
+            descText = new ArrayList<>();
             skills = StateMachine.team.get(selected).skills;
 
             // Uncoment when skills are implimented.
@@ -108,8 +113,19 @@ public class SkillsMenu extends Menu implements State {
               {
                 skillsText.add(new Text(skills[i].getName()+":\n"+skills[i].getDescription(), text_font, screenHeight / 15));
                 skillsText.get(i).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset);
+                skillsText.get(i).setColor(Color.BLACK);
                 window.draw(skillsRect.get(i));
                 window.draw(skillsText.get(i));
+              }
+            }
+            
+            for (int i = 0; i < 4; i++) {
+              if(skills[i] != null)
+              {
+                descText.add(new Text(skills[i].getDescription(), text_font, screenHeight / 15));
+                descText.get(i).setPosition(15 + StateMachine.xOffset, 5 + ((screenHeight / 4 - 2) * i) + StateMachine.yOffset + (screenHeight / 12 - 2));
+                descText.get(i).setColor(Color.WHITE);
+                window.draw(descText.get(i));
               }
             }
 

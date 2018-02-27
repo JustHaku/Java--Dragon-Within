@@ -1,3 +1,4 @@
+
 import java.io.EOFException;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -28,6 +29,7 @@ public class StateMachine {
     public static int yOffset = 0;
     public static int resX = 0;
     public static int resY = 0;
+    public static Intro intro;
     private int scale;
 
     public static void toggleLock() {
@@ -41,22 +43,18 @@ public class StateMachine {
 
         int screenWidth = 288;
         int screenHeight = 160;
-        
+
         resX = VideoMode.getDesktopMode().width;
         resY = VideoMode.getDesktopMode().height;
-        if(VideoMode.getDesktopMode().width/screenWidth > VideoMode.getDesktopMode().height/screenHeight){
+        if (VideoMode.getDesktopMode().width / screenWidth > VideoMode.getDesktopMode().height / screenHeight) {
             scale = VideoMode.getDesktopMode().height / screenHeight;
-            
-        }else{
-            scale = VideoMode.getDesktopMode().width / screenWidth;            
-        }
-        
-        xOffset = (VideoMode.getDesktopMode().width - (screenWidth*scale))/2;
-        yOffset = (VideoMode.getDesktopMode().height - (screenHeight*scale))/2;
-        
-                
-        
 
+        } else {
+            scale = VideoMode.getDesktopMode().width / screenWidth;
+        }
+
+        xOffset = (VideoMode.getDesktopMode().width - (screenWidth * scale)) / 2;
+        yOffset = (VideoMode.getDesktopMode().height - (screenHeight * scale)) / 2;
         RenderWindow window = new RenderWindow();
         window.create(new VideoMode(screenWidth * scale, screenHeight * scale), "The Dragon Within", WindowStyle.CLOSE);
         window.setFramerateLimit(60); // Limit the framerate to 60.
@@ -72,15 +70,13 @@ public class StateMachine {
         try {
             s = Save.load("src/saves/save000");
             gameWorld.load(s);
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(StateMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            state = 99;
+
         }
-        
 
         State mainMenu = new MainMenu(window, scale, 4);
-
+        intro = new Intro(window);
         //team.add(Game.Petros);
         State battleSystem = new BattleSystem(window, scale, 3, team);
         State inventoryMenu = new InventoryMenu(window, scale, 7, team);
@@ -88,7 +84,6 @@ public class StateMachine {
         State itemsMenu = new ItemsMenu(window, scale, 4, gameWorld.playerInv, team);
         State skillsMenu = new SkillsMenu(window, scale, 0, team);
         State magicMenu = new MagicMenu(window, scale, 0, team);
-        Intro intro = new Intro(window);
         states[0] = mainMenu;
         states[1] = gameWorld;
         states[2] = battleSystem;
@@ -101,6 +96,7 @@ public class StateMachine {
 
         Vector2i v = new Vector2i(100, 100);
         window.setKeyRepeatEnabled(true);
+
         while (window.isOpen()) {
             if (state == 2) {
                 states[state] = new BattleSystem(window, scale, 3, team);
@@ -109,23 +105,19 @@ public class StateMachine {
             }
 
             // Change state if no new class is required.
-            if (!locked) {
-                state = states[state].run();
-            }
-
             //FileManager.save("src/saves/save000", (Game)gameWorld);
-            if (state == 98){
+            if (state == 98) {
                 team.clear();
                 Activator.activators.clear();
                 ScriptedNPC.scriptedNPCs.clear();
 
                 gameWorld = new Game(window, scale);
                 states[1] = gameWorld;
-                
+
                 team.add(Game.player1);
-                
+
                 Game.player1.name = intro.name;
-                
+
                 try {
                     Files.delete(Paths.get("src/saves/save000"));
 
@@ -138,6 +130,7 @@ public class StateMachine {
                     s = new Save(gameWorld.playerInv, Game.player1, gameWorld, Activator.activators, ScriptedNPC.scriptedNPCs, StateMachine.team);
                     Save.save("src/saves/save000", s);
                 } catch (IOException ex) {
+                    //state = 99;
                     Logger.getLogger(Game.class.getName()).log(Level.SEVERE, null, ex);
                 }
 
@@ -148,14 +141,17 @@ public class StateMachine {
             if (state == 99) {
                 intro = new Intro(window);
                 states[10] = intro;
-                
+
                 state = 10;
-                
+
             }
             if (state > 100) {
                 scale = state - 100;
                 state = 0;
                 window.close();
+            }
+            if (!locked) {
+                state = states[state].run();
             }
         }
         return scale;
