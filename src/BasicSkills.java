@@ -14,6 +14,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,8 +26,8 @@ import org.xml.sax.SAXException;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 /**
- *
  * @author valka
  */
 public class BasicSkills implements Serializable {
@@ -43,27 +44,36 @@ public class BasicSkills implements Serializable {
     static {
         //method for healing
         SKILLMAP.put("heal", (character, value) -> {
+            int pre = character.health;
             character.heal(value);
+            return Math.abs(character.health - pre);
         });
         //method for gaining mana
         SKILLMAP.put("manareg", (character, value) -> {
+            int pre = character.mana;
             character.regen(value);
+            return Math.abs(character.mana - pre);
         });
         //method for gaining deffecne points
         SKILLMAP.put("deffbuff", (character, value) -> {
+            int pre = character.defence;
             character.defence = Math.max(0, character.defence + value);
+            return Math.abs(character.defence - pre);
         });
         //method for gaining speed points
         SKILLMAP.put("speedbuff", (character, value) -> {
             character.speed += value;
+            return value;
         });
 
         //method for paying with mana
         SKILLMAP.put("mana", (character, value) -> {
+            int pre = character.mana;
             if (character.mana - value < 0) {
                 throw new Skills.SkillExeption("insufficient mana to cast");
             }
             character.mana -= value;
+            return Math.abs(character.mana - pre);
         });
 
 //        SKILLMAP.put("action", (character, value) -> {
@@ -79,7 +89,9 @@ public class BasicSkills implements Serializable {
      */
     private static Skills.myBiConsumer<Character, Integer> getTypedDamageSkill(String element) {
         return (Character t, Integer u) -> {
+            int pre = t.health;
             t.takeDamage(element, u);
+            return Math.abs(t.health - pre);
         };
     }
 
@@ -94,7 +106,7 @@ public class BasicSkills implements Serializable {
      *
      * @param path of the xml file
      * @throws java.io.IOException when the file is not on the selected path or
-     * the file doesn't have the right format
+     *                             the file doesn't have the right format
      */
     public BasicSkills(String path) throws IOException {
         DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
@@ -208,7 +220,6 @@ public class BasicSkills implements Serializable {
      * @param path of the xml file
      * @return a list of all the skills
      * @throws Exception for a lot of reasons
-     *
      */
     public static ArrayList<Skills> readSkills(String path) throws Exception {
         ArrayList<Skills> skillslist = new ArrayList<>();
@@ -234,41 +245,5 @@ public class BasicSkills implements Serializable {
             throw new Exception();
         }
         return skillslist;
-    }
-
-    public static void main(String[] args) {
-        try {
-            BasicSkills bsk = new BasicSkills("skills.xml");
-            Skills fireball = bsk.getNewSkillInstance("speedup");
-            System.out.println(fireball.getName());
-
-            Character fr = new Character();
-            fr.name = "Gred";
-            fr.mana = 100;
-            fr.health = 100;
-            fr.attack = 60;
-            fr.speed = 30;
-            fr.defence = 30;
-
-            Character en = new Character();
-            en.name = "Bread";
-            en.mana = 50;
-            en.health = 100;
-            en.attack = 60;
-            en.speed = 20;
-            en.defence = 30;
-
-            Skills sk = fireball;
-            sk.teachTo(fr);
-            sk.addTarget(en);
-            System.out.println(en.speed);
-            sk.executeSkill();
-            System.out.println(sk.getPostEffectText());
-            System.out.println(en.speed);
-            Runnable r = sk.getReverted();
-            r.run();
-        } catch (Skills.SkillExeption | IOException ex) {
-            Logger.getLogger(BasicSkills.class.getName()).log(Level.SEVERE, null, ex);
-        }
     }
 }

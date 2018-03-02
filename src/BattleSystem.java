@@ -98,7 +98,7 @@ public class BattleSystem extends Menu implements State {
           stat_texts[i].setStyle(TextStyle.BOLD);
           stat_texts[i].setPosition(((Sprite)obj[i]).getPosition());
           stat_texts[i].setColor(Color.BLACK);
-          stat_texts[i].move(-60,-140);
+          stat_texts[i].move(-5,-80);
         }
         //exp_gain is initially set to 0
         exp_gain = 0;
@@ -394,7 +394,6 @@ public class BattleSystem extends Menu implements State {
     *Random() class to produce the desired result.
     *@param enemy is the automated attacker
     *@param player is the array holding the battle_participants
-    *@param range is the maximume element in player array that the enemy can
     *choose someone to attack from. (This is done to block enemies attacking themselves)
     *NOTE: If this method is called without making a check if all the members of a party
     *(friendly or hostile) are dead, it will it to ender an infinite loop.
@@ -431,15 +430,21 @@ public class BattleSystem extends Menu implements State {
 
         try
         {
-          skill.executeSkill();
+          String posteff = skill.executeSkill();
           if(skill.revertable)
             revertibles.add(skill.getReverted());
           after_attack = createText("Enemy used "+skill.getName());
           draw(mainBGsp,after_attack,stat_texts,obj);
           sleepThread(1200);
-          after_attack = createText(skill.getPostEffectText());
+          after_attack = createText(posteff);
           draw(mainBGsp,after_attack,stat_texts,obj);
-          sleepThread(1200);
+          sleepThread(600);
+          for(int i = 0 ; i < stat_texts.length; i++) {
+              Character c = player[i];
+              stat_texts[i].setString(c.name + " LvL " + c.level + "\n" + c.health + "/" + c.max_health + "HP");
+          }
+          draw(mainBGsp,after_attack,stat_texts,obj);
+          sleepThread(1000);
         }
         catch(Exception e)
         {
@@ -711,9 +716,10 @@ public class BattleSystem extends Menu implements State {
                                                   skill.addTarget(char_selected.remove(0));
                                                 }
 
+                                                String posteff = "";
                                                 try
                                                 {
-                                                  skill.executeSkill();
+                                                  posteff = skill.executeSkill();
                                                   if(skill.revertable)
                                                     revertibles.add(skill.getReverted());
                                                 }
@@ -724,7 +730,7 @@ public class BattleSystem extends Menu implements State {
                                                 Text post_effect = createText(attacker.name+" has used "+skill.getName());
                                                 draw(mainBGsp,post_effect,stat_texts,obj);
                                                 sleepThread(1200);
-                                                post_effect = createText(skill.getPostEffectText());
+                                                post_effect = createText(posteff);
                                                 draw(mainBGsp,post_effect,stat_texts,obj);
                                                 sleepThread(1200);
                                                 skill.unBindAll();

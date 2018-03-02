@@ -246,21 +246,27 @@ public class Skills implements Serializable {
      *
      * @throws Skills.SkillExeption when the skill cannot be casted
      */
-    public void executeSkill() throws SkillExeption {
+    public String executeSkill() throws SkillExeption {
         consuming.accept(applier, cost);
 
         //for damaging abilities the value retrieved from the xml file acts as a percentage
         if (damaging) {
             value = (applier.totalDmg() * value / 100) + applier.totalDmg();
         }
+        StringBuilder bul = new StringBuilder();
         try {
             // apply the effect on each target
             for (Character ap : targets) {
-                applying.accept(ap, value);
+               int effvalue = applying.accept(ap, value);
+               String temp = posteffect.replaceFirst("!", Integer.toString(Math.abs(effvalue)));
+                bul.append(ap
+                        .name).append(temp).append("\n");
             }
+            bul.deleteCharAt(bul.length() - 1);
         } catch (NullPointerException e) {
             throw new SkillExeption("Not enough targets");
         }
+        return bul.toString();
     }
 
     /**
@@ -282,7 +288,7 @@ public class Skills implements Serializable {
     @FunctionalInterface
     public static interface myBiConsumer<T extends Character, U extends Integer> {
 
-        void accept(T t, U u) throws SkillExeption;
+        int accept(T t, U u) throws SkillExeption;
     }
 
     /**
